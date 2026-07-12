@@ -26,8 +26,8 @@ class CategoryController extends Controller
 
     public function create(): View
     {
-        $parents = Category::query()->whereNull('parent_id')->orderBy('name')->get();
-        return view('admin.content.product-management.categories.create', compact('parents'));
+        $parentCategories = Category::query()->whereNull('parent_id')->orderBy('name')->get();
+        return view('admin.content.product-management.categories.create', compact('parentCategories'));
     }
 
     public function store(CategoryRequest $request): RedirectResponse
@@ -49,8 +49,13 @@ class CategoryController extends Controller
 
     public function edit(Category $category): View
     {
-        $parents = Category::query()->whereNull('parent_id')->where('id', '!=', $category->id)->orderBy('name')->get();
-        return view('admin.content.product-management.categories.edit', compact('category', 'parents'));
+        $parentCategories = Category::query()
+            ->whereNull('parent_id')
+            ->where('id', '!=', $category->id)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.content.product-management.categories.edit', compact('category', 'parentCategories'));
     }
 
     public function update(CategoryRequest $request, Category $category): RedirectResponse
