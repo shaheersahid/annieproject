@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Qadeer Optics - Amazon & Temu Eyewear Deals')
+@section('title', 'Annie Eyewear - Amazon & Temu Eyewear Deals')
 
 @php
     $bannerFallbacks = [

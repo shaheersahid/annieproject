@@ -48,7 +48,7 @@ class AffiliateDemoProductSeeder extends Seeder
 
         $brands = collect([
             'Smart Comfort Finds',
-            'Qadeer Optics',
+            'Annie Eyewear',
             'Astra',
             'Peachmart',
             'RayBan',
@@ -62,13 +62,13 @@ class AffiliateDemoProductSeeder extends Seeder
             ['Blue Light Blocking Glasses for Computer Work', 'Blue Light Glasses', 'Astra', 'lens', 'both', 'astra-hexagonal-metal-frame.png', 4.6, ['Lightweight daily frame', 'Good for laptop and mobile use'], ['Confirm size on retailer page']],
             ['Anti Glare Reading Glasses 3 Pack', 'Reading Glasses', 'Smart Comfort Finds', 'lens', 'amazon', 'peachmart-blue-cut-glasses.png', 4.4, ['Useful multi-pack', 'Simple everyday design'], ['Strength options vary by listing']],
             ['Polarized Driving Sunglasses for Men', 'Sunglasses', 'Police', 'frame', 'both', 'police-polarized-sunglasses.png', 4.7, ['Polarized lenses', 'Good outdoor pick'], ['Fit may vary by face shape']],
-            ['Women Oversized UV400 Sunglasses', 'Sunglasses', 'Qadeer Optics', 'frame', 'temu', 'cartier-premium-half-frame.png', 4.3, ['Fashion-forward shape', 'UV400 style listing'], ['Retailer color can vary']],
+            ['Women Oversized UV400 Sunglasses', 'Sunglasses', 'Annie Eyewear', 'frame', 'temu', 'cartier-premium-half-frame.png', 4.3, ['Fashion-forward shape', 'UV400 style listing'], ['Retailer color can vary']],
             ['Flexible TR90 Eyeglass Frames', 'Eyeglass Frames', 'Astra', 'frame', 'amazon', 'tomford-men-eyewear.png', 4.5, ['Flexible frame material', 'Prescription-ready style'], ['Lens fitting handled by retailer or optician']],
             ['Rimless Lightweight Reading Glasses', 'Reading Glasses', 'Peachmart', 'lens', 'temu', 'alpha-bluecut-glasses.png', 4.2, ['Minimal frame look', 'Good spare pair option'], ['Check magnification before buying']],
             ['Kids Blue Light Glasses', 'Blue Light Glasses', 'Smart Comfort Finds', 'lens', 'both', 'rayban-premium-eyewear-frame.png', 4.4, ['Child-friendly style', 'Screen-time focused'], ['Sizing needs careful checking']],
-            ['Magnetic Clip On Sunglasses Frame', 'Eyeglass Frames', 'Qadeer Optics', 'frame', 'amazon', 'cartier-transition-glasses.png', 4.1, ['Two-in-one style', 'Useful for indoor and outdoor use'], ['Magnet alignment depends on model']],
+            ['Magnetic Clip On Sunglasses Frame', 'Eyeglass Frames', 'Annie Eyewear', 'frame', 'amazon', 'cartier-transition-glasses.png', 4.1, ['Two-in-one style', 'Useful for indoor and outdoor use'], ['Magnet alignment depends on model']],
             ['Eyeglass Repair Kit with Screws', 'Lens Accessories', 'Smart Comfort Finds', 'accessory', 'temu', 'eyewear-cleaning-kit.png', 4.3, ['Handy home repair kit', 'Small and easy to store'], ['Tiny parts require careful handling']],
-            ['Microfiber Lens Cleaning Cloth Set', 'Cleaning Kits', 'Qadeer Optics', 'accessory', 'both', 'eyewear-cleaning-kit.png', 4.8, ['Useful for glasses and screens', 'Low-cost add-on item'], ['Wash before reuse for best results']],
+            ['Microfiber Lens Cleaning Cloth Set', 'Cleaning Kits', 'Annie Eyewear', 'accessory', 'both', 'eyewear-cleaning-kit.png', 4.8, ['Useful for glasses and screens', 'Low-cost add-on item'], ['Wash before reuse for best results']],
             ['Portable Hard Shell Glasses Case', 'Lens Accessories', 'Smart Comfort Finds', 'accessory', 'amazon', 'custom-prescription-lens-package.png', 4.5, ['Protective travel case', 'Works for most standard frames'], ['Large sunglasses may not fit']],
             ['Photochromic Transition Style Glasses', 'Sunglasses', 'RayBan', 'lens', 'both', 'cartier-transition-glasses.png', 4.6, ['Indoor/outdoor convenience', 'Popular lens style'], ['Transition speed depends on conditions']],
         ];

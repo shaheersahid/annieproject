@@ -22,7 +22,7 @@
     <div class="page-content">
         <div class="container">
             <div class="alert alert-info">
-                Affiliate disclosure: Qadeer Optics may earn a commission when you buy through Amazon or Temu links. Prices and availability can change, so always confirm on the retailer site.
+                Affiliate disclosure: Annie Eyewear may earn a commission when you buy through Amazon or Temu links. Prices and availability can change, so always confirm on the retailer site.
             </div>
 
             <form method="GET" action="{{ route('product-list') }}" class="toolbox mb-3">

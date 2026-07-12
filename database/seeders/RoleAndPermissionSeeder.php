@@ -319,51 +319,63 @@ class RoleAndPermissionSeeder extends Seeder
 
         // 4. Seed test users
 
-        $superAdminUser = User::firstOrCreate(
-            ['email' => 'qadeeroptical@gmail.com'],
-            ['name' => 'Super Admin', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        // Clean up old emails if they exist to avoid stale duplicate accounts
+        User::whereIn('email', [
+            'qadeeroptical@gmail.com',
+            'qadeeropticals@gmail.com',
+            'admin@qadeeroptics.com',
+            'admin@smartcomfortfinds.com',
+            'manager@qadeeroptics.com',
+            'manager@raimall.com',
+            'staff@qadeeroptics.com',
+            'customer@qadeeroptics.com'
+        ])->delete();
+
+        $superAdminUser = User::updateOrCreate(
+            ['email' => 'superadmin@annie.com'],
+            ['name' => 'Super Admin', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $superAdminUser->syncRoles([$superAdminRole]);
 
-        $superAdminUser2 = User::firstOrCreate(
-            ['email' => 'qadeeropticals@gmail.com'],
-            ['name' => 'Super Admin 2', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $superAdminUser2 = User::updateOrCreate(
+            ['email' => 'superadmin2@annie.com'],
+            ['name' => 'Super Admin 2', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $superAdminUser2->syncRoles([$superAdminRole]);
 
-        $adminUser = User::firstOrCreate(
-            ['email' => 'admin@qadeeroptics.com'],
-            ['name' => 'Admin User', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $adminUser = User::updateOrCreate(
+            ['email' => 'admin@annie.com'],
+            ['name' => 'Annie', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $adminUser->syncRoles(['admin']);
 
         $annieAdminUser = User::updateOrCreate(
-            ['email' => 'admin@smartcomfortfinds.com'],
-            ['name' => 'Annie Admin', 'password' => bcrypt('smartcomfortfinds'), 'email_verified_at' => now()]
+            ['email' => 'annieadmin@annie.com'],
+            ['name' => 'Annie Admin', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $annieAdminUser->syncRoles([$superAdminRole]);
 
-        $managerUser = User::firstOrCreate(
-            ['email' => 'manager@qadeeroptics.com'],
-            ['name' => 'Manager User', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $managerUser = User::updateOrCreate(
+            ['email' => 'manager@annie.com'],
+            ['name' => 'Manager User', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $managerUser->syncRoles(['manager']);
 
-        $legacyManagerUser = User::firstOrCreate(
-            ['email' => 'manager@raimall.com'],
-            ['name' => 'Legacy Manager User', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $legacyManagerUser = User::updateOrCreate(
+            ['email' => 'legacymanager@annie.com'],
+            ['name' => 'Legacy Manager User', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $legacyManagerUser->syncRoles(['manager']);
 
-        $staffUser = User::firstOrCreate(
-            ['email' => 'staff@qadeeroptics.com'],
-            ['name' => 'Staff User', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $staffUser = User::updateOrCreate(
+            ['email' => 'staff@annie.com'],
+            ['name' => 'Staff User', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $staffUser->syncRoles(['staff']);
 
-        $customerUser = User::firstOrCreate(
-            ['email' => 'customer@qadeeroptics.com'],
-            ['name' => 'Customer User', 'password' => bcrypt('qadeer123'), 'email_verified_at' => now()]
+        $customerUser = User::updateOrCreate(
+            ['email' => 'customer@annie.com'],
+            ['name' => 'Customer User', 'password' => bcrypt('annie123'), 'email_verified_at' => now()]
         );
         $customerUser->syncRoles(['customer']);
     }
