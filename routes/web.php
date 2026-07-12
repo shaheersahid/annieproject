@@ -5,6 +5,8 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\ProductBrowseController;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 // Socialite Routes
@@ -14,7 +16,52 @@ Route::controller(SocialiteController::class)->group(function () {
 });
 
 Route::get('/', function () {
-    return view('content.index');
+    $homeCategories = Category::query()
+        ->with('images')
+        ->withCount('products')
+        ->active()
+        ->parentCategories()
+        ->ordered()
+        ->take(8)
+        ->get();
+
+    $featuredProducts = Product::query()
+        ->with(['categories', 'images', 'primaryImage'])
+        ->published()
+        ->where('is_featured', true)
+        ->latest()
+        ->take(10)
+        ->get();
+
+    $newProducts = Product::query()
+        ->with(['categories', 'images', 'primaryImage'])
+        ->published()
+        ->latest()
+        ->take(10)
+        ->get();
+
+    $categoryProducts = $homeCategories
+        ->take(2)
+        ->mapWithKeys(function (Category $category) {
+            return [
+                $category->id => Product::query()
+                    ->with(['categories', 'images', 'primaryImage'])
+                    ->published()
+                    ->whereHas('categories', function ($query) use ($category): void {
+                        $query->whereKey($category->id);
+                    })
+                    ->latest()
+                    ->take(10)
+                    ->get(),
+            ];
+        });
+
+    return view('content.index', compact(
+        'homeCategories',
+        'featuredProducts',
+        'newProducts',
+        'categoryProducts',
+    ));
 })->name('home');
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
