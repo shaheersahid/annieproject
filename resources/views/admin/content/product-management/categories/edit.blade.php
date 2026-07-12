@@ -21,9 +21,9 @@
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <!-- Show existing image if have -->
-                                         @if($category->image)
+                                         @if($category->image_url)
                                            <div>
-                                               <img src="{{ asset('storage/' . $category->image) }}" alt="Category Image" height="80px" width="120px" class="rounded-md mb-2">
+                                               <img src="{{ $category->image_url }}" alt="Category Image" height="80px" width="120px" class="rounded-md mb-2">
                                            </div>
                                          @endif
 
