@@ -1,7 +1,7 @@
 <header class="header header-7">
     <div class="header-top">
         <div class="container-fluid d-flex justify-content-center">
-            <p class="top-message mb-0 py-2"><strong>Affiliate Disclosure:</strong> We may earn when you buy through Amazon or Temu links.</p>
+            <p class="top-message mb-0 py-2"><strong>Affiliate Disclosure:</strong> We may earn when you buy through Amazon, Temu or AliExpress links.</p>
         </div><!-- End .container-fluid -->
     </div><!-- End .header-top -->
 
@@ -26,7 +26,7 @@
                         <div class="header-search-wrapper search-wrapper-wide">
                             <label for="q" class="sr-only">Search</label>
                             <input type="search" class="form-control" name="q" id="q"
-                                placeholder="Search eyewear deals ..." required>
+                                placeholder="Search comfort deals ..." required>
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                         </div><!-- End .header-search-wrapper -->
                     </form>

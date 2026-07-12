@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Annie Eyewear - Amazon & Temu Eyewear Deals')
+@section('title', 'Smart Comfort Deals - Top Ergonomic, Home & Office Support Deals')
 
 @php
     $bannerFallbacks = [
@@ -50,7 +50,7 @@
                             <span class="icon-box-icon"><i class="icon-truck"></i></span>
                             <div class="icon-box-content">
                                 <h3 class="icon-box-title">Amazon & Temu Picks</h3>
-                                <p>Compare eyewear deals before you buy</p>
+                                <p>Compare comfort & ergonomic deals before you buy</p>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
     <div class="bg-light-2 pt-6 pb-6 featured">
         <div class="container-fluid">
             <div class="heading heading-center mb-3">
-                <h2 class="title">FEATURED EYEWEAR DEALS</h2>
+                <h2 class="title">FEATURED COMFORT DEALS</h2>
 
                 @if($categoryProducts->isNotEmpty())
                     <ul class="nav nav-pills justify-content-center" role="tablist">

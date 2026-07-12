@@ -5,7 +5,7 @@
                 <div class="col-sm-12 col-lg-4">
                     <div class="widget widget-about">
                         <img src="{{ asset('assets/images/logo.png') }}" class="footer-logo" alt="Logo" width="200" height="100">
-                        <p>Annie Eyewear helps shoppers compare eyewear, lenses, sunglasses, and accessories from Amazon and Temu affiliate listings.</p>
+                        <p>Smart Comfort Deals helps shoppers compare ergonomic cushions, home comfort items, and lifestyle accessories from Amazon, Temu and AliExpress affiliate listings.</p>
                         
                         <div class="widget-about-info">
                             <div class="row">
@@ -27,7 +27,7 @@
                         <h4 class="widget-title">Useful links</h4><!-- End .widget-title -->
 
                         <ul class="widget-list">
-                            <li><a href="{{ route('about') }}">About Annie Eyewear</a></li>
+                            <li><a href="{{ route('about') }}">About Smart Comfort Deals</a></li>
                             <li><a href="{{ route('product-list') }}">All Deals</a></li>
                             <li><a href="{{ route('product-list', ['platform' => 'amazon']) }}">Amazon Picks</a></li>
                             <li><a href="{{ route('product-list', ['platform' => 'temu']) }}">Temu Picks</a></li>
@@ -68,7 +68,7 @@
                     <div class="widget widget-newsletter">
                         <h4 class="widget-title">Sign up to newsletter</h4><!-- End .widget-title -->
 
-                        <p>Get eyewear deal updates and buying guides.</p>
+                        <p>Get comfort deal updates and buying guides.</p>
                         
                         <form action="#">
                             <div class="input-group">
@@ -86,7 +86,7 @@
 
     <div class="footer-bottom">
         <div class="container-fluid">
-            <p class="footer-copyright">Copyright © {{ date('Y') }} Annie Eyewear. All Rights Reserved.</p><!-- End .footer-copyright -->
+            <p class="footer-copyright">Copyright © {{ date('Y') }} Smart Comfort Deals. All Rights Reserved.</p><!-- End .footer-copyright -->
             <ul class="footer-menu">
                 <li><a href="#">Terms Of Use</a></li>
                 <li><a href="#">Privacy Policy</a></li>

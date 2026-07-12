@@ -23,7 +23,7 @@
     <div class="page-content">
         <div class="container">
             <div class="alert alert-info product-detail-disclosure">
-                Affiliate disclosure: Annie Eyewear may earn a commission from qualifying purchases through Amazon or Temu links. Retailer prices and availability apply at checkout.
+                Affiliate disclosure: Smart Comfort Deals may earn a commission from qualifying purchases through Amazon, Temu or AliExpress links. Retailer prices and availability apply at checkout.
             </div>
 
             <div class="product-details-top">

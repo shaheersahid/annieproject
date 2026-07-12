@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFour();
+
         try {
             $frontendNavCategories = Schema::hasTable('categories')
                 ? app(FrontendCacheService::class)->getNavCategories()

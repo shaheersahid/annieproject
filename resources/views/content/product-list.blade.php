@@ -1,12 +1,26 @@
 @extends('layouts.main')
 
-@section('title', 'Eyewear Deals')
+@php
+    $activeCategoryName = null;
+    if (request('category')) {
+        $activeCategory = \App\Models\Category::where('slug', request('category'))->first();
+        if ($activeCategory) {
+            $activeCategoryName = $activeCategory->name;
+        }
+    }
+@endphp
+
+@section('title', $activeCategoryName ? $activeCategoryName . ' - Smart Comfort Deals' : 'Smart Comfort Deals')
 
 @section('content')
 <main class="main">
     <div class="page-header text-center" style="background-image: url('{{ asset('assets/images/page-header-bg.jpg') }}')">
         <div class="container">
-            <h1 class="page-title">Eyewear Deals<span>Amazon & Temu affiliate picks</span></h1>
+            @if($activeCategoryName)
+                <h1 class="page-title">{{ $activeCategoryName }}<span>Smart Comfort Deals</span></h1>
+            @else
+                <h1 class="page-title">Smart Comfort Deals<span>Top ergonomic, home & office picks</span></h1>
+            @endif
         </div>
     </div>
 
@@ -14,7 +28,12 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Deals</li>
+                @if($activeCategoryName)
+                    <li class="breadcrumb-item"><a href="{{ route('product-list') }}">Deals</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $activeCategoryName }}</li>
+                @else
+                    <li class="breadcrumb-item active" aria-current="page">All Deals</li>
+                @endif
             </ol>
         </div>
     </nav>
@@ -22,7 +41,7 @@
     <div class="page-content">
         <div class="container">
             <div class="alert alert-info">
-                Affiliate disclosure: Annie Eyewear may earn a commission when you buy through Amazon or Temu links. Prices and availability can change, so always confirm on the retailer site.
+                Affiliate disclosure: Smart Comfort Deals may earn a commission when you buy through Amazon, Temu or AliExpress links. Prices and availability can change, so always confirm on the retailer site.
             </div>
 
             <form method="GET" action="{{ route('product-list') }}" class="toolbox mb-3">
