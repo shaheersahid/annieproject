@@ -17,6 +17,7 @@
 <meta name="msapplication-TileColor" content="#cc9966">
 <meta name="msapplication-config" content="{{ asset('assets/images/icons/browserconfig.xml') }}">
 <meta name="theme-color" content="#ffffff">
+<meta name="p:domain_verify" content="5bff3ac02901bc5e97c8509a2d0c055a"/>
 <!-- Plugins CSS File -->
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/plugins/owl-carousel/owl.carousel.css') }}">
