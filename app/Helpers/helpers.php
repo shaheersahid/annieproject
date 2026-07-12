@@ -45,3 +45,10 @@ if (!function_exists('resolve_image_path')) {
         return Storage::disk('public')->url($path);
     }
 }
+
+if (!function_exists('format_price')) {
+    function format_price(float|int|string|null $amount, string $symbol = 'PKR'): string
+    {
+        return $symbol . ' ' . number_format((float) ($amount ?? 0), 2);
+    }
+}

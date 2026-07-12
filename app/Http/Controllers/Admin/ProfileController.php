@@ -13,7 +13,8 @@ class ProfileController extends Controller
     public function edit(): View
     {
         $user = auth()->user();
-        return view('admin.content.profile.edit', compact('user'));
+        $twoFactorEnabled = (bool) $user->two_factor_enabled;
+        return view('admin.content.profile.edit', compact('user', 'twoFactorEnabled'));
     }
 
     public function update(ProfileRequest $request): RedirectResponse

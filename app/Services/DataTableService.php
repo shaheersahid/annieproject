@@ -12,7 +12,6 @@ use App\Models\Order;
 use App\Models\OrderReturn;
 use App\Models\AbandonedCart;
 use App\Models\Transaction;
-use App\Models\Expense;
 use App\Models\User;
 use App\Models\ReturnModel;
 use App\Models\ProductReview;
@@ -547,14 +546,6 @@ class DataTableService implements DataTableServiceInterface
             ->addColumn('paid_at_formatted', fn ($transaction) => $transaction->paid_at?->format('d M Y H:i') ?? '-')
             ->rawColumns(['status_badge'])
             ->make(true);
-    }
-
-    /**
-     * Get query for expenses listing.
-     */
-    public function getExpensesQuery(): Builder
-    {
-        return Expense::query();
     }
 
     /**

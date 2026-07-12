@@ -42,16 +42,15 @@
                 @if($u->can('admin.products.index') || $u->can('admin.categories.index') || $u->can('admin.brands.index'))
                 <li class="menu-title">Product Management</li>
 
-                <li class="{{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product-review.*') ? 'mm-active' : '' }}">
-                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product-review.*') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.products.*') ? 'mm-active' : '' }}">
+                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                         <i class="fa fa-box-open"></i>
-                        <span>Manage Product</span>
+                        <span>Products</span>
                     </a>
-                    <ul class="sub-menu {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product-review.*') ? 'mm-show' : '' }}">
+                    <ul class="sub-menu {{ request()->routeIs('admin.products.*') ? 'mm-show' : '' }}">
                         <li><a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.index') ? 'active' : '' }}">All Products</a></li>
-                        <li><a href="{{ route('admin.products.drafts') }}" class="{{ request()->routeIs('admin.products.drafts') ? 'active' : '' }}">Draft Products</a></li>
-                        <li><a href="{{ route('admin.products.stock-products') }}" class="{{ request()->routeIs('admin.products.stock-products') ? 'active' : '' }}">Stock Products</a></li>
-                        <li><a href="{{ route('admin.product-review.index') }}" class="{{ request()->routeIs('admin.product-review.*') ? 'active' : '' }}">Product Review</a></li>
+                        <li><a href="{{ route('admin.products.drafts') }}" class="{{ request()->routeIs('admin.products.drafts') ? 'active' : '' }}">Drafts</a></li>
+                        <li><a href="{{ route('admin.products.create') }}" class="{{ request()->routeIs('admin.products.create') ? 'active' : '' }}">Add Product</a></li>
                     </ul>
                 </li>
 
@@ -61,39 +60,17 @@
                         <span>Categories & Attributes</span>
                     </a>
                     <ul class="sub-menu {{ request()->routeIs('admin.categories.*') || request()->routeIs('admin.attributes.*') || request()->routeIs('admin.product-attributes.*') || request()->routeIs('admin.brands.*') ? 'mm-show' : '' }}">
-                        <li><a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">Category List</a></li>
-                        <li><a href="{{ route('admin.product-attributes.index') }}" class="{{ request()->routeIs('admin.product-attributes.*') ? 'active' : '' }}">Attribute List</a></li>
-                        <li><a href="{{ route('admin.attributes.index') }}" class="{{ request()->routeIs('admin.attributes.*') ? 'active' : '' }}">Tag List</a></li>
-                        <li><a href="{{ route('admin.brands.index') }}" class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">Brand List</a></li>
+                        <li><a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">Categories</a></li>
+                        <li><a href="{{ route('admin.product-attributes.index') }}" class="{{ request()->routeIs('admin.product-attributes.*') ? 'active' : '' }}">Attributes</a></li>
+                        <li><a href="{{ route('admin.attributes.index') }}" class="{{ request()->routeIs('admin.attributes.*') ? 'active' : '' }}">Tags</a></li>
+                        <li><a href="{{ route('admin.brands.index') }}" class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">Brands</a></li>
                     </ul>
-                </li>
-
-                <li class="{{ request()->routeIs('admin.manage-inventory.*') ? 'mm-active' : '' }}">
-                    <a href="{{ route('admin.manage-inventory.index') }}" class="{{ request()->routeIs('admin.manage-inventory.*') ? 'active' : '' }}">
-                        <i class="fa fa-warehouse"></i>
-                        <span>Manage Inventory</span>
-                    </a>
                 </li>
                 @endif
 
-                <li class="menu-title">Order Management</li>
-
-                <li class="{{ request()->routeIs('admin.order-management.*') ? 'mm-active' : '' }}">
-                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.order-management.*') ? 'active' : '' }}">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span>Orders</span>
-                    </a>
-                    <ul class="sub-menu {{ request()->routeIs('admin.order-management.*') ? 'mm-show' : '' }}">
-                        <li><a href="{{ route('admin.order-management.orders') }}" class="{{ request()->routeIs('admin.order-management.orders') ? 'active' : '' }}">All Orders</a></li>
-                        <li><a href="{{ route('admin.order-management.returns-refunds') }}" class="{{ request()->routeIs('admin.order-management.returns-refunds') ? 'active' : '' }}">Return & Refund</a></li>
-                        <li><a href="{{ route('admin.order-management.abandoned-carts') }}" class="{{ request()->routeIs('admin.order-management.abandoned-carts') ? 'active' : '' }}">Abandoned Cart</a></li>
-                        <li><a href="{{ route('admin.order-management.transactions') }}" class="{{ request()->routeIs('admin.order-management.transactions') ? 'active' : '' }}">Transactions</a></li>
-                    </ul>
-                </li>
-            
                 {{-- ── USER MANAGEMENT ─────────────────────── --}}
-                @if($u->can('admin.users.index') || $u->can('admin.users.roles.index') || $u->can('admin.sellers.index') || $u->can('admin.customers.index'))
-                <li class="menu-title">User Management</li>
+                @if($u->can('admin.users.index') || $u->can('admin.users.roles.index'))
+                <li class="menu-title">Admin Users</li>
 
                 @if($u->can('admin.users.index'))
                 <li class="{{ request()->routeIs('admin.users.index') ? 'mm-active' : '' }}">
@@ -109,60 +86,29 @@
                 <li class="{{ request()->routeIs('admin.users.roles.*') ? 'mm-active' : '' }}">
                     <a href="{{ Route::has('admin.users.roles.index') ? route('admin.users.roles.index') : '#' }}"
                        class="{{ request()->routeIs('admin.users.roles.*') ? 'active' : '' }}">
-                        <i class="fas fa-store"></i>
+                        <i class="fas fa-shield-alt"></i>
                         <span>Roles &amp; Permissions</span>
                     </a>
                 </li>
                 @endif
-
-                <!-- Sellers -->
-                @if($u->can('admin.sellers.index'))
-                <li class="{{ request()->routeIs('admin.sellers.*') ? 'mm-active' : '' }}">
-                    <a href="{{ Route::has('admin.sellers.index') ? route('admin.sellers.index') : '#' }}"
-                       class="{{ request()->routeIs('admin.sellers.*') ? 'active' : '' }}">
-                        <i class="fas fa-user-friends"></i>
-                        <span>Sellers</span>
-                    </a>
-                </li>
                 @endif
 
-                <!-- Customers -->
-                @if($u->can('admin.customers.index'))
-                <li class="{{ request()->routeIs('admin.customers.*') ? 'mm-active' : '' }}">
-                    <a href="{{ route('admin.customers.index') }}"
-                       class="{{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
-                        <i class="fas fa-user-shield"></i>
-                        <span>Customers</span>
-                    </a>
-                </li>
-                @endif
-                @endif
+                {{-- ── ANALYTICS ────────────────────────────── --}}
+                <li class="menu-title">Analytics</li>
 
-                <li class="menu-title">Reports & Analytics</li>
-
-                <li class="{{ request()->routeIs('admin.reports-analytics.sales-reports') ? 'mm-active' : '' }}">
-                    <a href="{{ route('admin.reports-analytics.sales-reports') }}"
-                       class="{{ request()->routeIs('admin.reports-analytics.sales-reports') ? 'active' : '' }}">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Sales Reports</span>
-                    </a>
-                </li>   
-
-                <!-- Seller performance -->
-                <li class="{{ request()->routeIs('admin.reports-analytics.seller-performance') ? 'mm-active' : '' }}">
-                    <a href="{{ route('admin.reports-analytics.seller-performance') }}"
-                       class="{{ request()->routeIs('admin.reports-analytics.seller-performance') ? 'active' : '' }}">
-                        <i class="fas fa-user-tie"></i>
-                        <span>Seller performance</span>
-                    </a>
-                </li>
-
-                <!-- top products and categories -->
                 <li class="{{ request()->routeIs('admin.reports-analytics.top-products') ? 'mm-active' : '' }}">
                     <a href="{{ route('admin.reports-analytics.top-products') }}"
                        class="{{ request()->routeIs('admin.reports-analytics.top-products') ? 'active' : '' }}">
-                        <i class="fas fa-boxes"></i>
-                        <span>Top products and categories</span>
+                        <i class="fas fa-fire"></i>
+                        <span>Top Products</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin.reports-analytics.categories') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.reports-analytics.categories') }}"
+                       class="{{ request()->routeIs('admin.reports-analytics.categories') ? 'active' : '' }}">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Category Stats</span>
                     </a>
                 </li>
 
