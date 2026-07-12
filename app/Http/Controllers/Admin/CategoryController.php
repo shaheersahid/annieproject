@@ -30,7 +30,7 @@ class CategoryController extends Controller
         return view('admin.content.product-management.categories.create', compact('parentCategories'));
     }
 
-    public function store(CategoryRequest $request): RedirectResponse
+    public function store(CategoryRequest $request): RedirectResponse|JsonResponse
     {
         $data = $request->validated();
         $data['is_active'] = $request->boolean('is_active', true);
@@ -41,6 +41,14 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('categories', 'public');
             $category->images()->create(['path' => $path, 'type' => 'primary', 'order' => 0]);
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category created successfully.',
+                'redirect' => route('admin.categories.index'),
+            ]);
         }
 
         return redirect()->route('admin.categories.index')
@@ -58,7 +66,7 @@ class CategoryController extends Controller
         return view('admin.content.product-management.categories.edit', compact('category', 'parentCategories'));
     }
 
-    public function update(CategoryRequest $request, Category $category): RedirectResponse
+    public function update(CategoryRequest $request, Category $category): RedirectResponse|JsonResponse
     {
         $data = $request->validated();
         $data['is_active'] = $request->boolean('is_active', true);
@@ -69,6 +77,14 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('categories', 'public');
             $category->images()->updateOrCreate(['type' => 'primary'], ['path' => $path, 'order' => 0]);
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category updated successfully.',
+                'redirect' => route('admin.categories.index'),
+            ]);
         }
 
         return redirect()->route('admin.categories.index')
