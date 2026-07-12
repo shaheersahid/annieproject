@@ -9,12 +9,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Image;
 use App\Models\Product;
+use App\Services\FrontendCacheService;
 use App\Traits\AutoGeneratesSlug;
 use App\Traits\HasSeo;
 
 class Category extends Model
 {
     use HasFactory, AutoGeneratesSlug, HasSeo;
+
+    protected static function booted(): void
+    {
+        static::saved(fn () => app(FrontendCacheService::class)->clearCategories());
+        static::deleted(fn () => app(FrontendCacheService::class)->clearCategories());
+    }
 
     protected $fillable = [
         'name',
