@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin;
+use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Customer\AccountController;
-use App\Http\Controllers\AffiliateController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductBrowseController;
-use App\Http\Controllers\Admin;
+use Illuminate\Support\Facades\Route;
 
 // Socialite Routes
 Route::controller(SocialiteController::class)->group(function () {
@@ -14,8 +13,9 @@ Route::controller(SocialiteController::class)->group(function () {
     Route::get('/auth/google/callback', 'handleGoogleCallback');
 });
 
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return view('content.index');
+})->name('home');
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
 Route::get('/products/{product:slug}', [ProductBrowseController::class, 'show'])->name('product-detail');
@@ -149,7 +149,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::get('/export', [Admin\ProductController::class, 'export'])->name('export');
         Route::post('/reorder', [Admin\ProductController::class, 'reorder'])->name('reorder');
         Route::post('/update-status', [Admin\ProductController::class, 'updateStatus'])->name('update-status');
-        
+
         Route::get('/{product}/seo', [Admin\ProductController::class, 'seoEdit'])->name('seo.edit');
         Route::put('/{product}/seo', [Admin\ProductController::class, 'seoUpdate'])->name('seo.update');
         Route::get('/{product}/variant-builder-data', [Admin\ProductController::class, 'variantBuilderData'])->name('variant-builder-data');
