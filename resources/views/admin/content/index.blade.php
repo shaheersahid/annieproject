@@ -62,7 +62,7 @@
             @foreach([
                 ['label' => 'Amazon Clicks', 'value' => $amazonClicks, 'class' => 'warning', 'icon' => 'fa-external-link-alt'],
                 ['label' => 'Temu Clicks', 'value' => $temuClicks, 'class' => 'success', 'icon' => 'fa-external-link-alt'],
-                ['label' => 'Draft Products', 'value' => $draftProducts, 'class' => 'secondary', 'icon' => 'fa-edit'],
+                ['label' => 'AliExpress Clicks', 'value' => $aliexpressClicks, 'class' => 'danger', 'icon' => 'fa-external-link-alt'],
                 ['label' => 'Categories', 'value' => $totalCategories, 'class' => 'primary', 'icon' => 'fa-tags'],
             ] as $card)
                 <div class="col-md-3 col-sm-6">
@@ -151,7 +151,10 @@
                                     @forelse($recentAffiliateClicks as $click)
                                         <tr>
                                             <td>{{ $click->product?->name ?? 'Deleted product' }}</td>
-                                            <td><span class="badge bg-{{ $click->platform === 'amazon' ? 'warning' : 'success' }}">{{ ucfirst($click->platform) }}</span></td>
+                                            <td>
+                                                @php $pClass = match($click->platform) { 'amazon' => 'warning', 'temu' => 'success', 'aliexpress' => 'danger', default => 'secondary' }; @endphp
+                                                <span class="badge bg-{{ $pClass }}">{{ ucfirst($click->platform) }}</span>
+                                            </td>
                                             <td class="text-truncate" style="max-width: 260px;">{{ $click->referrer ?: 'Direct' }}</td>
                                             <td class="text-end">{{ $click->created_at->diffForHumans() }}</td>
                                         </tr>
@@ -200,7 +203,7 @@
         chart: { type: 'donut', height: 300 },
         labels: @json($platformPerformance['labels']),
         series: @json($platformPerformance['series']),
-        colors: ['#f1b44c', '#28a745'],
+        colors: ['#f1b44c', '#28a745', '#e83e3e'],
         legend: { position: 'bottom' },
         dataLabels: { enabled: true },
         noData: { text: 'No clicks in this period' }

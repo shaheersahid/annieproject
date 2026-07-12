@@ -74,7 +74,10 @@
                                 @if($product->temu_url)
                                     <a href="{{ route('affiliate.redirect', [$product, 'temu']) }}" class="btn-product btn-cart" target="_blank" rel="nofollow sponsored noopener"><span>Buy on Temu</span></a>
                                 @endif
-                                @unless($product->amazon_url || $product->temu_url)
+                                @if($product->aliexpress_url)
+                                    <a href="{{ route('affiliate.redirect', [$product, 'aliexpress']) }}" class="btn-product btn-cart" target="_blank" rel="nofollow sponsored noopener"><span>Buy on AliExpress</span></a>
+                                @endif
+                                @unless($product->amazon_url || $product->temu_url || $product->aliexpress_url)
                                     <a href="{{ route('contact') }}" class="btn-product btn-cart"><span>Contact for availability</span></a>
                                 @endunless
                             </div>

@@ -26,6 +26,7 @@ class Product extends Model
         'affiliate_platform',
         'amazon_url',
         'temu_url',
+        'aliexpress_url',
         'external_product_id',
         'has_variants',
         'status',
@@ -120,8 +121,8 @@ class Product extends Model
 
     public function getIsAffiliateAttribute(): bool
     {
-        return in_array($this->affiliate_platform, ['amazon', 'temu', 'both'], true)
-            && (filled($this->amazon_url) || filled($this->temu_url));
+        return in_array($this->affiliate_platform, ['amazon', 'temu', 'aliexpress', 'both', 'all'], true)
+            && (filled($this->amazon_url) || filled($this->temu_url) || filled($this->aliexpress_url));
     }
 
     public function getAffiliatePlatformsAttribute(): array
@@ -129,6 +130,7 @@ class Product extends Model
         return collect([
             'amazon' => $this->amazon_url,
             'temu' => $this->temu_url,
+            'aliexpress' => $this->aliexpress_url,
         ])->filter(fn ($url) => filled($url))->keys()->all();
     }
 

@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-12 col-lg-4">
                     <div class="widget widget-about">
-                        <img src="{{ asset('assets/images/qadeer-logo.webp') }}" class="footer-logo" alt="Qadeer Opticals Logo" width="200" height="100">
+                        <img src="{{ asset('assets/images/logo.png') }}" class="footer-logo" alt="Logo" width="200" height="100">
                         <p>Qadeer Optics helps shoppers compare eyewear, lenses, sunglasses, and accessories from Amazon and Temu affiliate listings.</p>
                         
                         <div class="widget-about-info">

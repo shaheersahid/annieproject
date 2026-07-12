@@ -14,7 +14,7 @@
                 </button>
 
                 <a href="{{ url('/') }}" class="logo">
-                    <img src="{{ asset('assets/images/qadeer-logo.webp') }}" alt="Qadeer Opticals Logo" height="100"
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" height="100"
                         width="200">
                 </a>
             </div><!-- End .header-left -->

@@ -2871,8 +2871,8 @@ p {
     padding-bottom: 1rem; }
 .header-7 .btn-primary:hover, .header-7 .btn-primary:focus, .header-7 .btn-primary.focus, .header-7 .btn-primary:not(:disabled):not(.disabled):active, .header-7 .btn-primary:not(:disabled):not(.disabled).active, .header-7 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #a3834a;
-  border-color: #a3834a;
+  background-color: #0097b2;
+  border-color: #0097b2;
   box-shadow: none; }
 .header-7 .top-menu:not(.top-link-menu) ul {
   min-width: 180px; }

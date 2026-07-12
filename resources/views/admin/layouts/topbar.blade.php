@@ -8,10 +8,10 @@
         <div class="navbar-logo-box">
             <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="{{ asset('assets/images/qadeer-logo.webp') }}" alt="Qadeer Opticals Logo" style="max-height: 30px; width: auto;">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="max-height: 30px; width: auto;">
                 </span>
                 <span class="logo-lg">
-                    <img src="{{ asset('assets/images/qadeer-logo.webp') }}" alt="Qadeer Opticals Logo" style="max-height: 45px; width: auto; object-fit: contain;">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="max-height: 45px; width: auto; object-fit: contain;">
                 </span>
             </a>
 

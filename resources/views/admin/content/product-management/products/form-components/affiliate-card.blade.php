@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <label for="affiliate_platform" class="form-label fw-semibold">Platform</label>
                 <select class="form-select" name="affiliate_platform" id="affiliate_platform">
-                    @foreach(['none' => 'None', 'amazon' => 'Amazon', 'temu' => 'Temu', 'both' => 'Amazon + Temu'] as $value => $label)
+                    @foreach(['none' => 'None', 'amazon' => 'Amazon', 'temu' => 'Temu', 'aliexpress' => 'AliExpress', 'both' => 'Amazon + Temu', 'all' => 'All Platforms'] as $value => $label)
                         <option value="{{ $value }}" {{ old('affiliate_platform', $product?->affiliate_platform ?? 'none') === $value ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
@@ -26,13 +26,17 @@
                 <label for="affiliate_rating" class="form-label">Editorial Rating</label>
                 <input type="number" step="0.1" min="0" max="5" class="form-control" id="affiliate_rating" name="affiliate_rating" value="{{ old('affiliate_rating', $product?->affiliate_rating) }}" placeholder="4.5">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="amazon_url" class="form-label">Amazon Affiliate URL</label>
                 <input type="url" class="form-control" id="amazon_url" name="amazon_url" value="{{ old('amazon_url', $product?->amazon_url) }}" placeholder="https://www.amazon.com/...tag=yourtag-20">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="temu_url" class="form-label">Temu Affiliate URL</label>
-                <input type="url" class="form-control" id="temu_url" name="temu_url" value="{{ old('temu_url', $product?->temu_url) }}" placeholder="https://...">
+                <input type="url" class="form-control" id="temu_url" name="temu_url" value="{{ old('temu_url', $product?->temu_url) }}" placeholder="https://temu.com/...">
+            </div>
+            <div class="col-md-4">
+                <label for="aliexpress_url" class="form-label">AliExpress Affiliate URL</label>
+                <input type="url" class="form-control" id="aliexpress_url" name="aliexpress_url" value="{{ old('aliexpress_url', $product?->aliexpress_url) }}" placeholder="https://www.aliexpress.com/...aff_id=...">
             </div>
             <div class="col-md-6">
                 <label for="price_note" class="form-label">Price Display Text</label>

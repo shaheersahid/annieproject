@@ -7,7 +7,7 @@ const files = [
     'public/assets/css/main.css'
 ];
 
-const basePath = 'c:\\Users\\shaheer\\Desktop\\project\\raimall';
+const basePath = __dirname;
 
 files.forEach(file => {
     const filePath = path.join(basePath, file);
@@ -15,8 +15,8 @@ files.forEach(file => {
         let content = fs.readFileSync(filePath, 'utf8');
 
         // Replace primary color
-        content = content.replace(/#cc6666/gi, '#a3834a');
-        content = content.replace(/rgba\(204,\s*102,\s*102,/gi, 'rgba(163, 131, 74,');
+        content = content.replace(/#cc6666/gi, '#0097b2');
+        content = content.replace(/rgba\(204,\s*102,\s*102,/gi, 'rgba(0, 151, 178,');
 
         // Replace secondary color
         content = content.replace(/#fcb941/gi, '#252522');
