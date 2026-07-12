@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="product-content">
-                                <p>{{ $product->short_description ?: 'Selected eyewear deal from Amazon or Temu.' }}</p>
+                                {!! $product->short_description ?: '<p>Selected eyewear deal from Amazon or Temu.</p>' !!}
                             </div>
 
                             <div class="product-details-action">
