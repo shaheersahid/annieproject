@@ -33,7 +33,7 @@
                     'category' => $category,
                     'fallbackImage' => $bannerFallbacks[$index + 2] ?? $bannerFallbacks[2],
                     'columnClass' => 'col-md-6 col-lg-4',
-                    'contentClass' => $loop->odd ? 'banner-content-right' : '',
+                    'contentClass' => '',
                     'textClass' => $loop->even ? 'color-grey' : 'text-white',
                     'buttonClass' => $loop->even ? '' : 'btn-outline-white-3',
                 ])
