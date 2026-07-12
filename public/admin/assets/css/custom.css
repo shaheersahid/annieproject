@@ -1,0 +1,126 @@
+/* -------------------------------------------------------------------------- */
+/* AI Content Assistant Styles */
+/* -------------------------------------------------------------------------- */
+
+.btn-toggle-ai {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white !important;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 12px rgba(118, 75, 162, 0.25);
+    font-size: 0.85rem;
+}
+
+.btn-toggle-ai:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(118, 75, 162, 0.4);
+    opacity: 0.95;
+    filter: brightness(1.1);
+}
+
+.btn-toggle-ai:active {
+    transform: translateY(0);
+}
+
+#ai-settings-panel {
+    border: 2px dashed #764ba2 !important;
+    background: #f8f9ff !important;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#ai-settings-panel .card-body {
+    padding: 1.5rem;
+}
+
+#btn-generate-ai {
+    background: #764ba2;
+    border-color: #764ba2;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+#btn-generate-ai:hover {
+    background: #623d8b;
+    border-color: #623d8b;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.spinner-ai {
+    animation: fa-spin 1s infinite linear;
+}
+
+/* -------------------------------------------------------------------------- */
+/* End AI Assistant Styles */
+/* -------------------------------------------------------------------------- */
+
+.select2-container {
+    min-width: 200px !important;
+}
+
+.swal2-styled.swal2-confirm,
+.swal2-styled.swal2-cancel {
+    font-size: 0.9rem !important;
+    box-shadow: none !important;
+}
+
+#products-table tbody tr td,
+#categories-table tbody tr td,
+#sections-table tbody tr td {
+    vertical-align: middle;
+}
+
+.categories-btns {
+    max-width: 180px;
+    flex-wrap: wrap;
+}
+
+.invalid-feedback {
+    font-size: 0.9rem !important;
+}
+
+.border-round-dash {
+    border: 1px dashed var(--bs-border-color);
+    border-radius: 0.3rem;
+    margin-bottom: 5px;
+}
+
+.form-control,
+.btn {
+    min-height: 2.1rem;
+}
+
+a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-name {
+    max-width: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.toast-warning {
+    background-color: #667eea !important;
+    color: #fff !important;
+    border-color: #667eea !important;
+}

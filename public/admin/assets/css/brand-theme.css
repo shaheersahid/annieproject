@@ -1,0 +1,29 @@
+/* Brand Theme - Brothers Halal */
+:root {
+    --bs-primary: #A0021E;
+    --bs-primary-rgb: 160, 2, 30;
+    --bs-secondary: #212529;
+}
+
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: #800018;
+    border-color: #800018;
+}
+
+.page-item.active .page-link {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
