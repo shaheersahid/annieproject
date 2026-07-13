@@ -9,8 +9,11 @@ use App\Models\BlogPost;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class BlogController extends Controller
 {
@@ -30,13 +33,13 @@ class BlogController extends Controller
         return view('admin.content.blog.create');
     }
 
-    public function store(BlogPostRequest $request): RedirectResponse
+    public function store(BlogPostRequest $request): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
         $data['author_id'] = auth()->id();
 
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('blog', 'public');
+            $data['featured_image'] = $this->storeFeaturedImage($request->file('featured_image'));
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
@@ -47,7 +50,7 @@ class BlogController extends Controller
 
         BlogPost::create($data);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog post created.');
+        return $this->savedResponse($request, 'Blog post created.');
     }
 
     public function edit(BlogPost $blog): View
@@ -55,15 +58,14 @@ class BlogController extends Controller
         return view('admin.content.blog.edit', compact('blog'));
     }
 
-    public function update(BlogPostRequest $request, BlogPost $blog): RedirectResponse
+    public function update(BlogPostRequest $request, BlogPost $blog): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
 
+        $oldImage = $blog->featured_image;
+
         if ($request->hasFile('featured_image')) {
-            if ($blog->featured_image) {
-                Storage::disk('public')->delete($blog->featured_image);
-            }
-            $data['featured_image'] = $request->file('featured_image')->store('blog', 'public');
+            $data['featured_image'] = $this->storeFeaturedImage($request->file('featured_image'));
         } else {
             unset($data['featured_image']);
         }
@@ -76,7 +78,11 @@ class BlogController extends Controller
 
         $blog->update($data);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog post updated.');
+        if (isset($data['featured_image']) && $oldImage && $oldImage !== $data['featured_image']) {
+            Storage::disk('public')->delete($oldImage);
+        }
+
+        return $this->savedResponse($request, 'Blog post updated.');
     }
 
     public function destroy(BlogPost $blog): RedirectResponse
@@ -102,5 +108,36 @@ class BlogController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'Status updated.']);
+    }
+
+    private function storeFeaturedImage(UploadedFile $image): string
+    {
+        try {
+            $path = $image->store('blog', 'public');
+        } catch (Throwable $exception) {
+            report($exception);
+            $path = false;
+        }
+
+        if (! $path) {
+            throw ValidationException::withMessages([
+                'featured_image' => 'Image could not be saved. Check storage permissions and try again.',
+            ]);
+        }
+
+        return $path;
+    }
+
+    private function savedResponse(Request $request, string $message): JsonResponse|RedirectResponse
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'redirect' => route('admin.blog.index'),
+            ]);
+        }
+
+        return redirect()->route('admin.blog.index')->with('success', $message);
     }
 }

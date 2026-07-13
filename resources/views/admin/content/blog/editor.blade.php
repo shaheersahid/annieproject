@@ -75,10 +75,89 @@
                 document.getElementById('imagePreview').classList.remove('d-none');
             });
 
-            form.addEventListener('submit', function () {
+            var originalButtonHtml = saveButton.innerHTML;
+
+            function resetSubmitButton() {
+                form.dataset.submitting = '';
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalButtonHtml;
+            }
+
+            function showError(message) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.error(message);
+                } else {
+                    window.alert(message);
+                }
+            }
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (form.dataset.submitting === '1') return;
+
+                var imageInput = document.getElementById('featuredImageInput');
+                var image = imageInput.files[0];
+                var allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
+
+                if (image) {
+                    var extension = image.name.split('.').pop().toLowerCase();
+                    if (!allowedExtensions.includes(extension) || image.size > 5 * 1024 * 1024) {
+                        showError('Featured image must be JPG, PNG, WebP, or AVIF and no larger than 5 MB.');
+                        return;
+                    }
+                }
+
                 if (typeof tinymce !== 'undefined') tinymce.triggerSave();
+
+                form.dataset.submitting = '1';
                 saveButton.disabled = true;
                 saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Saving...';
+
+                var request = new XMLHttpRequest();
+                request.open('POST', form.action, true);
+                request.timeout = 90000;
+                request.setRequestHeader('Accept', 'application/json');
+                request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                request.upload.addEventListener('progress', function (progressEvent) {
+                    if (!progressEvent.lengthComputable || !image) return;
+                    var percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                    saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Uploading ' + percent + '%';
+                });
+
+                request.addEventListener('load', function () {
+                    var payload = {};
+                    try {
+                        payload = JSON.parse(request.responseText || '{}');
+                    } catch (error) {
+                        payload = {};
+                    }
+
+                    if (request.status >= 200 && request.status < 300 && payload.redirect) {
+                        window.location.assign(payload.redirect);
+                        return;
+                    }
+
+                    if (request.status === 422 && payload.errors) {
+                        var messages = Object.values(payload.errors).flat();
+                        showError(messages[0] || 'Please check form fields.');
+                    } else {
+                        showError(payload.message || 'Blog post could not be saved. Please try again.');
+                    }
+                    resetSubmitButton();
+                });
+
+                request.addEventListener('error', function () {
+                    showError('Network error. Blog post was not saved.');
+                    resetSubmitButton();
+                });
+
+                request.addEventListener('timeout', function () {
+                    showError('Upload timed out. Use a smaller image or check server upload limits.');
+                    resetSubmitButton();
+                });
+
+                request.send(new FormData(form));
             });
         });
     </script>

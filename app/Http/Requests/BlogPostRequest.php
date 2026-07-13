@@ -33,7 +33,7 @@ class BlogPostRequest extends FormRequest
             'slug'             => "nullable|string|max:255|unique:blog_posts,slug,{$postId}",
             'excerpt'          => 'nullable|string|max:500',
             'content'          => 'required|string',
-            'featured_image'   => 'nullable|image|max:2048',
+            'featured_image'   => 'nullable|file|mimes:jpg,jpeg,png,webp,avif|max:5120',
             'status'           => 'required|in:draft,published',
             'publish_date'     => 'nullable|required_with:publish_time|date_format:Y-m-d',
             'publish_time'     => 'nullable|required_with:publish_date|date_format:H:i',
@@ -49,6 +49,8 @@ class BlogPostRequest extends FormRequest
             'content.required' => 'Post content is required.',
             'publish_date.required_with' => 'Select publish date.',
             'publish_time.required_with' => 'Select publish time.',
+            'featured_image.mimes' => 'Featured image must be JPG, PNG, WebP, or AVIF.',
+            'featured_image.max' => 'Featured image must not exceed 5 MB.',
         ];
     }
 }

@@ -145,9 +145,9 @@
                         <label for="featuredImageInput" class="form-label fw-semibold">Choose Image</label>
                         <input type="file" id="featuredImageInput" name="featured_image"
                             class="form-control @error('featured_image') is-invalid @enderror"
-                            accept="image/jpeg,image/png,image/webp">
+                            accept=".jpg,.jpeg,.png,.webp,.avif">
                         @error('featured_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        <p class="text-muted small mt-2 mb-0">JPG, PNG or WebP. Maximum 2 MB.</p>
+                        <p class="text-muted small mt-2 mb-0">JPG, PNG, WebP or AVIF. Maximum 5 MB.</p>
                     </div>
                 </div>
             </div>

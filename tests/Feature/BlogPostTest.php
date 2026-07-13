@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -75,5 +77,45 @@ class BlogPostTest extends TestCase
             ->assertSee('name="publish_date"', false)
             ->assertSee('name="publish_time"', false)
             ->assertSee('name="content"', false);
+    }
+
+    public function test_admin_can_update_blog_featured_image_with_json_response(): void
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create();
+        $admin->assignRole(Role::create(['name' => 'admin', 'guard_name' => 'web']));
+        Storage::disk('public')->put('blog/old.jpg', 'old image');
+
+        $post = BlogPost::create([
+            'author_id' => $admin->id,
+            'title' => 'Image Update Test',
+            'content' => '<p>Original content.</p>',
+            'featured_image' => 'blog/old.jpg',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->withHeaders(['Accept' => 'application/json', 'X-Requested-With' => 'XMLHttpRequest'])
+            ->post(route('admin.blog.update', $post), [
+            '_method' => 'PUT',
+            'title' => 'Image Update Test',
+            'slug' => $post->slug,
+            'content' => '<p>Updated content.</p>',
+            'status' => 'published',
+            'publish_date' => now()->format('Y-m-d'),
+            'publish_time' => now()->format('H:i'),
+            'featured_image' => UploadedFile::fake()->image('updated.webp', 1200, 630),
+            ]);
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('redirect', route('admin.blog.index'));
+
+        $post->refresh();
+        Storage::disk('public')->assertExists($post->featured_image);
+        Storage::disk('public')->assertMissing('blog/old.jpg');
     }
 }
