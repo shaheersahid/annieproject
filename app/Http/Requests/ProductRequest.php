@@ -16,9 +16,6 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         $productId = $this->route('product')?->id;
-        $hasVariants = filter_var($this->input('has_variants', false), FILTER_VALIDATE_BOOLEAN);
-        $isAffiliate = $this->input('affiliate_platform', 'none') !== 'none';
-
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('products', 'slug')->ignore($productId)],
@@ -89,15 +86,9 @@ class ProductRequest extends FormRequest
             'variants.*.attributes' => ['nullable'],
         ];
 
-        if ($isAffiliate || $hasVariants) {
-            $rules['base_price'] = ['nullable', 'numeric', 'min:0'];
-            $rules['sale_price'] = ['nullable', 'numeric', 'min:0'];
-            $rules['stock'] = ['nullable', 'integer', 'min:0'];
-        } else {
-            $rules['base_price'] = ['required', 'numeric', 'min:0'];
-            $rules['sale_price'] = ['nullable', 'numeric', 'min:0', 'lt:base_price'];
-            $rules['stock'] = ['nullable', 'integer', 'min:0'];
-        }
+        $rules['base_price'] = ['nullable', 'numeric', 'min:0'];
+        $rules['sale_price'] = ['nullable', 'numeric', 'min:0'];
+        $rules['stock'] = ['nullable', 'integer', 'min:0'];
 
         return $rules;
     }
@@ -113,21 +104,20 @@ class ProductRequest extends FormRequest
         $isActive = filter_var($this->input('is_active', true), FILTER_VALIDATE_BOOLEAN);
         $status = $isDraft ? 'draft' : ($isActive ? 'published' : 'draft');
         $affiliatePlatform = $this->input('affiliate_platform', 'none');
-        $isAffiliate = $affiliatePlatform !== 'none';
 
         $this->merge([
-            'has_variants' => filter_var($this->input('has_variants', false), FILTER_VALIDATE_BOOLEAN),
+            'has_variants' => false,
             'product_type' => $this->input('product_type', $this->input('type', 'frame')),
-            'is_deal' => $isAffiliate ? false : filter_var($this->input('is_deal', false), FILTER_VALIDATE_BOOLEAN),
-            'deal_enabled' => $isAffiliate ? false : filter_var($this->input('deal_enabled', $this->input('is_deal', false)), FILTER_VALIDATE_BOOLEAN),
-            'base_price' => $isAffiliate ? 0 : $this->input('base_price', $this->input('price')),
-            'sale_price' => $isAffiliate ? null : $this->input('sale_price'),
+            'is_deal' => false,
+            'deal_enabled' => false,
+            'base_price' => $this->input('base_price', 0),
+            'sale_price' => null,
             'price_note' => $this->input('price_note', 'Check latest price'),
             'affiliate_rating' => $this->input('affiliate_rating'),
             'pros' => $this->linesToArray($this->input('pros')),
             'cons' => $this->linesToArray($this->input('cons')),
-            'stock' => $this->input('stock', $this->input('stock_quantity', 0)),
-            'low_stock_threshold' => $this->input('low_stock_threshold', 5),
+            'stock' => $this->input('stock', 0),
+            'low_stock_threshold' => $this->input('low_stock_threshold', 0),
             'specifications' => $specifications,
             'is_draft' => $isDraft,
             'is_active' => $isActive,

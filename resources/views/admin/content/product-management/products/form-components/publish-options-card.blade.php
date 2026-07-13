@@ -15,11 +15,6 @@
             <label class="form-check-label" for="is_active_switch">Active</label>
         </div>
         
-        <!-- Out of Stock Option -->
-        <div class="form-check form-switch mb-3">
-            <input type="hidden" name="out_of_stock" value="0">
-            <input class="form-check-input" type="checkbox" id="out_of_stock_switch" name="out_of_stock" value="1" {{ old('out_of_stock', $isEdit && $product ? $product->out_of_stock : false) ? 'checked' : '' }}>
-            <label class="form-check-label" for="out_of_stock_switch">Out of Stock</label>
-        </div>
+        <input type="hidden" name="out_of_stock" value="0">
     </div>
 </div>

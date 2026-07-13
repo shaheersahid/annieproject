@@ -1,9 +1,8 @@
 const ProductForm = (function () {
     let config = {
-        variantIndex: 1,
         specIndex: 0,
         currentStep: 1,
-        totalSteps: 4,
+        totalSteps: 3,
         maxImages: 9
     };
 
@@ -18,31 +17,7 @@ const ProductForm = (function () {
         config.currentStep = savedStep;
         updateStep(config.currentStep);
 
-        // Count existing variants
-        const existingVariants = $('.variant-row').length;
-        if (existingVariants > 0) {
-            config.variantIndex = existingVariants;
-        }
-
-        // Initialize presentation based on has_variants state
-        const initialHasVariants = isVariantsEnabled();
-        updateVariantsPresentation(initialHasVariants);
-        updateAffiliatePricingPresentation();
         updateGalleryCount();
-    }
-
-    function isVariantsEnabled() {
-        const $toggle = $('#has_variants');
-        if ($toggle.length) {
-            return $toggle.is(':checked');
-        }
-
-        return $('input[name="has_variants"]:checked').val() === '1';
-    }
-
-    function isAffiliateProduct() {
-        const platform = $('#affiliate_platform').val();
-        return platform && platform !== 'none';
     }
 
     function initDatePickers() {
@@ -81,84 +56,7 @@ const ProductForm = (function () {
         }
     }
 
-    function calculateTotalVariantStock() {
-        if (isVariantsEnabled()) {
-            let total = 0;
-            $('.variant-stock').each(function () {
-                const qty = parseInt($(this).val()) || 0;
-                total += qty;
-            });
-            $('#stock_quantity').val(total);
-        }
-    }
-
-    function updateVariantsPresentation(hasVariants) {
-        if (hasVariants) {
-            $('.simple-product-only').addClass('d-none');
-            $('#variants-section').removeClass('d-none');
-            $('#stock_quantity').prop('readonly', true).addClass('bg-light');
-            $('#stock_quantity_help').text('Auto-updated from variants total stock.').removeClass('d-none');
-            calculateTotalVariantStock();
-        } else {
-            $('.simple-product-only').removeClass('d-none');
-            $('#variants-section').addClass('d-none');
-            $('#stock_quantity').prop('readonly', false).removeClass('bg-light');
-            $('#stock_quantity_help').addClass('d-none');
-        }
-    }
-
-    function updateAffiliatePricingPresentation() {
-        const affiliate = isAffiliateProduct();
-        const $fields = $('.affiliate-price-field');
-
-        $fields.toggleClass('d-none', affiliate);
-        $fields.find('input, select, textarea').prop('disabled', affiliate);
-
-        if (affiliate) {
-            $('#base_price').val('');
-            $('#sale_price').val('');
-            $('#is_deal').prop('checked', false);
-            $('#deal_enabled').val('0');
-            $('#deal-settings-wrapper').hide();
-        }
-    }
-
     function bindEvents() {
-        $(document).on('change', '#affiliate_platform', function () {
-            updateAffiliatePricingPresentation();
-        });
-
-        // Toggle variants display
-        $(document).on('change', '#has_variants, input[name="has_variants"]', function () {
-            const hasVariants = isVariantsEnabled();
-            updateVariantsPresentation(hasVariants);
-            updateAffiliatePricingPresentation();
-        });
-
-        // Add variant row
-        $('#add-variant').on('click', function () {
-            const template = $('#variant-template').html();
-            const html = template.replace(/__INDEX__/g, config.variantIndex);
-            $('#variants-container').append(html);
-            $('#no-variants-message').addClass('d-none');
-            config.variantIndex++;
-            calculateTotalVariantStock();
-        });
-
-        // Remove variant row
-        $(document).on('click', '.remove-variant', function () {
-            $(this).closest('.variant-row').remove();
-            if ($('#variants-container .variant-row').length === 0) {
-                $('#no-variants-message').removeClass('d-none');
-            }
-            calculateTotalVariantStock();
-        });
-
-        // Recalculate stock on variant stock change
-        $(document).on('input change', '.variant-stock', function () {
-            calculateTotalVariantStock();
-        });
-
         // Add specification row
         $(document).on('click', '#add-spec', function () {
             const template = $('#spec-template').html();
@@ -172,16 +70,6 @@ const ProductForm = (function () {
         // Remove specification row
         $(document).on('click', '.remove-spec', function () {
             $(this).closest('.spec-row').remove();
-        });
-
-        // Toggle Deal / Promotion
-        $(document).on('change', '#is_deal', function () {
-            $('#deal_enabled').val($(this).is(':checked') ? '1' : '0');
-            if ($(this).is(':checked')) {
-                $('#deal-settings-wrapper').slideDown();
-            } else {
-                $('#deal-settings-wrapper').slideUp();
-            }
         });
 
         // --- Multi-step Navigation ---
@@ -298,24 +186,6 @@ const ProductForm = (function () {
             }
         }
 
-        if (step === 3 && !isVariantsEnabled() && !isAffiliateProduct()) {
-            const basePrice = parseFloat($('#base_price').val());
-            const salePriceValue = $('#sale_price').val();
-            const salePrice = salePriceValue === '' ? null : parseFloat(salePriceValue);
-
-            if (Number.isNaN(basePrice) || basePrice < 0) {
-                $('#base_price').addClass('is-invalid');
-                $('#base_price').closest('.input-group').after('<div class="invalid-feedback d-block">Base price is required.</div>');
-                isValid = false;
-            }
-
-            if (salePrice !== null && (!Number.isNaN(basePrice) && salePrice >= basePrice)) {
-                $('#sale_price').addClass('is-invalid');
-                $('#sale_price').closest('.input-group').after('<div class="invalid-feedback d-block">Sale price must be less than base price.</div>');
-                isValid = false;
-            }
-        }
-
         if (!isValid) {
             if (typeof toastr !== 'undefined') {
                 toastr.error('Please fill in all required fields.');
@@ -407,10 +277,6 @@ const ProductForm = (function () {
 
     return {
         init: init,
-        updatePresentation: function () {
-            const hasVariants = isVariantsEnabled();
-            updateVariantsPresentation(hasVariants);
-        },
         handleThumbnailSelect: handleThumbnailSelect,
         removeThumbnail: removeThumbnail,
         handleGallerySelect: handleGallerySelect,

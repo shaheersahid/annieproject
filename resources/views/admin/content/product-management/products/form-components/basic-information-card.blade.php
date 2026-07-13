@@ -57,28 +57,7 @@
             </div>
         </div>
 
-        <div class="row mb-1">
-            <div class="col-md-6">
-                <label for="has_variants" class="form-label">Enable Variants</label>
-                <div class="form-check form-switch mt-1">
-                    <input type="hidden" name="has_variants" value="0">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="has_variants"
-                        name="has_variants"
-                        value="1"
-                        {{ old('has_variants', $product?->has_variants ?? false) ? 'checked' : '' }}
-                    >
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="text-muted small mt-md-4 pt-md-2">
-                    Use variants for frame sizes/colors, lens types, prescription ranges, and accessory packs.
-                </div>
-            </div>
-        </div>
+        <input type="hidden" name="has_variants" value="0">
 
     </div>
 </div>

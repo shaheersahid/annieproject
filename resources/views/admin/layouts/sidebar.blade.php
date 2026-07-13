@@ -112,6 +112,20 @@
                     </a>
                 </li>
 
+                {{-- ── CONTENT ──────────────────────────────── --}}
+                <li class="menu-title">Content</li>
+
+                <li class="{{ request()->routeIs('admin.blog.*') ? 'mm-active' : '' }}">
+                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog</span>
+                    </a>
+                    <ul class="sub-menu {{ request()->routeIs('admin.blog.*') ? 'mm-show' : '' }}">
+                        <li><a href="{{ Route::has('admin.blog.index') ? route('admin.blog.index') : '#' }}" class="{{ request()->routeIs('admin.blog.index') ? 'active' : '' }}">All Posts</a></li>
+                        <li><a href="{{ Route::has('admin.blog.create') ? route('admin.blog.create') : '#' }}" class="{{ request()->routeIs('admin.blog.create') ? 'active' : '' }}">Write Post</a></li>
+                    </ul>
+                </li>
+
                 {{-- ── MARKETING ────────────────────────────── --}}
                 @if($u->can('admin.newsletter.index') || $u->can('admin.contact.index'))
                 <li class="menu-title">Marketing</li>

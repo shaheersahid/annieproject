@@ -2,8 +2,7 @@
     $steps = $steps ?? [
         ['number' => 1, 'label' => 'Basics', 'meta' => 'Name, category, suppliers'],
         ['number' => 2, 'label' => 'Media', 'meta' => 'Thumbnail, gallery, video'],
-        ['number' => 3, 'label' => 'Pricing & Stock', 'meta' => 'Price, VAT, inventory'],
-        ['number' => 4, 'label' => 'Details', 'meta' => 'Specs, publish, merchandising'],
+        ['number' => 3, 'label' => 'Details', 'meta' => 'Specs and publish status'],
     ];
     $activeStep = $activeStep ?? 1;
 @endphp

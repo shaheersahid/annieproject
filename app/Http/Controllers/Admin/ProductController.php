@@ -220,10 +220,6 @@ class ProductController extends Controller
             'sellers'        => Seller::where('is_active', true)->orderBy('store_name')->get(),
             'sizeCharts'     => SizeChart::orderBy('name')->get(),
             'productTags'    => ProductTag::where('is_active', true)->orderBy('name')->get(),
-            'attributeValues' => ProductAttribute::where('is_active', true)
-                ->get()
-                ->mapWithKeys(fn ($a) => [$a->id => array_filter(array_map('trim', explode(',', $a->value ?? '')))])
-                ->toArray(),
         ];
     }
 
@@ -278,6 +274,7 @@ class ProductController extends Controller
     private function syncVariants(Product $product, Request $request): void
     {
         if (! $request->boolean('has_variants')) {
+            $product->variants()->delete();
             return;
         }
 

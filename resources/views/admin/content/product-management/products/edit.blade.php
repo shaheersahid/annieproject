@@ -66,19 +66,6 @@
 
                 <div class="form-step" id="step-3">
                     @include('admin.content.product-management.products.form-components.step-intro', [
-                        'title' => 'Update pricing, stock, and variants',
-                        'text' => 'Adjust product price and variant options.',
-                    ])
-                    <div class="row">
-                        <div class="col-lg-12">
-                            @include('admin.content.product-management.products.form-components.pricing-card', ['isEdit' => true, 'product' => $product])
-                            @include('admin.content.product-management.products.form-components.variants-card', ['isEdit' => true, 'product' => $product])
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-step" id="step-4">
-                    @include('admin.content.product-management.products.form-components.step-intro', [
                         'title' => 'Finalize product details',
                         'text' => 'Update specifications and publishing status.',
                     ])
@@ -97,8 +84,6 @@
         </x-admin.card>
     </div>
 </div>
-
-@include('admin.content.product-management.products.form-components.variant-template', ['isEdit' => true])
 
 <template id="spec-template">
     <div class="spec-row row mb-2">
@@ -133,34 +118,7 @@
             }
             $('#product_type').on('change', toggleSizeChart);
             toggleSizeChart();
-            const attributeValues = @json($attributeValues);
-            function fillVariantValues($row) {
-                const attributeId = $row.find('.variant-option').val();
-                const selected = $row.find('.variant-value').data('selected') || $row.find('.variant-value').val();
-                const values = attributeValues[attributeId] || [];
-                const $value = $row.find('.variant-value');
-                $value.empty().append(new Option('Select value', ''));
-                values.forEach(function(value) {
-                    const option = new Option(value, value);
-                    if (String(value) === String(selected)) option.selected = true;
-                    $value.append(option);
-                });
-            }
-            $('#variants-container .variant-row').each(function() {
-                fillVariantValues($(this));
-            });
-            $(document).on('change', '.variant-option', function() {
-                const $row = $(this).closest('.variant-row');
-                $row.find('.variant-value').data('selected', '');
-                fillVariantValues($row);
-            });
-            $(document).on('click', '#add-variant', function() {
-                setTimeout(function() {
-                    $('#variants-container .variant-row').last().find('.variant-option').trigger('change');
-                }, 0);
-            });
             ProductForm.init({
-                variantIndex: {{ $product->variants->count() }},
                 specIndex: 0,
                 existingImageCount: {{ $product->images->where('type', 'gallery')->count() }},
                 redirectUrl: "{{ route('admin.products.index') }}",
