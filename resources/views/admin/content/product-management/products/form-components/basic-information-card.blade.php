@@ -8,8 +8,10 @@
         <h5 class="card-title mb-0"><i class="fa fa-info-circle me-2"></i>Basic Information</h5>
     </div>
     <div class="card-body">
+        <input type="hidden" name="product_type" value="{{ old('product_type', $product?->product_type ?? 'accessory') }}">
+
         <div class="row mb-3">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <label for="name" class="form-label fw-semibold">Product Title <span class="text-danger">*</span></label>
                 <input
                     type="text"
@@ -17,18 +19,8 @@
                     id="name"
                     name="name"
                     value="{{ old('name', $product?->name) }}"
-                    @if(!$isEdit) placeholder="e.g. RayBan Premium Eyewear Frame" @endif
+                    @if(!$isEdit) placeholder="e.g. Ergonomic Lumbar Support Cushion" @endif
                 >
-            </div>
-            <div class="col-md-3">
-                <label for="product_type" class="form-label fw-semibold">Product Type <span class="text-danger">*</span></label>
-                <select class="form-select" name="product_type" id="product_type">
-                    @foreach($productTypes as $type)
-                        <option value="{{ $type->value }}" {{ old('product_type', $product?->product_type ?? 'frame') === $type->value ? 'selected' : '' }}>
-                            {{ str($type->value)->headline() }}
-                        </option>
-                    @endforeach
-                </select>
             </div>
         </div>
 

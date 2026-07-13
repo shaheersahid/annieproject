@@ -165,16 +165,10 @@
                     <div class="form-step" id="step-3">
                         @include('admin.content.product-management.products.form-components.step-intro', [
                             'title' => 'Finish publishing details',
-                            'text' => 'Add final specifications and choose whether this product is published.',
+                            'text' => 'Choose whether this product is published.',
                         ])
-                        <div class="row">
-                            <div class="col-lg-8">
-                                @include(
-                                    'admin.content.product-management.products.form-components.details-card',
-                                    ['isEdit' => false]
-                                )
-                            </div>
-                            <div class="col-lg-4">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
                                 @include(
                                     'admin.content.product-management.products.form-components.publish-options-card',
                                     ['isEdit' => false]
@@ -192,23 +186,6 @@
         </div>
     </div>
 
-    <template id="spec-template">
-        <div class="spec-row row mb-2">
-            <div class="col-5">
-                <input type="text" class="form-control" name="specifications[items][__INDEX__][key]"
-                    placeholder="Specification name">
-            </div>
-            <div class="col-5">
-                <input type="text" class="form-control" name="specifications[items][__INDEX__][value]"
-                    placeholder="Value">
-            </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-outline-danger remove-spec">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </template>
 @endsection
 
 @push('admin-scripts')
@@ -217,25 +194,37 @@
     <script src="{{ asset('admin/assets/js/products.js') }}"></script>
     <script>
         $(function() {
-            $('.select2, .select2-categories').select2({
-                placeholder: 'Select Options',
-                allowClear: true
-            });
+            $('.select2-categories').select2({ placeholder: 'Select categories', allowClear: true });
+            $('.select2').select2({ placeholder: 'Select options', allowClear: true });
 
-            function toggleSizeChart() {
-                const usesGuide = ['frame', 'service'].includes($('#product_type').val());
-                $('#size-chart-wrapper').toggle(usesGuide);
-                if (!usesGuide) {
-                    $('#size_chart_id').val('');
-                }
-            }
-            $('#product_type').on('change', toggleSizeChart);
-            toggleSizeChart();
             ProductForm.init({
                 specIndex: 0,
                 existingImageCount: 0,
                 redirectUrl: "{{ route('admin.products.index') }}",
                 maxImages: 9
+            });
+
+            // Quick-create tag
+            $('#quick-add-tag').on('click', function () {
+                $('#quick-tag-form').removeClass('d-none');
+                $('#new-tag-name').focus();
+            });
+            $('#cancel-new-tag').on('click', function () {
+                $('#quick-tag-form').addClass('d-none');
+                $('#new-tag-name').val('');
+            });
+            $('#save-new-tag').on('click', function () {
+                var name = $('#new-tag-name').val().trim();
+                if (!name) return;
+                $.post("{{ route('admin.attributes.quick-store') }}", { _token: "{{ csrf_token() }}", name: name })
+                    .done(function (res) {
+                        var opt = new Option(res.name, res.id, true, true);
+                        $('#tag_ids').append(opt).trigger('change');
+                        $('#quick-tag-form').addClass('d-none');
+                        $('#new-tag-name').val('');
+                        toastr.success('Tag "' + res.name + '" created.');
+                    })
+                    .fail(function () { toastr.error('Could not create tag.'); });
             });
         });
     </script>

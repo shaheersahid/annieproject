@@ -196,8 +196,9 @@ const ProductForm = (function () {
                 isValid = false;
             }
 
-            const selectedCategories = $('#category_ids').val() || [];
-            if ($('#category_ids').length && !selectedCategories.length) {
+            const categoryCount = $('#category_ids option:selected').length ||
+                ($('#category_ids').val() ? ($('#category_ids').val() || []).length : 0);
+            if ($('#category_ids').length && !categoryCount) {
                 $('#category_ids').addClass('is-invalid');
                 $('#category_ids').next('.select2-container').after('<div class="invalid-feedback d-block">Please select at least one category.</div>');
                 isValid = false;

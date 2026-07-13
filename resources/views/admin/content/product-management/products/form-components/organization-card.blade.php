@@ -55,6 +55,9 @@
         <div class="mt-3">
             <div class="d-flex align-items-center justify-content-between mb-1">
                 <label for="tag_ids" class="form-label mb-0">Tags</label>
+                <button type="button" class="btn btn-outline-secondary btn-xs py-0 px-2" id="quick-add-tag" title="Create new tag">
+                    <i class="fa fa-plus fa-xs"></i> New Tag
+                </button>
             </div>
             <select class="form-select select2" id="tag_ids" name="tag_ids[]" multiple="multiple">
                 @foreach (($productTags ?? collect()) as $tag)
@@ -63,6 +66,13 @@
                     </option>
                 @endforeach
             </select>
+            <div class="mt-2 d-none" id="quick-tag-form">
+                <div class="input-group input-group-sm">
+                    <input type="text" id="new-tag-name" class="form-control" placeholder="New tag name...">
+                    <button type="button" class="btn btn-success" id="save-new-tag">Add</button>
+                    <button type="button" class="btn btn-outline-secondary" id="cancel-new-tag">&times;</button>
+                </div>
+            </div>
         </div>
 
         @if($isEdit)

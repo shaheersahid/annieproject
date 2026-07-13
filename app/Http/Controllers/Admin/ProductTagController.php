@@ -56,4 +56,14 @@ class ProductTagController extends Controller
         $attribute->update(['is_active' => ! $attribute->is_active]);
         return response()->json(['success' => true]);
     }
+
+    public function quickStore(Request $request): JsonResponse
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        $tag = ProductTag::firstOrCreate(
+            ['name' => $request->input('name')],
+            ['is_active' => true]
+        );
+        return response()->json(['id' => $tag->id, 'name' => $tag->name]);
+    }
 }

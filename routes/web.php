@@ -120,6 +120,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::resource('attributes', Admin\ProductTagController::class)->except(['show']);
     Route::patch('attributes/{attribute}/toggle-active', [Admin\ProductTagController::class, 'toggleActive'])
         ->name('attributes.toggle-active');
+    Route::post('attributes/quick-store', [Admin\ProductTagController::class, 'quickStore'])
+        ->name('attributes.quick-store');
     Route::resource('product-attributes', Admin\ProductAttributeController::class)->except(['show']);
     Route::patch('product-attributes/{product_attribute}/toggle-active', [Admin\ProductAttributeController::class, 'toggleActive'])
         ->name('product-attributes.toggle-active');
