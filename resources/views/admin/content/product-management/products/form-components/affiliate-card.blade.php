@@ -38,11 +38,7 @@
                 <label for="aliexpress_url" class="form-label">AliExpress Affiliate URL</label>
                 <input type="url" class="form-control" id="aliexpress_url" name="aliexpress_url" value="{{ old('aliexpress_url', $product?->aliexpress_url) }}" placeholder="https://www.aliexpress.com/...aff_id=...">
             </div>
-            <div class="col-md-6">
-                <label for="price_note" class="form-label">Price Display Text</label>
-                <input type="text" class="form-control" id="price_note" name="price_note" value="{{ old('price_note', $product?->price_note ?? 'Check latest price') }}">
-                <small class="text-muted">Recommended for Amazon unless price comes from PA API.</small>
-            </div>
+            <input type="hidden" id="price_note" name="price_note" value="{{ old('price_note', $product?->price_note ?? 'Check latest price') }}">
             <div class="col-md-6">
                 <label for="is_featured" class="form-label">Featured Deal</label>
                 <div class="form-check form-switch mt-1">

@@ -10,7 +10,7 @@
     </div>
     <div class="card-body" id="simple-pricing">
         <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-md-6 affiliate-price-field">
                 <label for="base_price" class="form-label fw-semibold">Base Price <span class="text-danger">*</span></label>
                 <div class="input-group">
                     <span class="input-group-text">PKR</span>
@@ -20,7 +20,7 @@
                 </div>
                 <small class="text-muted">The regular price of the product</small>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 affiliate-price-field">
                 <label for="sale_price" class="form-label fw-semibold">Sale Price</label>
                 <div class="input-group">
                     <span class="input-group-text">PKR</span>
@@ -46,7 +46,7 @@
 
         <hr class="my-4">
 
-        <div class="d-flex align-items-center justify-content-between p-3 bg-light border rounded">
+        <div class="d-flex align-items-center justify-content-between p-3 bg-light border rounded affiliate-price-field">
             <div>
                 <label class="form-label fw-semibold mb-1" for="is_deal">Enable Deal</label>
                 <div class="text-muted small">Use this for fixed or percentage promotional pricing.</div>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div id="deal-settings-wrapper" class="mt-3" style="display: {{ old('is_deal', $isEdit ? $product->deal_enabled : false) ? 'block' : 'none' }};">
+        <div id="deal-settings-wrapper" class="mt-3 affiliate-price-field" style="display: {{ old('is_deal', $isEdit ? $product->deal_enabled : false) ? 'block' : 'none' }};">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="deal_type" class="form-label fw-semibold">Deal Type</label>

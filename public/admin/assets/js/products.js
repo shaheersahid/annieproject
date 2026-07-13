@@ -27,6 +27,7 @@ const ProductForm = (function () {
         // Initialize presentation based on has_variants state
         const initialHasVariants = isVariantsEnabled();
         updateVariantsPresentation(initialHasVariants);
+        updateAffiliatePricingPresentation();
         updateGalleryCount();
     }
 
@@ -37,6 +38,11 @@ const ProductForm = (function () {
         }
 
         return $('input[name="has_variants"]:checked').val() === '1';
+    }
+
+    function isAffiliateProduct() {
+        const platform = $('#affiliate_platform').val();
+        return platform && platform !== 'none';
     }
 
     function initDatePickers() {
@@ -101,11 +107,32 @@ const ProductForm = (function () {
         }
     }
 
+    function updateAffiliatePricingPresentation() {
+        const affiliate = isAffiliateProduct();
+        const $fields = $('.affiliate-price-field');
+
+        $fields.toggleClass('d-none', affiliate);
+        $fields.find('input, select, textarea').prop('disabled', affiliate);
+
+        if (affiliate) {
+            $('#base_price').val('');
+            $('#sale_price').val('');
+            $('#is_deal').prop('checked', false);
+            $('#deal_enabled').val('0');
+            $('#deal-settings-wrapper').hide();
+        }
+    }
+
     function bindEvents() {
+        $(document).on('change', '#affiliate_platform', function () {
+            updateAffiliatePricingPresentation();
+        });
+
         // Toggle variants display
         $(document).on('change', '#has_variants, input[name="has_variants"]', function () {
             const hasVariants = isVariantsEnabled();
             updateVariantsPresentation(hasVariants);
+            updateAffiliatePricingPresentation();
         });
 
         // Add variant row
@@ -271,7 +298,7 @@ const ProductForm = (function () {
             }
         }
 
-        if (step === 3 && !isVariantsEnabled()) {
+        if (step === 3 && !isVariantsEnabled() && !isAffiliateProduct()) {
             const basePrice = parseFloat($('#base_price').val());
             const salePriceValue = $('#sale_price').val();
             const salePrice = salePriceValue === '' ? null : parseFloat(salePriceValue);

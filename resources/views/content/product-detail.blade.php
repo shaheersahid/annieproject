@@ -218,6 +218,10 @@
     }
 
     .product-detail-gallery .product-image-gallery {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-content: flex-start;
         flex: 0 0 8.8rem;
         width: 8.8rem;
         margin: 0;
@@ -230,6 +234,8 @@
         margin: 0 0 1rem;
         border: .1rem solid #ebebeb;
         background: #fff;
+        flex: none;
+        max-width: none;
     }
 
     .product-detail-gallery .product-gallery-item img {
