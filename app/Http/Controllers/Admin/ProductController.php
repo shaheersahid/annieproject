@@ -218,7 +218,7 @@ class ProductController extends Controller
     {
         return [
             'productTypes'   => ProductTypeEnum::cases(),
-            'categories'     => Category::active()->orderBy('name')->get(),
+            'categories'     => Category::active()->with('parent')->orderBy('name')->get(),
             'brands'         => Brand::active()->orderBy('name')->get(),
             'sellers'        => Seller::where('is_active', true)->orderBy('store_name')->get(),
             'sizeCharts'     => SizeChart::orderBy('name')->get(),

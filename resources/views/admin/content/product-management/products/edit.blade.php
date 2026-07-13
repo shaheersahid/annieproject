@@ -90,8 +90,7 @@
     <script src="{{ asset('admin/assets/js/products.js') }}"></script>
     <script>
         $(function() {
-            $('.select2-categories').select2({ placeholder: 'Select categories', allowClear: true });
-            $('.select2').select2({ placeholder: 'Select options', allowClear: true });
+            $('.select2, .select2-categories').select2({ placeholder: 'Select options', allowClear: true });
 
             ProductForm.init({
                 specIndex: 0,
