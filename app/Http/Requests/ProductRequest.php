@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\ProductTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class ProductRequest extends FormRequest
 {
@@ -59,10 +60,10 @@ class ProductRequest extends FormRequest
             'deal_end_at' => ['nullable', 'date', 'after_or_equal:deal_start_at'],
             'sold_out' => ['nullable', 'integer', 'min:0'],
             'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
-            'thumbnail' => ['nullable', 'image', 'max:4096'],
+            'thumbnail' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
             'images' => ['nullable', 'array'],
-            'images.*' => ['nullable', 'image', 'max:4096'],
-            'video' => ['nullable', 'file', 'mimetypes:video/mp4,video/mpeg,video/quicktime,video/webm', 'max:51200'],
+            'images.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,avif', 'max:5120'],
+            'video' => ['nullable', 'file', 'mimetypes:video/mp4,video/mpeg,video/quicktime,video/webm', 'max:30720'],
             'deleted_images' => ['nullable', 'array'],
             'deleted_images.*' => ['string'],
             'variants' => ['nullable', 'array'],
@@ -91,6 +92,21 @@ class ProductRequest extends FormRequest
         $rules['stock'] = ['nullable', 'integer', 'min:0'];
 
         return $rules;
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator): void {
+            $files = collect([$this->file('thumbnail'), $this->file('video')])
+                ->merge($this->file('images', []))
+                ->filter();
+
+            $totalBytes = $files->sum(fn ($file) => $file->getSize() ?: 0);
+
+            if ($totalBytes > 32 * 1024 * 1024) {
+                $validator->errors()->add('images', 'Combined media upload must not exceed 32 MB.');
+            }
+        });
     }
 
     protected function prepareForValidation(): void
@@ -146,6 +162,11 @@ class ProductRequest extends FormRequest
         return [
             'category_ids.required' => 'Please select at least one category.',
             'product_type.in' => 'Selected optical product type is invalid.',
+            'thumbnail.mimes' => 'Main image must be JPG, PNG, WebP, or AVIF.',
+            'thumbnail.max' => 'Main image must not exceed 5 MB.',
+            'images.*.mimes' => 'Gallery images must be JPG, PNG, WebP, or AVIF.',
+            'images.*.max' => 'Each gallery image must not exceed 5 MB.',
+            'video.max' => 'Video must not exceed 30 MB.',
         ];
     }
 }

@@ -17,10 +17,13 @@ use App\Models\Seller;
 use App\Models\SizeChart;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -243,17 +246,22 @@ class ProductController extends Controller
     private function handleImages(Product $product, Request $request): void
     {
         if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('products', 'public');
+            $oldThumbnail = $product->images()->where('type', 'primary')->first();
+            $path = $this->storePublicFile($request->file('thumbnail'), 'products', 'thumbnail');
             $product->images()->updateOrCreate(
                 ['type' => 'primary'],
                 ['path' => $path, 'order' => 0]
             );
+
+            if ($oldThumbnail && $oldThumbnail->path !== $path) {
+                Storage::disk('public')->delete($oldThumbnail->path);
+            }
         }
 
         if ($request->hasFile('images')) {
             $existing = $product->images()->where('type', 'gallery')->count();
             foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('products', 'public');
+                $path = $this->storePublicFile($file, 'products', 'images');
                 $product->images()->create([
                     'path'  => $path,
                     'type'  => 'gallery',
@@ -269,6 +277,34 @@ class ProductController extends Controller
                 $img->delete();
             });
         }
+
+        if ($request->hasFile('video')) {
+            $oldVideo = $product->video_path;
+            $videoPath = $this->storePublicFile($request->file('video'), 'products/videos', 'video');
+            $product->update(['video_path' => $videoPath]);
+
+            if ($oldVideo && $oldVideo !== $videoPath) {
+                Storage::disk('public')->delete($oldVideo);
+            }
+        }
+    }
+
+    private function storePublicFile(UploadedFile $file, string $directory, string $field): string
+    {
+        try {
+            $path = $file->store($directory, 'public');
+        } catch (Throwable $exception) {
+            report($exception);
+            $path = false;
+        }
+
+        if (! $path) {
+            throw ValidationException::withMessages([
+                $field => 'File could not be saved. Check public storage permissions and try again.',
+            ]);
+        }
+
+        return $path;
     }
 
     private function syncVariants(Product $product, Request $request): void

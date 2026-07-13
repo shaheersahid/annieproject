@@ -3,7 +3,10 @@ const ProductForm = (function () {
         specIndex: 0,
         currentStep: 1,
         totalSteps: 3,
-        maxImages: 9
+        maxImages: 9,
+        maxImageBytes: 5 * 1024 * 1024,
+        maxVideoBytes: 30 * 1024 * 1024,
+        maxUploadBytes: 32 * 1024 * 1024
     };
 
     function init(userConfig) {
@@ -87,16 +90,18 @@ const ProductForm = (function () {
 
         $('#draft-btn').on('click', function (e) {
             e.preventDefault();
-            $('#is_draft').val(1);
-            $('#current_step').val(config.currentStep);
-            $('#product-form')[0].submit();
+            submitProduct(true);
         });
 
         $('#submit-btn').on('click', function (e) {
             e.preventDefault();
-            $('#is_draft').val(0);
-            $('#current_step').val(config.currentStep);
-            $('#product-form')[0].submit();
+            submitProduct(false);
+        });
+
+        $('#video').on('change', function () {
+            if (!validateMedia()) {
+                $(this).val('');
+            }
         });
 
         $('.step-item').on('click keydown', function (event) {
@@ -118,6 +123,19 @@ const ProductForm = (function () {
             config.currentStep = targetStep;
             updateStep(config.currentStep);
         });
+    }
+
+    function submitProduct(isDraft) {
+        if (!validateMedia()) return;
+
+        if (typeof tinymce !== 'undefined') {
+            tinymce.triggerSave();
+        }
+
+        $('#is_draft').val(isDraft ? 1 : 0);
+        $('#current_step').val(config.currentStep);
+        $('#draft-btn, #submit-btn').prop('disabled', true);
+        $('#product-form')[0].submit();
     }
 
     function updateStep(step) {
@@ -198,6 +216,19 @@ const ProductForm = (function () {
     // --- Image Upload & Preview Functions ---
     function handleThumbnailSelect(input) {
         if (input.files && input.files[0]) {
+            if (!isValidImage(input.files[0]) || input.files[0].size > config.maxImageBytes) {
+                showMediaError('Main image must be JPG, PNG, WebP, or AVIF and no larger than 5 MB.');
+                $(input).val('');
+                removeThumbnail();
+                return;
+            }
+
+            if (!validateMedia()) {
+                $(input).val('');
+                removeThumbnail();
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = function (e) {
                 $('#thumbnail-preview').attr('src', e.target.result);
@@ -223,11 +254,28 @@ const ProductForm = (function () {
             const newCount = input.files.length;
             const totalCount = existingCount + newCount;
 
+            const invalidFile = Array.from(input.files).find(file =>
+                !isValidImage(file) || file.size > config.maxImageBytes
+            );
+
+            if (invalidFile) {
+                showMediaError('Gallery images must be JPG, PNG, WebP, or AVIF and no larger than 5 MB each.');
+                $(input).val('');
+                updateGalleryCount();
+                return;
+            }
+
             if (totalCount > config.maxImages) {
                 const maxAllowed = config.maxImages - existingCount;
                 if (typeof toastr !== 'undefined') {
                     toastr.warning(`You can select a maximum of ${maxAllowed} more image(s). Total limit: ${config.maxImages}`);
                 }
+                $(input).val('');
+                updateGalleryCount();
+                return;
+            }
+
+            if (!validateMedia()) {
                 $(input).val('');
                 updateGalleryCount();
                 return;
@@ -256,12 +304,16 @@ const ProductForm = (function () {
     }
 
     function removeSelectedGalleryImage(btn, index) {
+        const input = document.getElementById('images');
+        const transfer = new DataTransfer();
+
+        Array.from(input.files).forEach((file, fileIndex) => {
+            if (fileIndex !== index) transfer.items.add(file);
+        });
+
+        input.files = transfer.files;
         $(btn).closest('.new-gallery-image').remove();
-        // Since we can't easily edit a FileList, we just clear the input file selector if all selected ones are deleted
-        if ($('#gallery-preview .new-gallery-image').length === 0) {
-            $('#images').val('');
-        }
-        updateGalleryCount();
+        handleGallerySelect(input);
     }
 
     function removeExistingImage(path, btn) {
@@ -273,6 +325,51 @@ const ProductForm = (function () {
     function updateGalleryCount() {
         const total = $('#gallery-preview .existing-image-card, #gallery-preview .new-gallery-image').length;
         $('#gallery-count').text(`${total}/${config.maxImages}`);
+    }
+
+    function isValidImage(file) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        return ['jpg', 'jpeg', 'png', 'webp', 'avif'].includes(extension);
+    }
+
+    function validateMedia() {
+        const thumbnail = document.getElementById('thumbnail')?.files?.[0];
+        const images = Array.from(document.getElementById('images')?.files || []);
+        const video = document.getElementById('video')?.files?.[0];
+
+        if (thumbnail && (!isValidImage(thumbnail) || thumbnail.size > config.maxImageBytes)) {
+            showMediaError('Main image must be JPG, PNG, WebP, or AVIF and no larger than 5 MB.');
+            return false;
+        }
+
+        if (images.some(file => !isValidImage(file) || file.size > config.maxImageBytes)) {
+            showMediaError('Gallery images must be JPG, PNG, WebP, or AVIF and no larger than 5 MB each.');
+            return false;
+        }
+
+        if (video && video.size > config.maxVideoBytes) {
+            showMediaError('Video must not exceed 30 MB.');
+            return false;
+        }
+
+        const totalBytes = (thumbnail?.size || 0)
+            + images.reduce((total, file) => total + file.size, 0)
+            + (video?.size || 0);
+
+        if (totalBytes > config.maxUploadBytes) {
+            showMediaError('Combined media upload must not exceed 32 MB.');
+            return false;
+        }
+
+        return true;
+    }
+
+    function showMediaError(message) {
+        if (typeof toastr !== 'undefined') {
+            toastr.error(message);
+        } else {
+            window.alert(message);
+        }
     }
 
     return {
