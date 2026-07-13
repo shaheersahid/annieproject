@@ -1,9 +1,9 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Smart Comfort Deals | Premium Ergonomic Cushions, Home & Office Comfort Solutions</title>
+<title>@yield('title', 'Smart Comfort Deals | Premium Ergonomic Cushions, Home & Office Comfort Solutions')</title>
 <meta name="keywords" content="Smart Comfort Deals, ergonomic seat cushion, memory foam cushion, office comfort, home ergonomics, lumbar support, lifestyle accessories">
-<meta name="description" content="Discover Smart Comfort Deals' premium collection of high-quality ergonomic seat cushions, memory foam support, home comfort items, and lifestyle accessories.">
+<meta name="description" content="@yield('meta-description', "Discover Smart Comfort Deals' premium collection of high-quality ergonomic seat cushions, memory foam support, home comfort items, and lifestyle accessories.")">
 <meta name="author" content="Smart Comfort Deals">
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/icons/apple-touch-icon.png') }}">

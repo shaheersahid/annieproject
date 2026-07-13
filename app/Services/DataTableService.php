@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BlogPost;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductTag;
@@ -738,6 +739,33 @@ class DataTableService implements DataTableServiceInterface
                 return $activity->event ? str($activity->event)->headline() : '-';
             })
             ->rawColumns(['properties_summary'])
+            ->make(true);
+    }
+
+    public function getBlogPostsDataTable()
+    {
+        $query = BlogPost::with('author')->latest();
+
+        return DataTables::eloquent($query)
+            ->addColumn('author_name', fn ($p) => $p->author?->name ?? '-')
+            ->addColumn('status_badge', function ($post) {
+                $scheduled = $post->status === 'published' && $post->published_at?->isFuture();
+                $class = $scheduled ? 'info' : ($post->status === 'published' ? 'success' : 'secondary');
+                $label = $scheduled ? 'Scheduled' : ucfirst($post->status);
+
+                return "<span class='badge bg-{$class}'>".$label.'</span>';
+            })
+            ->addColumn('toggle', function ($post) {
+                $checked = $post->status === 'published' ? 'checked' : '';
+                return '<div class="form-check form-switch form-switch-sm d-flex justify-content-center">
+                            <input class="form-check-input toggle-status" type="checkbox"
+                                data-id="'.$post->id.'"
+                                '.$checked.'>
+                        </div>';
+            })
+            ->editColumn('published_at', fn ($p) => $p->published_at?->format('d M Y, h:i A') ?? '-')
+            ->addColumn('action', fn ($p) => view('admin.content.blog.actions', ['blog' => $p])->render())
+            ->rawColumns(['status_badge', 'toggle', 'action'])
             ->make(true);
     }
 }

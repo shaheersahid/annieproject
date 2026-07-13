@@ -41,11 +41,14 @@
         <div class="container-fluid">
             <nav class="main-nav">
                 <ul class="menu sf-arrows">
-                    <li class="active">
+                    <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                         <a href="{{ url('/') }}">Home</a>
                     </li>
-                    <li>
+                    <li class="{{ request()->routeIs('product-list', 'product-detail') ? 'active' : '' }}">
                         <a href="{{ route('product-list') }}">All Deals</a>
+                    </li>
+                    <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">
+                        <a href="{{ route('blog.index') }}">Blog</a>
                     </li>
                     @foreach ($frontendNavCategories ?? collect() as $category)
                         <li>

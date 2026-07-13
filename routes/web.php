@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\ProductBrowseController;
 use App\Models\Category;
@@ -66,6 +67,8 @@ Route::get('/', function () {
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
 Route::get('/products/{product:slug}', [ProductBrowseController::class, 'show'])->name('product-detail');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/wishlist', function () {
     return view('content.wishlist');
@@ -179,6 +182,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::patch('sellers/{seller}/toggle-active', [Admin\SellerController::class, 'toggleActive'])
         ->name('sellers.toggle-active');
     Route::get('customers', [Admin\CustomerController::class, 'index'])->name('customers.index');
+
+    // Blog
+    Route::resource('blog', Admin\BlogController::class)->except(['show']);
+    Route::patch('blog/{blog}/toggle-status', [Admin\BlogController::class, 'toggleStatus'])->name('blog.toggle-status');
 
     // Categories
     Route::get('categories/{category}/products', [Admin\CategoryController::class, 'products'])->name('categories.products');

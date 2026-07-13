@@ -1,6 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+if (!function_exists('generateSlug')) {
+    function generateSlug(\Illuminate\Database\Eloquent\Model $model, string $source): string
+    {
+        $slug     = Str::slug($source);
+        $original = $slug;
+        $count    = 1;
+
+        while (
+            $model::where('slug', $slug)
+                ->when($model->exists, fn ($q) => $q->where('id', '!=', $model->id))
+                ->exists()
+        ) {
+            $slug = $original . '-' . $count++;
+        }
+
+        return $slug;
+    }
+}
 
 if (!function_exists('resolve_image_path')) {
     /**

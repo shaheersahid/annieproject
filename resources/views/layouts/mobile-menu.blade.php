@@ -13,7 +13,7 @@
         
         <nav class="mobile-nav">
             <ul class="mobile-menu">
-                <li class="active">
+                <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                     <a href="{{ url('/') }}">Home</a>
                 </li>
                 @foreach(($frontendNavCategories ?? collect()) as $category)
@@ -32,6 +32,9 @@
                 @endforeach
                 <li>
                     <a href="{{ route('product-list') }}">All Deals</a>
+                </li>
+                <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">
+                    <a href="{{ route('blog.index') }}">Blog</a>
                 </li>
                 <li>
                     <a href="{{ route('about') }}">About</a>
