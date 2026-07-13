@@ -36,8 +36,13 @@
 
                             @if($gallery->isNotEmpty())
                                 <div id="product-zoom-gallery" class="product-image-gallery">
+                                    @if($product->primaryImage)
+                                        <a class="product-gallery-item active" href="#" data-image="{{ $product->primaryImage->url }}" data-zoom-image="{{ $product->primaryImage->url }}">
+                                            <img src="{{ $product->primaryImage->url }}" alt="{{ $product->name }}">
+                                        </a>
+                                    @endif
                                     @foreach($gallery as $image)
-                                        <a class="product-gallery-item" href="#">
+                                        <a class="product-gallery-item" href="#" data-image="{{ $image->url }}" data-zoom-image="{{ $image->url }}">
                                             <img src="{{ $image->url }}" alt="{{ $product->name }}">
                                         </a>
                                     @endforeach
