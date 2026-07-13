@@ -189,19 +189,24 @@ const ProductForm = (function () {
         $currentStepEl.find('.invalid-feedback').remove();
 
         if (step === 1) {
-            const name = $('#name').val().trim();
+            const name = ($('#name').val() || '').trim();
             if (!name) {
                 $('#name').addClass('is-invalid');
                 $('#name').after('<div class="invalid-feedback">Product title is required.</div>');
                 isValid = false;
             }
 
-            const categoryCount = $('#category_ids option:selected').length ||
-                ($('#category_ids').val() ? ($('#category_ids').val() || []).length : 0);
-            if ($('#category_ids').length && !categoryCount) {
-                $('#category_ids').addClass('is-invalid');
-                $('#category_ids').next('.select2-container').after('<div class="invalid-feedback d-block">Please select at least one category.</div>');
-                isValid = false;
+            const $catSelect = $('#category_ids');
+            if ($catSelect.length) {
+                const valArr = $catSelect.val();
+                const hasVal = Array.isArray(valArr) && valArr.length > 0;
+                const hasOpt = $catSelect.find('option:selected').length > 0;
+                const hasUi = $catSelect.next('.select2-container').find('.select2-selection__choice').length > 0;
+                if (!hasVal && !hasOpt && !hasUi) {
+                    $catSelect.addClass('is-invalid');
+                    $catSelect.next('.select2-container').after('<div class="invalid-feedback d-block">Please select at least one category.</div>');
+                    isValid = false;
+                }
             }
         }
 
