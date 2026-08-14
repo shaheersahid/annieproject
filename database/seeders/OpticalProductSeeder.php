@@ -62,7 +62,7 @@ class OpticalProductSeeder extends Seeder
                 'country' => 'Pakistan',
                 'zip_code' => '54000',
                 'location' => 'Lahore, Pakistan',
-                'short_description' => 'Custom prescription glasses, optical frames, blue cut lenses, transition lenses, sunglasses, and eyewear accessories.',
+                'short_description' => 'Custom prescription glasses, optical frames, blue cut lenses, transition lenses, sunglasses, and vision accessories.',
                 'is_active' => true,
             ]
         );
@@ -74,7 +74,7 @@ class OpticalProductSeeder extends Seeder
             ['name' => 'Frames', 'description' => 'Prescription-ready optical frames by size, shape, and fit.', 'sort_order' => 10, 'show_on_home' => true],
             ['name' => 'Lenses', 'description' => 'Blue cut, transition, powered, and non-powered lens services.', 'sort_order' => 20, 'show_on_home' => true],
             ['name' => 'Sunglasses', 'description' => 'Outdoor and prescription-ready sunglasses.', 'sort_order' => 30, 'show_on_home' => true],
-            ['name' => 'Accessories', 'description' => 'Cases, cleaning kits, and daily eyewear care items.', 'sort_order' => 40, 'show_on_home' => true],
+            ['name' => 'Accessories', 'description' => 'Cases, cleaning kits, and daily glasses care items.', 'sort_order' => 40, 'show_on_home' => true],
         ])->map(fn ($category) => Category::updateOrCreate(
             ['slug' => Str::slug($category['name'])],
             $category + ['is_active' => true]
@@ -169,16 +169,16 @@ class OpticalProductSeeder extends Seeder
     protected function seedProducts(Seller $seller, $categories, $brands, $tags, $attributes)
     {
         $catalog = collect([
-            ['name' => 'RayBan Premium Eyewear Frame L-328', 'type' => 'frame', 'brand' => 'RayBan', 'price' => 6500, 'sale_price' => 5200, 'stock' => 36, 'category' => 'Luxury Frames', 'image' => 'rayban-premium-eyewear-frame.png', 'attributes' => ['Frame Size' => ['Medium', 'Wide'], 'Frame Color' => ['Black', 'Gold']]],
+            ['name' => 'RayBan Premium Frame L-328', 'type' => 'frame', 'brand' => 'RayBan', 'price' => 6500, 'sale_price' => 5200, 'stock' => 36, 'category' => 'Luxury Frames', 'image' => 'rayban-premium-frame.png', 'attributes' => ['Frame Size' => ['Medium', 'Wide'], 'Frame Color' => ['Black', 'Gold']]],
             ['name' => 'Cartier Premium Half Frame L-340', 'type' => 'frame', 'brand' => 'Cartier', 'price' => 7200, 'sale_price' => 5900, 'stock' => 22, 'category' => 'Luxury Frames', 'image' => 'cartier-premium-half-frame.png', 'attributes' => ['Frame Size' => ['Wide'], 'Frame Color' => ['Gold', 'Silver']]],
             ['name' => 'Astra Hexagonal Metal Frame L-160 Grey Transparent', 'type' => 'frame', 'brand' => 'Astra', 'price' => 4800, 'sale_price' => 3600, 'stock' => 41, 'category' => 'Power Free Fashion Frames', 'image' => 'astra-hexagonal-metal-frame.png', 'attributes' => ['Frame Size' => ['Medium', 'Wide'], 'Frame Color' => ['Grey Transparent', 'Matte White']]],
-            ['name' => 'TomFord High Quality Men Eyewear L-325', 'type' => 'frame', 'brand' => 'TomFord', 'price' => 6800, 'sale_price' => null, 'stock' => 18, 'category' => 'Men Frames', 'image' => 'tomford-men-eyewear.png', 'attributes' => ['Frame Size' => ['Medium'], 'Frame Color' => ['Black', 'Tortoise']]],
+            ['name' => 'TomFord High Quality Men Frame L-325', 'type' => 'frame', 'brand' => 'TomFord', 'price' => 6800, 'sale_price' => null, 'stock' => 18, 'category' => 'Men Frames', 'image' => 'tomford-men-frame.png', 'attributes' => ['Frame Size' => ['Medium'], 'Frame Color' => ['Black', 'Tortoise']]],
             ['name' => 'Peachmart Aero Screen Blue Cut Glasses 1786', 'type' => 'lens', 'brand' => 'Peachmart', 'price' => 3200, 'sale_price' => 2600, 'stock' => 55, 'category' => 'Blue Cut Glasses', 'image' => 'peachmart-blue-cut-glasses.png', 'attributes' => ['Lens Type' => ['Blue Cut'], 'Frame Size' => ['Medium', 'Wide']]],
             ['name' => 'Alpha Screen Protection BlueCut Glasses T-009', 'type' => 'lens', 'brand' => 'Qadir Optics', 'price' => 2900, 'sale_price' => 2400, 'stock' => 48, 'category' => 'Blue Cut Glasses', 'image' => 'alpha-bluecut-glasses.png', 'attributes' => ['Lens Type' => ['Blue Cut'], 'Frame Size' => ['Narrow', 'Medium']]],
             ['name' => 'Cartier Transition Glasses PC-237', 'type' => 'lens', 'brand' => 'Cartier', 'price' => 8500, 'sale_price' => 7000, 'stock' => 24, 'category' => 'Transition Glasses', 'image' => 'cartier-transition-glasses.png', 'attributes' => ['Lens Type' => ['Transition'], 'Prescription Range' => ['Power Free', 'Single Vision']]],
             ['name' => 'Qadir Custom Prescription Lens Package', 'type' => 'service', 'brand' => 'Qadir Optics', 'price' => 4500, 'sale_price' => null, 'stock' => 100, 'category' => 'Prescription Lenses', 'image' => 'custom-prescription-lens-package.png', 'attributes' => ['Lens Type' => ['Prescription'], 'Prescription Range' => ['Single Vision', 'Bifocal', 'Progressive']]],
             ['name' => 'Police Polarized Sunglasses Gold Black L-195', 'type' => 'frame', 'brand' => 'Police', 'price' => 7800, 'sale_price' => 6700, 'stock' => 17, 'category' => 'Sunglasses', 'image' => 'police-polarized-sunglasses.png', 'attributes' => ['Lens Type' => ['Polarized'], 'Frame Color' => ['Gold', 'Black']]],
-            ['name' => 'Qadir Complete Eyewear Cleaning Kit', 'type' => 'accessory', 'brand' => 'Qadir Optics', 'price' => 850, 'sale_price' => null, 'stock' => 120, 'category' => 'Cleaning Kits', 'image' => 'eyewear-cleaning-kit.png', 'attributes' => ['Accessory Pack' => ['Complete Care Kit', 'Cleaning Kit']]],
+            ['name' => 'Qadir Complete Glasses Cleaning Kit', 'type' => 'accessory', 'brand' => 'Qadir Optics', 'price' => 850, 'sale_price' => null, 'stock' => 120, 'category' => 'Cleaning Kits', 'image' => 'glasses-cleaning-kit.png', 'attributes' => ['Accessory Pack' => ['Complete Care Kit', 'Cleaning Kit']]],
         ]);
 
         return $catalog->map(function ($item, $index) use ($seller, $categories, $brands, $tags, $attributes) {
@@ -211,7 +211,7 @@ class OpticalProductSeeder extends Seeder
                     'sold_out' => 0,
                     'short_description' => $this->shortDescription($item['type']),
                     'description' => 'Seeded optical catalog item for inventory, dashboard categorization, variants, and cash-on-delivery demo orders.',
-                    'pros' => ['Good everyday value', 'Relevant eyewear category', 'Easy retailer checkout'],
+                    'pros' => ['Good everyday value', 'Relevant product category', 'Easy retailer checkout'],
                     'cons' => ['Retailer price can change', 'Availability depends on seller'],
                     'is_featured' => $index < 4,
                 ]
@@ -359,7 +359,7 @@ class OpticalProductSeeder extends Seeder
     {
         return match ($type) {
             'lens' => 'Custom lens option for screen protection, prescription, or transition use.',
-            'accessory' => 'Practical eyewear accessory for everyday care and storage.',
+            'accessory' => 'Practical glasses accessory for everyday care and storage.',
             'service' => 'Optical service item for custom prescription handling.',
             default => 'Prescription-ready optical frame with managed sizes, colors, and inventory.',
         };

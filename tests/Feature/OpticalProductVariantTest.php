@@ -25,7 +25,7 @@ it('creates an optical product with a categorized variant', function () {
     ]);
 
     $response = $this->actingAs($manager)->post(route('admin.products.store'), [
-        'name' => 'RayBan Premium Eyewear Frame',
+        'name' => 'RayBan Premium Frame',
         'product_type' => 'frame',
         'has_variants' => true,
         'category_ids' => [$frames->id],
@@ -48,7 +48,7 @@ it('creates an optical product with a categorized variant', function () {
 
     $response->assertRedirect(route('admin.products.index'));
 
-    $product = Product::where('name', 'RayBan Premium Eyewear Frame')->firstOrFail();
+    $product = Product::where('name', 'RayBan Premium Frame')->firstOrFail();
 
     expect($product->product_type)->toBe('frame')
         ->and($product->categories()->whereKey($frames->id)->exists())->toBeTrue()

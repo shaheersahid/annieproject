@@ -12,7 +12,7 @@
                             Good {{ now()->hour < 12 ? 'Morning' : (now()->hour < 18 ? 'Afternoon' : 'Evening') }},
                             <span class="text-primary">{{ auth()->user()->name }}!</span>
                         </h4>
-                        <p class="text-muted mb-0">Affiliate performance overview for Amazon and Temu eyewear deals.</p>
+                        <p class="text-muted mb-0">Affiliate performance overview for Amazon and Temu product deals.</p>
                     </div>
                     <div class="page-title-right">
                         <form action="{{ route('admin.dashboard') }}" method="GET" class="d-flex gap-2 align-items-center">

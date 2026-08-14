@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-sm-6">
-                {{ date('Y') }} © Annie Eyewear.
+                {{ date('Y') }} © Smart Comfort Deals.
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">

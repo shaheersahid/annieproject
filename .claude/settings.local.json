@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(php artisan *)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(Select-String -Pattern \"ERROR|Exception|Warning\")",
+      "Bash(Select-Object -Last 20)"
     ]
   }
 }

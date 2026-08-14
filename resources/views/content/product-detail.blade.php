@@ -64,12 +64,8 @@
                                 </div>
                             @endif
 
-                            <div class="product-price">
-                                {{ $product->is_affiliate ? ($product->price_note ?: 'Check latest price') : format_price($product->sale_price ?: $product->base_price) }}
-                            </div>
-
                             <div class="product-content">
-                                {!! $product->short_description ?: '<p>Selected eyewear deal from Amazon or Temu.</p>' !!}
+                                {!! $product->short_description ?: '<p>Selected product deal from Amazon or Temu.</p>' !!}
                             </div>
 
                             <div class="product-details-action product-detail-actions">
@@ -116,7 +112,7 @@
                     <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel">
                         <div class="product-desc-content">
                             <h3>Product Information</h3>
-                            {!! $product->description ?: '<p>This affiliate pick is listed so shoppers can compare eyewear options before buying from the retailer.</p>' !!}
+                            {!! $product->description ?: '<p>This affiliate pick is listed so shoppers can compare product options before buying from the retailer.</p>' !!}
 
                             <div class="row mt-3">
                                 @if(!empty($product->pros))
@@ -262,13 +258,6 @@
         letter-spacing: 0;
     }
 
-    .product-detail-summary .product-price {
-        margin-bottom: 1.8rem;
-        font-size: 2.4rem;
-        font-weight: 600;
-        color: #222;
-    }
-
     .product-detail-summary .product-content {
         margin-bottom: 2rem;
         color: #555;
@@ -352,10 +341,6 @@
 
         .product-detail-summary .product-title {
             font-size: 2.2rem;
-        }
-
-        .product-detail-summary .product-price {
-            font-size: 2rem;
         }
 
         .product-detail-actions .btn-product {

@@ -7,16 +7,16 @@ if (! is_dir($outputDir)) {
 }
 
 $products = [
-    ['rayban-premium-eyewear-frame.png', 'FRAME', 'RayBan Premium', [35, 35, 35], [204, 164, 74]],
+    ['rayban-premium-frame.png', 'FRAME', 'RayBan Premium', [35, 35, 35], [204, 164, 74]],
     ['cartier-premium-half-frame.png', 'FRAME', 'Cartier Half Frame', [64, 54, 46], [213, 175, 88]],
     ['astra-hexagonal-metal-frame.png', 'FRAME', 'Astra Hexagonal', [92, 103, 116], [188, 197, 206]],
-    ['tomford-men-eyewear.png', 'FRAME', 'TomFord Men', [28, 31, 38], [117, 79, 56]],
+    ['tomford-men-frame.png', 'FRAME', 'TomFord Men', [28, 31, 38], [117, 79, 56]],
     ['peachmart-blue-cut-glasses.png', 'BLUE CUT', 'Aero Screen', [31, 82, 147], [76, 154, 230]],
     ['alpha-bluecut-glasses.png', 'BLUE CUT', 'Alpha Protection', [18, 96, 124], [111, 197, 212]],
     ['cartier-transition-glasses.png', 'TRANSITION', 'Transition Lens', [75, 71, 88], [151, 134, 188]],
     ['custom-prescription-lens-package.png', 'LENS', 'Prescription Lens', [37, 104, 95], [117, 196, 174]],
     ['police-polarized-sunglasses.png', 'SUNGLASSES', 'Police Polarized', [26, 31, 37], [219, 174, 73]],
-    ['eyewear-cleaning-kit.png', 'ACCESSORY', 'Cleaning Kit', [38, 109, 93], [109, 190, 159]],
+    ['glasses-cleaning-kit.png', 'ACCESSORY', 'Cleaning Kit', [38, 109, 93], [109, 190, 159]],
 ];
 
 foreach ($products as [$filename, $type, $name, $primaryRgb, $accentRgb]) {

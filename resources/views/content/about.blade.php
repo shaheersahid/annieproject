@@ -21,7 +21,7 @@
             <div class="container">
                 <section class="content-title-section mb-6">
                     <h3 class="title title-center mb-3">Qadir Optics</h3>
-                    <p class="text-center">Quality eyewear, lenses, and optical accessories selected for everyday comfort and clear vision.</p>
+                    <p class="text-center">Quality comfort products and daily-use accessories selected to make everyday routines easier.</p>
                 </section>
             </div>
         </div>
