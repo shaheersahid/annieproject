@@ -88,7 +88,7 @@ class DataTableService implements DataTableServiceInterface
                 return $product->seller?->store_name ?? '-';
             })
             ->addColumn('price_formatted', function ($product) {
-                return format_price($product->base_price);
+                return (float) $product->base_price > 0 ? format_price($product->base_price) : ($product->price_note ?: 'Check latest price');
             })
             ->addColumn('status', function ($product) {
                 $checked = $product->is_active ? 'checked' : '';
@@ -122,7 +122,7 @@ class DataTableService implements DataTableServiceInterface
                 return $product->brand ? $product->brand->name : '-';
             })
             ->addColumn('price_formatted', function ($product) {
-                return format_price($product->price);
+                return (float) $product->price > 0 ? format_price($product->price) : ($product->price_note ?: 'Check latest price');
             })
             ->addColumn('action', function ($product) {
                 return view('admin.content.product-management.products.actions', compact('product'))->render();

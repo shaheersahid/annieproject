@@ -35,11 +35,17 @@
         <div class="product-price">
             @if($product->is_affiliate)
                 {{ $product->price_note ?: 'Check latest price' }}
-            @elseif($product->sale_price)
+            @elseif($product->sale_price && (float) $product->sale_price > 0)
                 <span class="new-price">{{ format_price($product->sale_price) }}</span>
-                <span class="old-price">{{ format_price($product->base_price) }}</span>
-            @else
+                @if((float) $product->base_price > 0)
+                    <span class="old-price">{{ format_price($product->base_price) }}</span>
+                @endif
+            @elseif((float) $product->base_price > 0)
                 {{ format_price($product->base_price) }}
+            @elseif($product->price_note)
+                {{ $product->price_note }}
+            @else
+                Check latest price
             @endif
         </div>
         <div class="ratings-container">
