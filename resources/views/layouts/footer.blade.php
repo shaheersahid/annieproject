@@ -8,16 +8,8 @@
                         <p>Smart Comfort Deals helps shoppers compare ergonomic cushions, home comfort items, and lifestyle accessories from Amazon, Temu and AliExpress affiliate listings.</p>
                         
                         <div class="widget-about-info">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-4">
-                                    <span class="widget-about-title">Got Question? Call us 24/7</span>
-                                    <a href="tel:123456789">+0123 456 789</a>
-                                </div><!-- End .col-sm-6 -->
-                                <div class="col-sm-6 col-md-8">
-                                    <span class="widget-about-title">Affiliate Disclosure</span>
-                                    <p class="mb-0">We may earn a commission from qualifying retailer purchases.</p>
-                                </div><!-- End .col-sm-6 -->
-                            </div><!-- End .row -->
+                            <span class="widget-about-title">Affiliate Disclosure</span>
+                            <p class="mb-0">We may earn a commission from qualifying retailer purchases.</p>
                         </div><!-- End .widget-about-info -->
                     </div><!-- End .widget about-widget -->
                 </div><!-- End .col-sm-12 col-lg-4 -->

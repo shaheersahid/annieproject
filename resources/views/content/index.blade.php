@@ -181,21 +181,5 @@
         </div>
     </div>
 
-    <div class="bg-light-2 pt-7 pb-6 testimonials">
-        <div class="container">
-            <h2 class="title text-center mb-2">Our Customers Say</h2>
-            <div class="owl-carousel owl-simple owl-testimonials" data-toggle="owl"
-                data-owl-options='{"nav": false, "dots": true, "margin": 20, "loop": false, "responsive": {"1200": {"nav": true}}}'>
-                <blockquote class="testimonial testimonial-icon text-center">
-                    <p>“Fast delivery, beautiful stitching, and product photos matched what arrived.”</p>
-                    <cite>Raimal Customer<span>Verified Buyer</span></cite>
-                </blockquote>
-                <blockquote class="testimonial testimonial-icon text-center">
-                    <p>“The collection is easy to browse and the fabric quality is exactly what I expected.”</p>
-                    <cite>Raimal Customer<span>Verified Buyer</span></cite>
-                </blockquote>
-            </div>
-        </div>
-    </div>
 </main>
 @endsection
