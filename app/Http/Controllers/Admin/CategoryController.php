@@ -6,6 +6,7 @@ use App\Contracts\DataTableServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,10 @@ use Illuminate\Contracts\View\View;
 
 class CategoryController extends Controller
 {
-    public function __construct(protected DataTableServiceInterface $dataTable) {}
+    public function __construct(
+        protected DataTableServiceInterface $dataTable,
+        protected ImageOptimizer $imageOptimizer,
+    ) {}
 
     public function index(Request $request): mixed
     {
@@ -42,7 +46,7 @@ class CategoryController extends Controller
         $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
+            $path = $this->imageOptimizer->storeResized($request->file('image'), 'categories', 800);
             $category->images()->create(['path' => $path, 'type' => 'primary', 'order' => 0]);
         }
 
@@ -83,7 +87,7 @@ class CategoryController extends Controller
         $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
+            $path = $this->imageOptimizer->storeResized($request->file('image'), 'categories', 800);
             $category->images()->updateOrCreate(['type' => 'primary'], ['path' => $path, 'order' => 0]);
         }
 

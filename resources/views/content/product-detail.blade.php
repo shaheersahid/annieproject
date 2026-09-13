@@ -226,6 +226,11 @@
 </main>
 @endsection
 
+@push('plugin-scripts')
+<script src="{{ asset('assets/js/bootstrap-input-spinner.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.elevateZoom.min.js') }}"></script>
+@endpush
+
 @push('page-styles')
 <style>
     .product-detail-page .page-content {

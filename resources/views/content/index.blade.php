@@ -10,7 +10,13 @@
         'assets/images/demos/demo-7/banners/banner-5.jpg',
     ];
     $heroCategories = $homeCategories->take(5)->values();
+    $lcpImage = $heroCategories->first()?->images?->url
+        ?? asset($bannerFallbacks[0]);
 @endphp
+
+@push('seo-head')
+    <link rel="preload" as="image" href="{{ $lcpImage }}" fetchpriority="high">
+@endpush
 
 @section('content')
 <main class="main">
@@ -35,6 +41,7 @@
                     'columnClass' => 'col-lg-6',
                     'contentClass' => 'banner-content-center',
                     'buttonClass' => '',
+                    'priority' => $index === 0,
                 ])
             @endforeach
         </div>
@@ -48,6 +55,7 @@
                     'contentClass' => '',
                     'textClass' => $loop->even ? 'color-grey' : 'text-white',
                     'buttonClass' => $loop->even ? '' : 'btn-outline-white-3',
+                    'priority' => false,
                 ])
             @endforeach
         </div>
@@ -166,7 +174,7 @@
                     <article class="entry">
                         <figure class="entry-media">
                             <a href="{{ route('product-list', ['category' => $category->slug]) }}">
-                                <img src="{{ $image }}" alt="{{ seo_alt($category->name . ' comfort deals from Smart Comfort Deals') }}">
+                                <img src="{{ $image }}" alt="{{ seo_alt($category->name . ' comfort deals from Smart Comfort Deals') }}" width="640" height="420" loading="lazy" decoding="async">
                             </a>
                         </figure>
 

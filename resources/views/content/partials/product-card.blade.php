@@ -19,8 +19,8 @@
         @endif
 
         <a href="{{ $productUrl }}">
-            <img src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'product photo') }}" class="product-image">
-            <img src="{{ $hoverImage }}" alt="{{ product_image_alt($product, 'alternate view') }}" class="product-image-hover">
+            <img src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'product photo') }}" class="product-image" width="400" height="400" loading="lazy" decoding="async">
+            <img src="{{ $hoverImage }}" alt="{{ product_image_alt($product, 'alternate view') }}" class="product-image-hover" width="400" height="400" loading="lazy" decoding="async">
         </a>
 
         <div class="product-action">

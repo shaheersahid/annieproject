@@ -19,16 +19,22 @@
 <meta name="msapplication-config" content="{{ asset('assets/images/icons/browserconfig.xml') }}">
 <meta name="theme-color" content="#ffffff">
 <meta name="p:domain_verify" content="5bff3ac02901bc5e97c8509a2d0c055a"/>
-<!-- Plugins CSS File -->
+
+{{-- Critical render CSS (needed for first paint) --}}
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/plugins/owl-carousel/owl.carousel.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/plugins/magnific-popup/magnific-popup.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/plugins/jquery.countdown.css') }}">
-<!-- Main CSS File -->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/skin.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/custom-storefront.css') }}?v={{ @filemtime(public_path('assets/css/custom-storefront.css')) ?: time() }}">
-<link rel="stylesheet" href="{{ asset('assets/css/plugins/nouislider/nouislider.css') }}">
 
+{{-- Non-critical plugin CSS: load without blocking first paint --}}
+<link rel="stylesheet" href="{{ asset('assets/css/plugins/owl-carousel/owl.carousel.css') }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ asset('assets/css/plugins/magnific-popup/magnific-popup.css') }}" media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/owl-carousel/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/magnific-popup/magnific-popup.css') }}">
+</noscript>
+
+{{-- Optional plugins (countdown / price slider) only when a page asks for them --}}
+@stack('plugin-styles')
 @stack('page-styles')

@@ -15,6 +15,7 @@ use App\Models\ProductTag;
 use App\Models\ProductVariant;
 use App\Models\Seller;
 use App\Models\SizeChart;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
@@ -30,6 +31,7 @@ class ProductController extends Controller
     public function __construct(
         protected DataTableServiceInterface $dataTable,
         protected VariationGeneratorServiceInterface $variantGenerator,
+        protected ImageOptimizer $imageOptimizer,
     ) {}
 
     public function index(Request $request): mixed
@@ -422,7 +424,13 @@ class ProductController extends Controller
     private function storePublicFile(UploadedFile $file, string $directory, string $field): string
     {
         try {
-            $path = $file->store($directory, 'public');
+            $mime = (string) $file->getMimeType();
+            if (str_starts_with($mime, 'image/')) {
+                $maxWidth = str_contains($directory, 'categories') ? 800 : 1200;
+                $path = $this->imageOptimizer->storeResized($file, $directory, $maxWidth);
+            } else {
+                $path = $file->store($directory, 'public');
+            }
         } catch (Throwable $exception) {
             report($exception);
             $path = false;
