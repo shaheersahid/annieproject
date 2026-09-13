@@ -1,0 +1,289 @@
+/* Critical first-paint CSS — keep tiny. Full theme CSS loads async. */
+html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: #333;
+  background: #fff;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+  vertical-align: middle;
+}
+
+a {
+  color: #0097b2;
+  text-decoration: none;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container,
+.container-fluid {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -1rem;
+  margin-left: -1rem;
+}
+
+.col-12,
+.col-md-6,
+.col-lg-4,
+.col-lg-6 {
+  position: relative;
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 96rem;
+  }
+
+  .col-lg-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+
+  .col-lg-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .mobile-menu-toggler {
+    display: none !important;
+  }
+}
+
+.header {
+  background: #fff;
+}
+
+.header-top {
+  background: #f5f6f7;
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+}
+
+.header-top .top-message {
+  margin: 0;
+  padding: .6rem 0;
+}
+
+.header-middle {
+  display: block;
+  padding: 1rem 0;
+  border-bottom: .1rem solid #ebebeb;
+}
+
+.header-middle .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo img {
+  width: auto;
+  max-height: 5.6rem;
+  height: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+  padding: .8rem 1.6rem;
+  border-radius: .3rem;
+  border: .1rem solid transparent;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #0097b2;
+  border-color: #0097b2;
+  color: #fff !important;
+}
+
+.header-search {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .header-search-visible {
+    display: block;
+  }
+
+  .header-search-wrapper {
+    display: flex;
+    align-items: stretch;
+    min-width: 32rem;
+    border: .1rem solid #ebebeb;
+    border-radius: 3rem;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .header-search .form-control {
+    flex: 1 1 auto;
+    border: 0;
+    height: 4.4rem;
+    padding: 0 1.6rem;
+    outline: none;
+    font-size: 1.4rem;
+  }
+
+  .header-search .btn {
+    border-radius: 0;
+    min-width: 5rem;
+  }
+}
+
+.header-bottom {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .header-bottom {
+    display: block;
+    border-bottom: .1rem solid #ebebeb;
+  }
+
+  .main-nav .menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: .8rem 0;
+  }
+
+  .main-nav .menu a {
+    color: #333;
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+}
+
+.mobile-menu-toggler {
+  border: 0;
+  background: transparent;
+  font-size: 2.2rem;
+  line-height: 1;
+  padding: .4rem;
+  color: #333;
+}
+
+.homepage-page-header {
+  padding: 2.4rem 0 1.6rem;
+  margin-bottom: 0;
+  text-align: center;
+  background: linear-gradient(180deg, #f4fafb 0%, #ffffff 100%);
+  border-bottom: .1rem solid #e8eef1;
+}
+
+.homepage-page-header .page-title {
+  margin: 0 0 .6rem;
+  font-size: 2.8rem;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  color: #222;
+}
+
+.homepage-page-header .page-title span {
+  display: block;
+  margin-top: .45rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #0097b2;
+}
+
+.homepage-hero-lead {
+  max-width: 54rem;
+  margin: 0 auto;
+  color: #667780;
+  font-size: 1.35rem;
+  line-height: 1.7;
+}
+
+.banner {
+  position: relative;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  background: #eef2f4;
+}
+
+.banner.banner-overlay > a img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+#scroll-top,
+.mobile-menu-container,
+.mobile-menu-overlay {
+  display: none;
+}

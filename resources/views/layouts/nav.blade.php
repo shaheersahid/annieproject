@@ -14,8 +14,8 @@
                 </button>
 
                 <a href="{{ url('/') }}" class="logo">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="{{ seo_alt('Smart Comfort Deals logo') }}" height="100"
-                        width="200">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="{{ seo_alt('Smart Comfort Deals logo') }}" height="56"
+                        width="112" decoding="async">
                 </a>
             </div><!-- End .header-left -->
 
