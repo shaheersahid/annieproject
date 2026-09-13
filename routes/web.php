@@ -41,10 +41,7 @@ Route::get('/', function () {
                 $category->id => Product::query()
                     ->withListing()
                     ->published()
-                    ->featuredPicks()
-                    ->whereHas('categories', function ($query) use ($category): void {
-                        $query->whereKey($category->id);
-                    })
+                    ->featuredInCategory($category->id)
                     ->take(10)
                     ->get(),
             ];

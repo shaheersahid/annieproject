@@ -87,7 +87,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         DB::transaction(function () use ($request, $product) {
-            $data = $this->prepareData($request);
+            $data = $this->prepareData($request, $product);
             $product->update($data);
 
             $this->syncCategories($product, $request);
@@ -263,7 +263,7 @@ class ProductController extends Controller
         ];
     }
 
-    private function prepareData(ProductRequest $request): array
+    private function prepareData(ProductRequest $request, ?Product $product = null): array
     {
         $data = $request->validated();
 
@@ -271,8 +271,23 @@ class ProductController extends Controller
             $data['featured_sort_order'] = ((int) Product::max('featured_sort_order')) + 1;
         }
 
+        if (! empty($data['is_featured'])) {
+            $existingIds = $product?->featured_category_ids ?? [];
+            if (empty($existingIds)) {
+                $data['featured_category_ids'] = Category::query()
+                    ->active()
+                    ->parentCategories()
+                    ->ordered()
+                    ->take(2)
+                    ->pluck('id')
+                    ->map(fn ($id) => (int) $id)
+                    ->all();
+            }
+        }
+
         if (empty($data['is_featured'])) {
             $data['featured_sort_order'] = 0;
+            $data['featured_category_ids'] = [];
         }
 
         if (! empty($data['is_latest']) && empty($data['latest_sort_order'])) {

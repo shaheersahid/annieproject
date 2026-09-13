@@ -56,6 +56,7 @@ class Product extends Model
         'is_active',
         'is_featured',
         'featured_sort_order',
+        'featured_category_ids',
         'is_latest',
         'is_reel',
         'latest_sort_order',
@@ -77,6 +78,7 @@ class Product extends Model
         'cons' => 'array',
         'is_featured' => 'boolean',
         'featured_sort_order' => 'integer',
+        'featured_category_ids' => 'array',
         'is_latest' => 'boolean',
         'is_reel' => 'boolean',
         'latest_sort_order' => 'integer',
@@ -225,6 +227,62 @@ class Product extends Model
         }
 
         return $query->orderByDesc('updated_at');
+    }
+
+    public function scopeFeaturedInCategory($query, int $categoryId)
+    {
+        $query->featuredPicks();
+
+        if (! Schema::hasColumn($this->getTable(), 'featured_category_ids')) {
+            return $query->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
+        }
+
+        return $query->where(function ($featured) use ($categoryId): void {
+            $featured->whereJsonContains('featured_category_ids', $categoryId)
+                ->orWhereJsonContains('featured_category_ids', (string) $categoryId)
+                ->orWhere(function ($legacy) use ($categoryId): void {
+                    $legacy->where(function ($emptyIds): void {
+                        $emptyIds->whereNull('featured_category_ids')
+                            ->orWhere('featured_category_ids', '[]')
+                            ->orWhere('featured_category_ids', '');
+                    })->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
+                });
+        });
+    }
+
+    public function isFeaturedInCategory(?int $categoryId): bool
+    {
+        if (! $categoryId || ! $this->is_featured) {
+            return false;
+        }
+
+        $ids = collect($this->featured_category_ids ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        if ($ids !== []) {
+            return in_array($categoryId, $ids, true);
+        }
+
+        return $this->categories->contains('id', $categoryId);
+    }
+
+    public function syncFeaturedCategoryIds(array $categoryIds): void
+    {
+        $ids = collect($categoryIds)
+            ->map(fn ($id) => (int) $id)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        $this->forceFill([
+            'featured_category_ids' => $ids,
+            'is_featured' => $ids !== [],
+            'featured_sort_order' => $ids !== []
+                ? ($this->featured_sort_order ?: ((int) static::max('featured_sort_order')) + 1)
+                : 0,
+        ])->save();
     }
 
     public function scopeLatestPicks($query)

@@ -12,10 +12,12 @@
         ? json_encode($schemaFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
         : '');
     $robots = $meta['robots'] ?? 'index, follow';
+    $schemaPlaceholder = '{"' . '@context":"https://schema.org","' . '@type":"Product"}';
+    $twitterSitePlaceholder = '@' . 'smartcomfortdeals';
 
     try {
         $schemaPreview = json_encode($product->defaultProductSchema(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    } catch (Throwable $e) {
+    } catch (\Throwable $e) {
         $schemaPreview = 'Automatic schema preview is unavailable for this product.';
     }
 @endphp
@@ -97,7 +99,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Site</label>
-                                <input type="text" class="form-control" name="twitter_fields[site]" value="{{ $twitter['site'] ?? '' }}" placeholder="@smartcomfortdeals">
+                                <input type="text" class="form-control" name="twitter_fields[site]" value="{{ $twitter['site'] ?? '' }}" placeholder="{{ $twitterSitePlaceholder }}">
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold">Title</label>
@@ -116,7 +118,7 @@
 
                     <x-admin.card title="Schema Markup" class="mt-3">
                         <p class="text-muted small">Leave this empty to use the automatic Product + Breadcrumb schema. Paste custom JSON only if you want to override it.</p>
-                        <textarea class="form-control font-monospace @error('schema_fields') is-invalid @enderror" name="schema_fields" rows="8" placeholder='{"@context":"https://schema.org","@type":"Product"}'>{{ $schemaValue }}</textarea>
+                        <textarea class="form-control font-monospace @error('schema_fields') is-invalid @enderror" name="schema_fields" rows="8" placeholder="{{ $schemaPlaceholder }}">{{ $schemaValue }}</textarea>
                         @error('schema_fields') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </x-admin.card>
                 </div>

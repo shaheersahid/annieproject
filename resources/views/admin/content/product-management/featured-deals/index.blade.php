@@ -24,7 +24,7 @@
                     <p class="text-muted small">
                         Choose products for the homepage <strong>Featured Comfort Deals</strong> tabs
                         ({{ $featuredCategories->pluck('name')->implode(' / ') ?: 'home categories' }}).
-                        Only selected products show in that tab.
+                        Add the same product to both tabs if you want it to appear in Smart Home and Office Comfort.
                     </p>
                     <form method="POST" action="{{ route('admin.featured-deals.store') }}">
                         @csrf

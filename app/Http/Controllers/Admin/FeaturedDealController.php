@@ -18,18 +18,21 @@ class FeaturedDealController extends Controller
 
         $featuredProducts = Product::query()
             ->with(['primaryImage', 'categories'])
-            ->featuredPicks()
-            ->when($categoryId, function ($query) use ($categoryId): void {
-                $query->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
-            })
+            ->when(
+                $categoryId,
+                fn ($query) => $query->featuredInCategory((int) $categoryId),
+                fn ($query) => $query->featuredPicks()
+            )
             ->get();
+
+        $featuredProductIds = $featuredProducts->pluck('id');
 
         $availableProducts = Product::query()
             ->published()
-            ->where('is_featured', false)
-            ->when($categoryId, function ($query) use ($categoryId): void {
-                $query->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
-            })
+            ->when(
+                $featuredProductIds->isNotEmpty(),
+                fn ($query) => $query->whereNotIn('id', $featuredProductIds)
+            )
             ->orderBy('name')
             ->get(['id', 'name']);
 
@@ -45,26 +48,48 @@ class FeaturedDealController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'integer', 'exists:products,id'],
-            'category' => ['nullable', 'integer', 'exists:categories,id'],
+            'category' => ['required', 'integer', 'exists:categories,id'],
         ]);
 
         $product = Product::findOrFail($validated['product_id']);
-        $product->update([
-            'is_featured' => true,
-            'featured_sort_order' => ((int) Product::max('featured_sort_order')) + 1,
-        ]);
+        $categoryId = (int) $validated['category'];
+        $ids = collect($product->featured_category_ids ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->push($categoryId)
+            ->unique()
+            ->values()
+            ->all();
 
-        return $this->redirectToIndex($request, $product->name . ' added to Featured Comfort Deals.');
+        $product->forceFill([
+            'is_featured' => true,
+            'featured_sort_order' => $product->featured_sort_order
+                ?: ((int) Product::max('featured_sort_order')) + 1,
+            'featured_category_ids' => $ids,
+        ])->save();
+
+        return $this->redirectToIndex($request, $product->name . ' added to this Featured Comfort Deals tab.');
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
-        $product->update([
-            'is_featured' => false,
-            'featured_sort_order' => 0,
-        ]);
+        $categoryId = $request->integer('category');
+        $ids = collect($product->featured_category_ids ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->reject(fn ($id) => $categoryId && $id === $categoryId)
+            ->values()
+            ->all();
 
-        return $this->redirectToIndex($request, $product->name . ' removed from Featured Comfort Deals.');
+        if (! $categoryId) {
+            $ids = [];
+        }
+
+        $product->forceFill([
+            'featured_category_ids' => $ids,
+            'is_featured' => $ids !== [],
+            'featured_sort_order' => $ids !== [] ? $product->featured_sort_order : 0,
+        ])->save();
+
+        return $this->redirectToIndex($request, $product->name . ' removed from this Featured Comfort Deals tab.');
     }
 
     public function reorder(Request $request): RedirectResponse
@@ -72,6 +97,7 @@ class FeaturedDealController extends Controller
         $validated = $request->validate([
             'order' => ['required', 'array'],
             'order.*' => ['integer', 'exists:products,id'],
+            'category' => ['nullable', 'integer', 'exists:categories,id'],
         ]);
 
         foreach ($validated['order'] as $index => $productId) {
