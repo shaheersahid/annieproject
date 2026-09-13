@@ -7,7 +7,7 @@
 
         <form action="{{ route('product-list') }}" method="get" class="mobile-search">
             <label for="mobile-search" class="sr-only">Search</label>
-            <input type="search" class="form-control" name="q" id="mobile-search" value="{{ request('q') }}" placeholder="Search comfort deals ..." required>
+            <input type="search" class="form-control" name="q" id="mobile-search" value="{{ request('q') }}" placeholder="Search comfort deals ..." autocomplete="off" data-suggest-url="{{ route('products.suggest') }}">
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
         

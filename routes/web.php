@@ -59,6 +59,7 @@ Route::get('/', function () {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
+Route::get('/products/suggest', [ProductBrowseController::class, 'suggest'])->name('products.suggest');
 Route::get('/latest-deals', [ProductBrowseController::class, 'latest'])->name('latest-deals');
 Route::get('/products/{product:slug}/quickview', [ProductBrowseController::class, 'quickview'])->name('product-quickview');
 Route::get('/products/{product:slug}', [ProductBrowseController::class, 'show'])->name('product-detail');

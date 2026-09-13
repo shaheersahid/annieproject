@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductBrowseController extends Controller
@@ -38,6 +39,52 @@ class ProductBrowseController extends Controller
             ->get();
 
         return view('content.product-list', compact('products', 'categories', 'search'));
+    }
+
+    public function suggest(Request $request): JsonResponse
+    {
+        $search = trim((string) $request->input('q', ''));
+
+        if (mb_strlen($search) < 2) {
+            return response()->json(['products' => []]);
+        }
+
+        $products = Product::query()
+            ->withListing()
+            ->published()
+            ->search($search)
+            ->orderByDesc('is_featured')
+            ->orderByDesc('click_count')
+            ->orderByDesc('updated_at')
+            ->take(8)
+            ->get()
+            ->map(function (Product $product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'url' => route('product-detail', $product),
+                    'image' => $product->primaryImage?->url
+                        ?? asset('assets/images/products/product-1.jpg'),
+                    'category' => $product->categories->first()?->name,
+                    'price' => $product->is_affiliate
+                        ? ($product->price_note ?: 'Check latest price')
+                        : (
+                            $product->sale_price && (float) $product->sale_price > 0
+                                ? format_price($product->sale_price)
+                                : (
+                                    (float) $product->base_price > 0
+                                        ? format_price($product->base_price)
+                                        : ($product->price_note ?: 'Check latest price')
+                                )
+                        ),
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'products' => $products,
+            'view_all_url' => route('product-list', ['q' => $search]),
+        ]);
     }
 
     public function latest(): View

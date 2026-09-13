@@ -27,7 +27,9 @@
                             <label for="q" class="sr-only">Search</label>
                             <input type="search" class="form-control" name="q" id="q"
                                 value="{{ request('q') }}"
-                                placeholder="Search comfort deals ..." required>
+                                placeholder="Search comfort deals ..."
+                                autocomplete="off"
+                                data-suggest-url="{{ route('products.suggest') }}">
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                         </div><!-- End .header-search-wrapper -->
                     </form>

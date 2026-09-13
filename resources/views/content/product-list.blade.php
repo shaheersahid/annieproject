@@ -54,8 +54,8 @@
                     </div>
                     <div class="toolbox-sort ml-2">
                         <label for="list-search">Search:</label>
-                        <div class="d-flex">
-                            <input type="search" id="list-search" class="form-control" name="q" value="{{ $search }}" placeholder="Search deals...">
+                        <div class="d-flex live-search-field">
+                            <input type="search" id="list-search" class="form-control" name="q" value="{{ $search }}" placeholder="Search deals..." autocomplete="off" data-suggest-url="{{ route('products.suggest') }}">
                             <button class="btn btn-outline-dark-2 ml-1" type="submit"><i class="icon-search"></i></button>
                         </div>
                     </div>
