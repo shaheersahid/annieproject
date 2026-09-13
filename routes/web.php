@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\ProductBrowseController;
+use App\Http\Controllers\SitemapController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,7 @@ Route::get('/', function () {
         'categoryProducts',
     ));
 })->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
 Route::get('/latest-deals', [ProductBrowseController::class, 'latest'])->name('latest-deals');
