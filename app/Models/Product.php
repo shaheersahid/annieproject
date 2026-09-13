@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Throwable;
 
 class Product extends Model
@@ -216,6 +217,128 @@ class Product extends Model
         $urlColumn = $platform . '_url';
 
         return $query->whereNotNull($urlColumn)->where($urlColumn, '!=', '');
+    }
+
+    public function relatedProducts(int $limit = 8)
+    {
+        $categoryIds = ($this->relationLoaded('categories')
+            ? $this->categories->pluck('id')
+            : $this->categories()->pluck('categories.id'))->map(fn ($id) => (int) $id)->values();
+
+        $tagIds = ($this->relationLoaded('tags')
+            ? $this->tags->pluck('id')
+            : $this->tags()->pluck('product_tags.id'))->map(fn ($id) => (int) $id)->values();
+
+        $keywords = $this->relatedKeywords();
+
+        $base = static::query()
+            ->withListing()
+            ->published()
+            ->whereKeyNot($this->id)
+            ->withCount([
+                'categories as shared_categories_count' => function ($categoryQuery) use ($categoryIds): void {
+                    if ($categoryIds->isNotEmpty()) {
+                        $categoryQuery->whereIn('categories.id', $categoryIds);
+                    } else {
+                        $categoryQuery->whereRaw('0 = 1');
+                    }
+                },
+                'tags as shared_tags_count' => function ($tagQuery) use ($tagIds): void {
+                    if ($tagIds->isNotEmpty()) {
+                        $tagQuery->whereIn('product_tags.id', $tagIds);
+                    } else {
+                        $tagQuery->whereRaw('0 = 1');
+                    }
+                },
+            ]);
+
+        if ($keywords->isNotEmpty()) {
+            $scoreSql = [];
+            $bindings = [];
+
+            foreach ($keywords as $keyword) {
+                $scoreSql[] = '(CASE WHEN LOWER(products.name) LIKE ? OR LOWER(COALESCE(products.short_description, "")) LIKE ? THEN 1 ELSE 0 END)';
+                $like = '%' . $keyword . '%';
+                $bindings[] = $like;
+                $bindings[] = $like;
+            }
+
+            $base->addSelect('products.*')
+                ->selectRaw('(' . implode(' + ', $scoreSql) . ') as keyword_score', $bindings);
+        } else {
+            $base->selectRaw('0 as keyword_score');
+        }
+
+        $relatedQuery = (clone $base)->where(function ($match) use ($categoryIds, $tagIds, $keywords): void {
+            $hasConstraint = false;
+
+            if ($categoryIds->isNotEmpty()) {
+                $hasConstraint = true;
+                $match->orWhereHas('categories', fn ($categoryQuery) => $categoryQuery->whereIn('categories.id', $categoryIds));
+            }
+
+            if ($tagIds->isNotEmpty()) {
+                $hasConstraint = true;
+                $match->orWhereHas('tags', fn ($tagQuery) => $tagQuery->whereIn('product_tags.id', $tagIds));
+            }
+
+            foreach ($keywords as $keyword) {
+                $hasConstraint = true;
+                $like = '%' . $keyword . '%';
+                $match->orWhere('products.name', 'like', $like)
+                    ->orWhere('products.short_description', 'like', $like);
+            }
+
+            if (! $hasConstraint) {
+                $match->whereRaw('0 = 1');
+            }
+        });
+
+        $related = $relatedQuery
+            ->orderByDesc('shared_categories_count')
+            ->orderByDesc('keyword_score')
+            ->orderByDesc('shared_tags_count')
+            ->orderByDesc('affiliate_rating')
+            ->orderByDesc('updated_at')
+            ->take($limit)
+            ->get();
+
+        if ($related->count() >= $limit) {
+            return $related;
+        }
+
+        $fallback = static::query()
+            ->withListing()
+            ->published()
+            ->whereKeyNot($this->id)
+            ->whereNotIn('id', $related->pluck('id'))
+            ->orderByDesc('affiliate_rating')
+            ->orderByDesc('updated_at')
+            ->take($limit - $related->count())
+            ->get();
+
+        return $related->concat($fallback)->values();
+    }
+
+    public function relatedKeywords()
+    {
+        $seedTerms = [
+            'cushion', 'ergonomic', 'lumbar', 'seat', 'foam', 'gel', 'footrest', 'armrest',
+            'pillow', 'support', 'office', 'desk', 'laptop', 'stand', 'memory', 'coccyx',
+            'back', 'posture', 'chair', 'wrist', 'knee', 'neck', 'massage', 'cooling',
+            'honeycomb', 'adjustable', 'monitor',
+        ];
+
+        $haystack = Str::lower(trim(implode(' ', array_filter([
+            $this->name,
+            $this->short_description,
+            $this->relationLoaded('tags') ? $this->tags->pluck('name')->implode(' ') : null,
+            $this->relationLoaded('categories') ? $this->categories->pluck('name')->implode(' ') : null,
+        ]))));
+
+        return collect($seedTerms)
+            ->filter(fn (string $term) => str_contains($haystack, $term))
+            ->values();
     }
 
     public function scopeFeaturedPicks($query)

@@ -51,3 +51,21 @@
 .product.product-7 .product-price {
   margin-bottom: .8rem;
 }
+
+.homepage-hero-intro {
+  max-width: 860px;
+  margin: 0 auto 1.2rem;
+}
+
+.homepage-hero-title {
+  color: #1f2a30;
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.homepage-hero-subtitle {
+  color: #5b6b73;
+  font-size: 1.5rem;
+  line-height: 1.6;
+}

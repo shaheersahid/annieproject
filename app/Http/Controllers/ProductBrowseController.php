@@ -58,13 +58,7 @@ class ProductBrowseController extends Controller
     {
         $product->load(['categories', 'images', 'primaryImage', 'brand', 'tags', 'seo']);
 
-        $relatedProducts = Product::query()
-            ->withListing()
-            ->published()
-            ->whereKeyNot($product->id)
-            ->latest()
-            ->take(8)
-            ->get();
+        $relatedProducts = $product->relatedProducts(8);
 
         return view('content.product-detail', compact('product', 'relatedProducts'));
     }

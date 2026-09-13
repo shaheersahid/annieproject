@@ -14,6 +14,15 @@
 
 @section('content')
 <main class="main">
+    <section class="homepage-hero-intro text-center pt-4 pb-2">
+        <div class="container">
+            <h1 class="homepage-hero-title mb-2">Smart Comfort Deals for Home, Office &amp; Everyday Comfort</h1>
+            <p class="homepage-hero-subtitle mb-0">
+                Discover ergonomic accessories, smart home finds and practical products from Amazon, Temu &amp; AliExpress.
+            </p>
+        </div>
+    </section>
+
     <div class="container-fluid">
         <div class="row">
             @foreach($heroCategories->take(2) as $index => $category)

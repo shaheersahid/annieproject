@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\ProductBrowseController;
 use App\Http\Controllers\SitemapController;
@@ -76,9 +77,8 @@ Route::get('/about', function () {
     return view('content.about');
 })->name('about');
 
-Route::get('/contact', function () {
-    return view('content.contact');
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/checkout', function () {
     return view('content.checkout');
