@@ -25,7 +25,6 @@
                             <li><a href="{{ route('product-list', ['platform' => 'amazon']) }}">Amazon Picks</a></li>
                             <li><a href="{{ route('product-list', ['platform' => 'temu']) }}">Temu Picks</a></li>
                             <li><a href="{{ route('contact') }}">Contact us</a></li>
-                            <li><a href="{{ route('login') }}">Log in</a></li>
                         </ul><!-- End .widget-list -->
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-4 col-lg-2 -->
@@ -45,19 +44,7 @@
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-4 col-lg-2 -->
 
-                <div class="col-sm-4 col-lg-2">
-                    <div class="widget">
-                        <h4 class="widget-title">Admin</h4><!-- End .widget-title -->
-
-                        <ul class="widget-list">
-                            <li><a href="{{ route('login') }}">Sign In</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                            <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        </ul><!-- End .widget-list -->
-                    </div><!-- End .widget -->
-                </div><!-- End .col-sm-4 col-lg-2 -->
-
-                <div class="col-sm-6 col-lg-2">
+                <div class="col-sm-6 col-lg-4">
                     <div class="widget widget-newsletter">
                         <h4 class="widget-title">Sign up to newsletter</h4><!-- End .widget-title -->
 
@@ -72,7 +59,7 @@
                             </div><!-- .End .input-group -->
                         </form>
                     </div><!-- End .widget -->
-                </div><!-- End .col-sm-6 col-lg-2 -->
+                </div><!-- End .col-sm-6 col-lg-4 -->
             </div><!-- End .row -->
         </div><!-- End .container-fluid -->
     </div><!-- End .footer-middle -->
