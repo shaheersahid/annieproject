@@ -49,6 +49,7 @@
                             @include('admin.content.product-management.products.form-components.basic-information-card', ['isEdit' => true, 'product' => $product])
                             @include('admin.content.product-management.products.form-components.affiliate-card', ['isEdit' => true, 'product' => $product])
                             @include('admin.content.product-management.products.form-components.description-card', ['isEdit' => true, 'product' => $product])
+                            @include('admin.content.product-management.products.form-components.seo-card', ['product' => $product])
                         </div>
                         <div class="col-lg-4">
                             @include('admin.content.product-management.products.form-components.organization-card', ['isEdit' => true, 'product' => $product])

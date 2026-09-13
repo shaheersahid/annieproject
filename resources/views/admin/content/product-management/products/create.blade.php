@@ -147,6 +147,7 @@
                                 @include('admin.content.product-management.products.form-components.basic-information-card')
                                 @include('admin.content.product-management.products.form-components.affiliate-card')
                                 @include('admin.content.product-management.products.form-components.description-card')
+                                @include('admin.content.product-management.products.form-components.seo-card')
                             </div>
                             <div class="col-lg-4">
                                 @include('admin.content.product-management.products.form-components.organization-card')

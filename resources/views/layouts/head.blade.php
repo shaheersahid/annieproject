@@ -2,9 +2,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>@yield('title', 'Smart Comfort Deals | Premium Ergonomic Cushions, Home & Office Comfort Solutions')</title>
-<meta name="keywords" content="Smart Comfort Deals, ergonomic seat cushion, memory foam cushion, office comfort, home ergonomics, lumbar support, lifestyle accessories">
+<meta name="keywords" content="@yield('meta-keywords', 'Smart Comfort Deals, ergonomic seat cushion, memory foam cushion, office comfort, home ergonomics, lumbar support, lifestyle accessories')">
 <meta name="description" content="@yield('meta-description', "Discover Smart Comfort Deals' premium collection of high-quality ergonomic seat cushions, memory foam support, home comfort items, and lifestyle accessories.")">
 <meta name="author" content="Smart Comfort Deals">
+@stack('seo-head')
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/icons/apple-touch-icon.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/icons/favicon-32x32.png') }}">
@@ -27,6 +28,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/skin.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/custom-storefront.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/plugins/nouislider/nouislider.css') }}">
 
 @stack('page-styles')

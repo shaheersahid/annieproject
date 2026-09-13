@@ -1,26 +1,33 @@
 @php
     $productUrl = route('product-detail', $product);
+    $linkToProduct = $linkToProduct ?? true;
+    $actionUrl = $linkToProduct ? $productUrl : route('product-quickview', $product);
+    $actionClass = $linkToProduct ? 'btn-product btn-cart' : 'btn-product btn-quickview';
     $primaryImage = $product->primaryImage?->url ?? asset('assets/images/products/product-1.jpg');
     $hoverImage = $product->images?->firstWhere('type', 'gallery')?->url ?? $primaryImage;
-    $reviewsCount = $product->reviews_count ?? 0;
-    $ratingPercent = $product->affiliate_rating ? min(100, (float) $product->affiliate_rating * 20) : ($reviewsCount > 0 ? 80 : 0);
+    $enabledTags = $product->enabledTags();
+    $isReel = $product->isTiktokReel();
 @endphp
 
 <div class="product product-7 text-center">
     <figure class="product-media">
-        @if($product->sale_price)
+        @if($isReel)
+            <span class="product-label label-circle label-new">Reel</span>
+        @elseif($product->sale_price)
             <span class="product-label label-circle label-sale">Sale</span>
         @elseif($product->deal_enabled)
             <span class="product-label label-circle label-top">Deal</span>
+        @elseif($product->is_latest)
+            <span class="product-label label-circle label-new">Latest</span>
         @endif
 
         <a href="{{ $productUrl }}">
-            <img src="{{ $primaryImage }}" alt="{{ $product->name }}" class="product-image">
-            <img src="{{ $hoverImage }}" alt="{{ $product->name }}" class="product-image-hover">
+            <img src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'product photo') }}" class="product-image">
+            <img src="{{ $hoverImage }}" alt="{{ product_image_alt($product, 'alternate view') }}" class="product-image-hover">
         </a>
 
         <div class="product-action">
-            <a href="{{ $productUrl }}" class="btn-product btn-quickview"><span>View deal</span></a>
+            <a href="{{ $actionUrl }}" class="{{ $actionClass }}"><span>View deal</span></a>
         </div>
     </figure>
 
@@ -48,18 +55,18 @@
                 Check latest price
             @endif
         </div>
-        <div class="ratings-container">
-            <div class="ratings">
-                <div class="ratings-val" style="width: {{ $ratingPercent }}%;"></div>
+        @if($isReel)
+            <div class="product-feature-list">
+                <span class="product-feature-badge">TikTok / Reel</span>
             </div>
-            <span class="ratings-text">
-                @if($product->affiliate_rating)
-                    {{ number_format((float) $product->affiliate_rating, 1) }}/5
-                @else
-                    ( {{ $reviewsCount }} Reviews )
-                @endif
-            </span>
-        </div>
+        @endif
+        @if($enabledTags->isNotEmpty())
+            <div class="product-feature-list">
+                @foreach($enabledTags as $tag)
+                    <span class="product-feature-badge">{{ $tag->name }}</span>
+                @endforeach
+            </div>
+        @endif
         @if($product->is_affiliate)
             <div class="mt-1">
                 @if($product->amazon_url)
@@ -67,6 +74,9 @@
                 @endif
                 @if($product->temu_url)
                     <a href="{{ route('affiliate.redirect', [$product, 'temu']) }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="nofollow sponsored noopener">Temu</a>
+                @endif
+                @if($product->aliexpress_url)
+                    <a href="{{ route('affiliate.redirect', [$product, 'aliexpress']) }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="nofollow sponsored noopener">AliExpress</a>
                 @endif
             </div>
         @endif

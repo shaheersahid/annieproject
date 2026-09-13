@@ -27,7 +27,7 @@ Route::get('/', function () {
         ->get();
 
     $featuredProducts = Product::query()
-        ->with(['categories', 'images', 'primaryImage'])
+        ->withListing()
         ->published()
         ->where('is_featured', true)
         ->latest()
@@ -35,9 +35,9 @@ Route::get('/', function () {
         ->get();
 
     $newProducts = Product::query()
-        ->with(['categories', 'images', 'primaryImage'])
+        ->withListing()
         ->published()
-        ->latest()
+        ->latestPicks()
         ->take(10)
         ->get();
 
@@ -46,7 +46,7 @@ Route::get('/', function () {
         ->mapWithKeys(function (Category $category) {
             return [
                 $category->id => Product::query()
-                    ->with(['categories', 'images', 'primaryImage'])
+                    ->withListing()
                     ->published()
                     ->whereHas('categories', function ($query) use ($category): void {
                         $query->whereKey($category->id);
@@ -66,6 +66,8 @@ Route::get('/', function () {
 })->name('home');
 Route::get('/go/{product}/{platform}', [AffiliateController::class, 'redirect'])->name('affiliate.redirect');
 Route::get('/products', [ProductBrowseController::class, 'index'])->name('product-list');
+Route::get('/latest-deals', [ProductBrowseController::class, 'latest'])->name('latest-deals');
+Route::get('/products/{product:slug}/quickview', [ProductBrowseController::class, 'quickview'])->name('product-quickview');
 Route::get('/products/{product:slug}', [ProductBrowseController::class, 'show'])->name('product-detail');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
@@ -194,6 +196,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('categories/toggle-status', [Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
     Route::post('categories/quick-store', [Admin\CategoryController::class, 'quickStore'])->name('categories.quick-store');
     Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+
+    Route::prefix('latest-deals')->name('latest-deals.')->group(function () {
+        Route::get('/', [Admin\LatestDealController::class, 'index'])->name('index');
+        Route::post('/', [Admin\LatestDealController::class, 'store'])->name('store');
+        Route::post('/reorder', [Admin\LatestDealController::class, 'reorder'])->name('reorder');
+        Route::delete('/{product}', [Admin\LatestDealController::class, 'destroy'])->name('destroy');
+    });
 
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/drafts', [Admin\ProductController::class, 'drafts'])->name('drafts');

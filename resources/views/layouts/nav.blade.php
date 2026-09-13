@@ -14,7 +14,7 @@
                 </button>
 
                 <a href="{{ url('/') }}" class="logo">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" height="100"
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="{{ seo_alt('Smart Comfort Deals logo') }}" height="100"
                         width="200">
                 </a>
             </div><!-- End .header-left -->
@@ -26,6 +26,7 @@
                         <div class="header-search-wrapper search-wrapper-wide">
                             <label for="q" class="sr-only">Search</label>
                             <input type="search" class="form-control" name="q" id="q"
+                                value="{{ request('q') }}"
                                 placeholder="Search comfort deals ..." required>
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                         </div><!-- End .header-search-wrapper -->
@@ -43,6 +44,9 @@
                 <ul class="menu sf-arrows">
                     <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                         <a href="{{ url('/') }}">Home</a>
+                    </li>
+                    <li class="{{ request()->routeIs('latest-deals') ? 'active' : '' }}">
+                        <a href="{{ route('latest-deals') }}">Latest Deals</a>
                     </li>
                     <li class="{{ request()->routeIs('product-list', 'product-detail') ? 'active' : '' }}">
                         <a href="{{ route('product-list') }}">All Deals</a>

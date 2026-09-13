@@ -7,7 +7,7 @@
 
         <form action="{{ route('product-list') }}" method="get" class="mobile-search">
             <label for="mobile-search" class="sr-only">Search</label>
-            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+            <input type="search" class="form-control" name="q" id="mobile-search" value="{{ request('q') }}" placeholder="Search comfort deals ..." required>
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
         
@@ -30,6 +30,9 @@
                         @endif
                     </li>
                 @endforeach
+                <li class="{{ request()->routeIs('latest-deals') ? 'active' : '' }}">
+                    <a href="{{ route('latest-deals') }}">Latest Deals</a>
+                </li>
                 <li>
                     <a href="{{ route('product-list') }}">All Deals</a>
                 </li>

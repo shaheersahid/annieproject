@@ -123,7 +123,7 @@
 
     <div class="container-fluid new-arrivals">
         <div class="heading heading-center mb-3">
-            <h2 class="title">LATEST AMAZON & TEMU PICKS</h2>
+            <h2 class="title">LATEST PROMOTED PICKS</h2>
         </div>
 
         <div class="products">
@@ -134,14 +134,14 @@
                     </div>
                 @empty
                     <div class="col-12 text-center">
-                        <p class="text-muted">No products available yet.</p>
+                        <p class="text-muted">No latest deals selected yet.</p>
                     </div>
                 @endforelse
             </div>
         </div>
 
         <div class="more-container text-center mt-2">
-            <a href="{{ route('product-list') }}" class="btn btn-outline-dark-3 btn-more"><span>View all deals</span><i class="icon-long-arrow-right"></i></a>
+            <a href="{{ route('latest-deals') }}" class="btn btn-outline-dark-3 btn-more"><span>View latest deals</span><i class="icon-long-arrow-right"></i></a>
         </div>
 
         <hr class="mt-0 mb-6">
@@ -158,7 +158,7 @@
                     <article class="entry">
                         <figure class="entry-media">
                             <a href="{{ route('product-list', ['category' => $category->slug]) }}">
-                                <img src="{{ $image }}" alt="{{ $category->name }}">
+                                <img src="{{ $image }}" alt="{{ seo_alt($category->name . ' comfort deals from Smart Comfort Deals') }}">
                             </a>
                         </figure>
 

@@ -1,12 +1,20 @@
 @extends('layouts.main')
 
-@section('title', $product->name)
+@section('title', $product->getSeoTitle())
+@section('meta-description', $product->getSeoDescription())
+@section('meta-keywords', $product->getSeoKeywords() ?: 'Smart Comfort Deals, comfort deals, Amazon, Temu, AliExpress')
+
+@push('seo-head')
+    @include('content.partials.product-seo', ['product' => $product])
+@endpush
 
 @section('content')
 @php
     $primaryImage = $product->primaryImage?->url ?? asset('assets/images/products/product-1.jpg');
     $gallery = $product->images->where('type', 'gallery')->values();
     $ratingPercent = $product->affiliate_rating ? min(100, (float) $product->affiliate_rating * 20) : 0;
+    $enabledTags = $product->enabledTags();
+    $enabledAttributes = $product->enabledAttributes();
 @endphp
 
 <main class="main product-detail-page">
@@ -31,19 +39,19 @@
                     <div class="col-lg-6">
                         <div class="product-gallery product-gallery-vertical product-detail-gallery">
                             <figure class="product-main-image">
-                                <img id="product-zoom" src="{{ $primaryImage }}" alt="{{ $product->name }}">
+                                <img id="product-zoom" src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'main product photo') }}">
                             </figure>
 
                             @if($gallery->isNotEmpty())
                                 <div id="product-zoom-gallery" class="product-image-gallery">
                                     @if($product->primaryImage)
                                         <a class="product-gallery-item active" href="#" data-image="{{ $product->primaryImage->url }}" data-zoom-image="{{ $product->primaryImage->url }}">
-                                            <img src="{{ $product->primaryImage->url }}" alt="{{ $product->name }}">
+                                            <img src="{{ $product->primaryImage->url }}" alt="{{ product_image_alt($product, 'thumbnail') }}">
                                         </a>
                                     @endif
                                     @foreach($gallery as $image)
                                         <a class="product-gallery-item" href="#" data-image="{{ $image->url }}" data-zoom-image="{{ $image->url }}">
-                                            <img src="{{ $image->url }}" alt="{{ $product->name }}">
+                                            <img src="{{ $image->url }}" alt="{{ product_image_alt($product, 'gallery image ' . ($loop->iteration + 1)) }}">
                                         </a>
                                     @endforeach
                                 </div>
@@ -68,6 +76,17 @@
                                 {!! $product->short_description ?: '<p>Selected product deal from Amazon or Temu.</p>' !!}
                             </div>
 
+                            @if($enabledTags->isNotEmpty() || $enabledAttributes->isNotEmpty())
+                                <div class="product-feature-list mb-3">
+                                    @foreach($enabledTags as $tag)
+                                        <span class="product-feature-badge">{{ $tag->name }}</span>
+                                    @endforeach
+                                    @foreach($enabledAttributes as $attribute)
+                                        <span class="product-feature-badge">{{ $attribute->name }}</span>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             <div class="product-details-action product-detail-actions">
                                 @if($product->amazon_url)
                                     <a href="{{ route('affiliate.redirect', [$product, 'amazon']) }}" class="btn-product btn-cart" target="_blank" rel="nofollow sponsored noopener"><span>Buy on Amazon</span></a>
@@ -77,6 +96,9 @@
                                 @endif
                                 @if($product->aliexpress_url)
                                     <a href="{{ route('affiliate.redirect', [$product, 'aliexpress']) }}" class="btn-product btn-cart" target="_blank" rel="nofollow sponsored noopener"><span>Buy on AliExpress</span></a>
+                                @endif
+                                @if($product->tiktok_url)
+                                    <a href="{{ $product->tiktok_url }}" class="btn-product btn-cart" target="_blank" rel="nofollow noopener"><span>Watch on TikTok</span></a>
                                 @endif
                                 @unless($product->amazon_url || $product->temu_url || $product->aliexpress_url)
                                     <a href="{{ route('contact') }}" class="btn-product btn-cart"><span>Contact for availability</span></a>
@@ -107,6 +129,11 @@
                     <li class="nav-item">
                         <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab">Specs</a>
                     </li>
+                    @if($enabledAttributes->isNotEmpty() || $enabledTags->isNotEmpty())
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-features-link" data-toggle="tab" href="#product-features-tab" role="tab">Features</a>
+                        </li>
+                    @endif
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel">
@@ -138,6 +165,30 @@
                             </div>
                         </div>
                     </div>
+                    @if($enabledAttributes->isNotEmpty() || $enabledTags->isNotEmpty())
+                        <div class="tab-pane fade" id="product-features-tab" role="tabpanel">
+                            <div class="product-desc-content">
+                                <h3>Deal Features</h3>
+                                <p>Only enabled features are shown for this deal.</p>
+                                <ul class="product-feature-details">
+                                    @foreach($enabledTags as $tag)
+                                        <li>{{ $tag->name }}</li>
+                                    @endforeach
+                                    @foreach($enabledAttributes as $attribute)
+                                        <li>
+                                            @if($attribute->icon)
+                                                <i class="{{ $attribute->icon }}"></i>
+                                            @endif
+                                            <strong>{{ $attribute->name }}</strong>
+                                            @if($attribute->short_description)
+                                                <span> — {{ $attribute->short_description }}</span>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
                     <div class="tab-pane fade" id="product-info-tab" role="tabpanel">
                         <div class="product-desc-content">
                             <h3>Additional Information</h3>

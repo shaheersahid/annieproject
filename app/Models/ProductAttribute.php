@@ -40,4 +40,9 @@ class ProductAttribute extends Model
     {
         return $this->belongsToMany(Category::class, 'category_product_attribute')->withTimestamps();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

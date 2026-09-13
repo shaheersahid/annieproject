@@ -66,6 +66,30 @@ if (!function_exists('resolve_image_path')) {
     }
 }
 
+if (! function_exists('seo_alt')) {
+    function seo_alt(?string $text, string $fallback = 'Smart Comfort Deals'): string
+    {
+        $value = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($text ?: $fallback))) ?? '');
+
+        return \Illuminate\Support\Str::limit($value !== '' ? $value : $fallback, 125, '');
+    }
+}
+
+if (! function_exists('product_image_alt')) {
+    function product_image_alt($product, ?string $suffix = null): string
+    {
+        $parts = array_filter([
+            $product->name ?? null,
+            $product->brand?->name,
+            $product->categories?->first()?->name,
+            $suffix,
+            'comfort deal',
+        ]);
+
+        return seo_alt(implode(' - ', array_unique($parts)));
+    }
+}
+
 if (!function_exists('format_price')) {
     function format_price(float|int|string|null $amount, string $symbol = 'PKR'): string
     {

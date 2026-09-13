@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-12 col-lg-4">
                     <div class="widget widget-about">
-                        <img src="{{ asset('assets/images/logo.png') }}" class="footer-logo" alt="Logo" width="200" height="100">
+                        <img src="{{ asset('assets/images/logo.png') }}" class="footer-logo" alt="{{ seo_alt('Smart Comfort Deals logo') }}" width="200" height="100">
                         <p>Smart Comfort Deals helps shoppers compare ergonomic cushions, home comfort items, and lifestyle accessories from Amazon, Temu and AliExpress affiliate listings.</p>
                         
                         <div class="widget-about-info">
@@ -20,6 +20,7 @@
 
                         <ul class="widget-list">
                             <li><a href="{{ route('about') }}">About Smart Comfort Deals</a></li>
+                            <li><a href="{{ route('latest-deals') }}">Latest Deals</a></li>
                             <li><a href="{{ route('product-list') }}">All Deals</a></li>
                             <li><a href="{{ route('product-list', ['platform' => 'amazon']) }}">Amazon Picks</a></li>
                             <li><a href="{{ route('product-list', ['platform' => 'temu']) }}">Temu Picks</a></li>

@@ -38,12 +38,32 @@
                 <label for="aliexpress_url" class="form-label">AliExpress Affiliate URL</label>
                 <input type="url" class="form-control" id="aliexpress_url" name="aliexpress_url" value="{{ old('aliexpress_url', $product?->aliexpress_url) }}" placeholder="https://www.aliexpress.com/...aff_id=...">
             </div>
+            <div class="col-md-8">
+                <label for="tiktok_url" class="form-label">TikTok / Reel URL</label>
+                <input type="url" class="form-control" id="tiktok_url" name="tiktok_url" value="{{ old('tiktok_url', $product?->tiktok_url) }}" placeholder="https://www.tiktok.com/@user/video/...">
+            </div>
             <input type="hidden" id="price_note" name="price_note" value="{{ old('price_note', $product?->price_note ?? 'Check latest price') }}">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <label for="is_featured" class="form-label">Featured Deal</label>
                 <div class="form-check form-switch mt-1">
                     <input type="hidden" name="is_featured" value="0">
                     <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product?->is_featured ?? false) ? 'checked' : '' }}>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="is_latest" class="form-label">Latest Deals Page</label>
+                <div class="form-check form-switch mt-1">
+                    <input type="hidden" name="is_latest" value="0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="is_latest" name="is_latest" value="1" {{ old('is_latest', $product?->is_latest ?? false) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_latest">Show as latest pick</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="is_reel" class="form-label">TikTok / Reel Pick</label>
+                <div class="form-check form-switch mt-1">
+                    <input type="hidden" name="is_reel" value="0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="is_reel" name="is_reel" value="1" {{ old('is_reel', $product?->is_reel ?? false) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_reel">Pin to top of Latest Deals</label>
                 </div>
             </div>
             <div class="col-md-6">

@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @php
+    $search = $search ?? request('q');
     $activeCategoryName = null;
     if (request('category')) {
         $activeCategory = \App\Models\Category::where('slug', request('category'))->first();
@@ -16,7 +17,9 @@
 <main class="main">
     <div class="page-header text-center" style="background-image: url('{{ asset('assets/images/page-header-bg.jpg') }}')">
         <div class="container">
-            @if($activeCategoryName)
+            @if(!empty($search))
+                <h1 class="page-title">Search results<span>for "{{ $search }}"</span></h1>
+            @elseif($activeCategoryName)
                 <h1 class="page-title">{{ $activeCategoryName }}<span>Smart Comfort Deals</span></h1>
             @else
                 <h1 class="page-title">Smart Comfort Deals<span>Top ergonomic, home & office picks</span></h1>
@@ -49,6 +52,13 @@
                     <div class="toolbox-info">
                         Showing <span>{{ $products->count() }} of {{ $products->total() }}</span> deals
                     </div>
+                    <div class="toolbox-sort ml-2">
+                        <label for="list-search">Search:</label>
+                        <div class="d-flex">
+                            <input type="search" id="list-search" class="form-control" name="q" value="{{ $search }}" placeholder="Search deals...">
+                            <button class="btn btn-outline-dark-2 ml-1" type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="toolbox-right">
                     <div class="toolbox-sort">
@@ -58,6 +68,7 @@
                                 <option value="">All</option>
                                 <option value="amazon" @selected(request('platform') === 'amazon')>Amazon</option>
                                 <option value="temu" @selected(request('platform') === 'temu')>Temu</option>
+                                <option value="aliexpress" @selected(request('platform') === 'aliexpress')>AliExpress</option>
                             </select>
                         </div>
                     </div>
@@ -74,6 +85,7 @@
                     @if(request('category'))
                         <input type="hidden" name="category" value="{{ request('category') }}">
                     @endif
+                    {{-- Search is submitted from the toolbox field above --}}
                 </div>
             </form>
 
@@ -87,7 +99,13 @@
                                 </div>
                             @empty
                                 <div class="col-12">
-                                    <p class="text-muted text-center py-5">No affiliate deals found.</p>
+                                    <p class="text-muted text-center py-5">
+                                        @if(!empty($search))
+                                            No deals found for "{{ $search }}".
+                                        @else
+                                            No affiliate deals found.
+                                        @endif
+                                    </p>
                                 </div>
                             @endforelse
                         </div>
@@ -112,7 +130,7 @@
                                     <div class="filter-items filter-items-count">
                                         @foreach($categories as $category)
                                             <div class="filter-item">
-                                                <a class="{{ request('category') === $category->slug ? 'font-weight-bold' : '' }}" href="{{ route('product-list', array_filter(['category' => $category->slug, 'platform' => request('platform'), 'sort' => request('sort')])) }}">
+                                                <a class="{{ request('category') === $category->slug ? 'font-weight-bold' : '' }}" href="{{ route('product-list', array_filter(['category' => $category->slug, 'platform' => request('platform'), 'sort' => request('sort'), 'q' => $search ?? request('q')])) }}">
                                                     {{ $category->name }}
                                                 </a>
                                                 <span class="item-count">{{ $category->products_count }}</span>

@@ -55,6 +55,7 @@ class ProductController extends Controller
             $this->syncTags($product, $request);
             $this->handleImages($product, $request);
             $this->syncVariants($product, $request);
+            $this->syncBasicSeo($product, $request);
 
             return $product;
         });
@@ -76,7 +77,7 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $product->load(['categories', 'tags', 'images', 'primaryImage', 'variants']);
+        $product->load(['categories', 'tags', 'images', 'primaryImage', 'variants', 'seo']);
         return view('admin.content.product-management.products.edit', array_merge(
             $this->formData(),
             ['product' => $product]
@@ -93,6 +94,7 @@ class ProductController extends Controller
             $this->syncTags($product, $request);
             $this->handleImages($product, $request);
             $this->syncVariants($product, $request);
+            $this->syncBasicSeo($product, $request);
         });
 
         return redirect()->route('admin.products.index')
@@ -169,23 +171,58 @@ class ProductController extends Controller
 
     public function seoEdit(Product $product): View
     {
+        $product->load(['seo', 'primaryImage', 'images', 'brand', 'categories']);
+
         return view('admin.content.product-management.products.edit-meta-fields', compact('product'));
     }
 
     public function seoUpdate(Request $request, Product $product): RedirectResponse
     {
-        $request->validate([
-            'meta_title'       => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
-            'meta_keywords'    => 'nullable|string|max:500',
+        $validated = $request->validate([
+            'meta_fields' => ['nullable', 'array'],
+            'meta_fields.title' => ['nullable', 'string', 'max:255'],
+            'meta_fields.description' => ['nullable', 'string', 'max:500'],
+            'meta_fields.keywords' => ['nullable', 'string', 'max:500'],
+            'meta_fields.canonical' => ['nullable', 'string', 'max:2048'],
+            'meta_fields.robots' => ['nullable', 'string', 'max:100'],
+            'og_fields' => ['nullable', 'array'],
+            'og_fields.title' => ['nullable', 'string', 'max:255'],
+            'og_fields.type' => ['nullable', 'string', 'max:50'],
+            'og_fields.description' => ['nullable', 'string', 'max:500'],
+            'og_fields.image' => ['nullable', 'string', 'max:2048'],
+            'og_fields.url' => ['nullable', 'string', 'max:2048'],
+            'twitter_fields' => ['nullable', 'array'],
+            'twitter_fields.card' => ['nullable', 'string', 'max:50'],
+            'twitter_fields.site' => ['nullable', 'string', 'max:100'],
+            'twitter_fields.title' => ['nullable', 'string', 'max:255'],
+            'twitter_fields.description' => ['nullable', 'string', 'max:500'],
+            'twitter_fields.image' => ['nullable', 'string', 'max:2048'],
+            'schema_fields' => ['nullable', 'string'],
         ]);
+
+        $schema = null;
+        $rawSchema = trim((string) $request->input('schema_fields', ''));
+        if ($rawSchema !== '') {
+            $decoded = json_decode($rawSchema, true);
+            if (json_last_error() !== JSON_ERROR_NONE || ! is_array($decoded)) {
+                return back()
+                    ->withErrors(['schema_fields' => 'Schema markup must be valid JSON.'])
+                    ->withInput();
+            }
+            $schema = $decoded;
+        }
 
         $product->seo()->updateOrCreate(
             ['seoable_id' => $product->id, 'seoable_type' => Product::class],
-            ['meta_fields' => $request->only(['meta_title', 'meta_description', 'meta_keywords'])]
+            [
+                'meta_fields' => $this->cleanSeoGroup($validated['meta_fields'] ?? []),
+                'og_fields' => $this->cleanSeoGroup($validated['og_fields'] ?? []),
+                'twitter_fields' => $this->cleanSeoGroup($validated['twitter_fields'] ?? []),
+                'schema_fields' => $schema,
+            ]
         );
 
-        return back()->with('success', 'SEO meta updated.');
+        return back()->with('success', 'SEO fields and schema markup saved.');
     }
 
     public function variantBuilderData(Product $product): JsonResponse
@@ -228,7 +265,17 @@ class ProductController extends Controller
 
     private function prepareData(ProductRequest $request): array
     {
-        return array_merge($request->validated(), [
+        $data = $request->validated();
+
+        if (! empty($data['is_latest']) && empty($data['latest_sort_order'])) {
+            $data['latest_sort_order'] = ((int) Product::max('latest_sort_order')) + 1;
+        }
+
+        if (empty($data['is_latest'])) {
+            $data['latest_sort_order'] = 0;
+        }
+
+        return array_merge($data, [
             'aliexpress_url' => $request->input('aliexpress_url'),
         ]);
     }
@@ -241,6 +288,32 @@ class ProductController extends Controller
     private function syncTags(Product $product, Request $request): void
     {
         $product->tags()->sync($request->input('tag_ids', []));
+    }
+
+    private function syncBasicSeo(Product $product, Request $request): void
+    {
+        if (! $request->exists('seo_title') && ! $request->exists('seo_description') && ! $request->exists('seo_keywords')) {
+            return;
+        }
+
+        $existing = $product->seo()->first();
+        $meta = $existing?->meta_fields ?? [];
+        $meta['title'] = trim((string) $request->input('seo_title', $meta['title'] ?? ''));
+        $meta['description'] = trim((string) $request->input('seo_description', $meta['description'] ?? ''));
+        $meta['keywords'] = trim((string) $request->input('seo_keywords', $meta['keywords'] ?? ''));
+
+        $product->seo()->updateOrCreate(
+            ['seoable_id' => $product->id, 'seoable_type' => Product::class],
+            ['meta_fields' => $this->cleanSeoGroup($meta)]
+        );
+    }
+
+    private function cleanSeoGroup(array $fields): array
+    {
+        return collect($fields)
+            ->map(fn ($value) => is_string($value) ? trim($value) : $value)
+            ->filter(fn ($value) => $value !== null && $value !== '')
+            ->all();
     }
 
     private function handleImages(Product $product, Request $request): void
