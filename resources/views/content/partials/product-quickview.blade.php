@@ -48,7 +48,7 @@
                     @endif
                 </h3>
 
-                <p class="product-txt">{!! $product->short_description ?: 'Selected product deal from Amazon, Temu or AliExpress.' !!}</p>
+                <p class="product-txt">{!! $product->storefrontShortDescription() ?: 'Selected product deal from Amazon, Temu or AliExpress.' !!}</p>
 
                 @if($enabledTags->isNotEmpty() || $enabledAttributes->isNotEmpty())
                     <div class="product-feature-list mb-2">

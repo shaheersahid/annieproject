@@ -73,7 +73,7 @@
                             @endif
 
                             <div class="product-content">
-                                {!! $product->short_description ?: '<p>Selected product deal from Amazon or Temu.</p>' !!}
+                                {!! $product->storefrontShortDescription() ?: '<p>Selected product deal from Amazon or Temu.</p>' !!}
                             </div>
 
                             @if($enabledTags->isNotEmpty() || $enabledAttributes->isNotEmpty())
@@ -139,7 +139,7 @@
                     <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel">
                         <div class="product-desc-content">
                             <h3>Product Information</h3>
-                            {!! $product->description ?: '<p>This affiliate pick is listed so shoppers can compare product options before buying from the retailer.</p>' !!}
+                            {!! $product->storefrontDescription() ?: '<p>This affiliate pick is listed so shoppers can compare product options before buying from the retailer.</p>' !!}
 
                             <div class="row mt-3">
                                 @if(!empty($product->pros))

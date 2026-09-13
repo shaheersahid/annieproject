@@ -470,6 +470,38 @@ class Product extends Model
             ->get();
     }
 
+    /**
+     * Description HTML for the storefront, with leftover draft headings removed.
+     */
+    public function storefrontDescription(): string
+    {
+        return $this->sanitizeStorefrontHtml((string) $this->description);
+    }
+
+    /**
+     * Short description HTML for the storefront.
+     */
+    public function storefrontShortDescription(): string
+    {
+        return $this->sanitizeStorefrontHtml((string) $this->short_description);
+    }
+
+    protected function sanitizeStorefrontHtml(string $html): string
+    {
+        $html = trim($html);
+
+        if ($html === '') {
+            return '';
+        }
+
+        // Content drafts sometimes leave empty admin headings like "SEO Slug" in the body.
+        $html = preg_replace('/<h[1-6][^>]*>\s*SEO\s*Slug\s*<\/h[1-6]>\s*/iu', '', $html) ?? $html;
+        $html = preg_replace('/<p[^>]*>\s*SEO\s*Slug\s*<\/p>\s*/iu', '', $html) ?? $html;
+        $html = preg_replace('/(?:^|<br\s*\/?>)\s*SEO\s*Slug\s*(?:<br\s*\/?>|$)/iu', '', $html) ?? $html;
+
+        return trim($html);
+    }
+
     public function getSeoUrl(): string
     {
         if (filled($this->slug)) {
