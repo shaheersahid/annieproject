@@ -360,16 +360,10 @@ class Product extends Model
             return $query->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
         }
 
+        // Strict: only products explicitly assigned to this homepage tab.
         return $query->where(function ($featured) use ($categoryId): void {
             $featured->whereJsonContains('featured_category_ids', $categoryId)
-                ->orWhereJsonContains('featured_category_ids', (string) $categoryId)
-                ->orWhere(function ($legacy) use ($categoryId): void {
-                    $legacy->where(function ($emptyIds): void {
-                        $emptyIds->whereNull('featured_category_ids')
-                            ->orWhere('featured_category_ids', '[]')
-                            ->orWhere('featured_category_ids', '');
-                    })->whereHas('categories', fn ($categoryQuery) => $categoryQuery->whereKey($categoryId));
-                });
+                ->orWhereJsonContains('featured_category_ids', (string) $categoryId);
         });
     }
 

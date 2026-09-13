@@ -260,6 +260,12 @@ class ProductController extends Controller
             'sellers'        => Seller::where('is_active', true)->orderBy('store_name')->get(),
             'sizeCharts'     => SizeChart::orderBy('name')->get(),
             'productTags'    => ProductTag::where('is_active', true)->orderBy('name')->get(),
+            'featuredHomeCategories' => Category::query()
+                ->active()
+                ->parentCategories()
+                ->ordered()
+                ->take(2)
+                ->get(['id', 'name']),
         ];
     }
 
@@ -267,22 +273,50 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
-        if (! empty($data['is_featured']) && empty($data['featured_sort_order'])) {
-            $data['featured_sort_order'] = ((int) Product::max('featured_sort_order')) + 1;
-        }
+        $featuredCategoryIds = collect($request->input('featured_category_ids', []))
+            ->map(fn ($id) => (int) $id)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
-        if (! empty($data['is_featured'])) {
-            $existingIds = $product?->featured_category_ids ?? [];
-            if (empty($existingIds)) {
-                $data['featured_category_ids'] = Category::query()
+        // Explicit tab picks from the product form take priority.
+        if ($request->boolean('featured_tabs_managed')) {
+            $data['featured_category_ids'] = $featuredCategoryIds;
+            $data['is_featured'] = $featuredCategoryIds !== [];
+        } elseif (! empty($data['is_featured'])) {
+            // Legacy single toggle: keep existing tab picks, otherwise use the product's matching home categories.
+            $existingIds = collect($product?->featured_category_ids ?? [])
+                ->map(fn ($id) => (int) $id)
+                ->filter()
+                ->values()
+                ->all();
+
+            if ($existingIds !== []) {
+                $data['featured_category_ids'] = $existingIds;
+            } else {
+                $homeIds = Category::query()
                     ->active()
                     ->parentCategories()
                     ->ordered()
                     ->take(2)
                     ->pluck('id')
-                    ->map(fn ($id) => (int) $id)
-                    ->all();
+                    ->map(fn ($id) => (int) $id);
+
+                $productCategoryIds = collect($request->input('category_ids', $product?->categories?->pluck('id') ?? []))
+                    ->map(fn ($id) => (int) $id);
+
+                $matched = $productCategoryIds->intersect($homeIds)->values()->all();
+                $data['featured_category_ids'] = $matched;
+                $data['is_featured'] = $matched !== [];
             }
+        } else {
+            $data['featured_category_ids'] = [];
+            $data['is_featured'] = false;
+        }
+
+        if (! empty($data['is_featured']) && empty($data['featured_sort_order'])) {
+            $data['featured_sort_order'] = ((int) Product::max('featured_sort_order')) + 1;
         }
 
         if (empty($data['is_featured'])) {

@@ -43,18 +43,40 @@
                 <input type="url" class="form-control" id="tiktok_url" name="tiktok_url" value="{{ old('tiktok_url', $product?->tiktok_url) }}" placeholder="https://www.tiktok.com/@user/video/...">
             </div>
             <input type="hidden" id="price_note" name="price_note" value="{{ old('price_note', $product?->price_note ?? 'Check latest price') }}">
-            <div class="col-md-3">
-                <label for="is_featured" class="form-label">Featured Comfort Deals</label>
-                <div class="form-check form-switch mt-1">
-                    <input type="hidden" name="is_featured" value="0">
-                    <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product?->is_featured ?? false) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="is_featured">Show in both homepage Featured Comfort Deals tabs</label>
-                    @if($isEdit && $product)
-                        <div class="mt-1">
-                            <a href="{{ route('admin.featured-deals.index') }}" class="small">Manage Featured Deals per tab</a>
+            @php
+                $featuredHomeCategories = $featuredHomeCategories ?? collect();
+                $selectedFeaturedTabs = collect(old('featured_category_ids', $product?->featured_category_ids ?? []))
+                    ->map(fn ($id) => (int) $id)
+                    ->all();
+            @endphp
+            <div class="col-12">
+                <label class="form-label">Featured Comfort Deals tabs</label>
+                <p class="text-muted small mb-2">Choose which homepage tabs should show this product. Leave both unchecked to keep it out of Featured Comfort Deals.</p>
+                <input type="hidden" name="featured_tabs_managed" value="1">
+                <div class="d-flex flex-wrap gap-3">
+                    @forelse($featuredHomeCategories as $featuredCategory)
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="featured_tab_{{ $featuredCategory->id }}"
+                                name="featured_category_ids[]"
+                                value="{{ $featuredCategory->id }}"
+                                @checked(in_array((int) $featuredCategory->id, $selectedFeaturedTabs, true))
+                            >
+                            <label class="form-check-label" for="featured_tab_{{ $featuredCategory->id }}">
+                                {{ $featuredCategory->name }}
+                            </label>
                         </div>
-                    @endif
+                    @empty
+                        <span class="text-muted small">No homepage featured tabs found.</span>
+                    @endforelse
                 </div>
+                @if($isEdit && $product)
+                    <div class="mt-2">
+                        <a href="{{ route('admin.featured-deals.index') }}" class="small">Open Featured Deals manager</a>
+                    </div>
+                @endif
             </div>
             <div class="col-md-3">
                 <label for="is_latest" class="form-label">Latest Deals Page</label>

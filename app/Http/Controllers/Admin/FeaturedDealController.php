@@ -15,6 +15,7 @@ class FeaturedDealController extends Controller
     {
         $featuredCategories = $this->featuredCategories();
         $categoryId = $request->integer('category') ?: $featuredCategories->first()?->id;
+        $activeCategory = $featuredCategories->firstWhere('id', $categoryId) ?? $featuredCategories->first();
 
         $featuredProducts = Product::query()
             ->with(['primaryImage', 'categories'])
@@ -34,13 +35,21 @@ class FeaturedDealController extends Controller
                 fn ($query) => $query->whereNotIn('id', $featuredProductIds)
             )
             ->orderBy('name')
-            ->get(['id', 'name']);
+            ->get(['id', 'name', 'featured_category_ids', 'is_featured']);
+
+        $tabCounts = $featuredCategories->mapWithKeys(function (Category $category) {
+            return [
+                $category->id => Product::query()->featuredInCategory($category->id)->count(),
+            ];
+        });
 
         return view('admin.content.product-management.featured-deals.index', compact(
             'featuredCategories',
             'categoryId',
+            'activeCategory',
             'featuredProducts',
             'availableProducts',
+            'tabCounts',
         ));
     }
 
@@ -67,7 +76,9 @@ class FeaturedDealController extends Controller
             'featured_category_ids' => $ids,
         ])->save();
 
-        return $this->redirectToIndex($request, $product->name . ' added to this Featured Comfort Deals tab.');
+        $tabName = Category::find($categoryId)?->name ?? 'this tab';
+
+        return $this->redirectToIndex($request, $product->name . ' added to ' . $tabName . '.');
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
@@ -89,7 +100,9 @@ class FeaturedDealController extends Controller
             'featured_sort_order' => $ids !== [] ? $product->featured_sort_order : 0,
         ])->save();
 
-        return $this->redirectToIndex($request, $product->name . ' removed from this Featured Comfort Deals tab.');
+        $tabName = $categoryId ? (Category::find($categoryId)?->name ?? 'this tab') : 'Featured Comfort Deals';
+
+        return $this->redirectToIndex($request, $product->name . ' removed from ' . $tabName . '.');
     }
 
     public function reorder(Request $request): RedirectResponse
@@ -107,7 +120,7 @@ class FeaturedDealController extends Controller
             ]);
         }
 
-        return $this->redirectToIndex($request, 'Featured Comfort Deals order saved.');
+        return $this->redirectToIndex($request, 'Order saved for this tab.');
     }
 
     private function redirectToIndex(Request $request, string $message): RedirectResponse
