@@ -6,14 +6,11 @@
     $primaryImage = $product->primaryImage?->url ?? asset('assets/images/products/product-1.jpg');
     $hoverImage = $product->images?->firstWhere('type', 'gallery')?->url ?? $primaryImage;
     $enabledTags = $product->enabledTags();
-    $isReel = $product->isTiktokReel();
 @endphp
 
 <div class="product product-7 text-center">
     <figure class="product-media">
-        @if($isReel)
-            <span class="product-label label-circle label-new">Reel</span>
-        @elseif($product->sale_price)
+        @if($product->sale_price)
             <span class="product-label label-circle label-sale">Sale</span>
         @elseif($product->deal_enabled)
             <span class="product-label label-circle label-top">Deal</span>
@@ -55,11 +52,6 @@
                 Check latest price
             @endif
         </div>
-        @if($isReel)
-            <div class="product-feature-list">
-                <span class="product-feature-badge">TikTok / Reel</span>
-            </div>
-        @endif
         @if($enabledTags->isNotEmpty())
             <div class="product-feature-list">
                 @foreach($enabledTags as $tag)

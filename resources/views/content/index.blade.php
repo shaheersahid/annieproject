@@ -82,9 +82,9 @@
             <div class="heading heading-center mb-3">
                 <h2 class="title">FEATURED COMFORT DEALS</h2>
 
-                @if($categoryProducts->isNotEmpty())
+                @if($featuredCategories->isNotEmpty())
                     <ul class="nav nav-pills justify-content-center" role="tablist">
-                        @foreach($homeCategories->take(2) as $category)
+                        @foreach($featuredCategories as $category)
                             <li class="nav-item">
                                 <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="featured-{{ $category->id }}-link" data-toggle="tab" href="#featured-{{ $category->id }}-tab" role="tab" aria-controls="featured-{{ $category->id }}-tab" aria-selected="{{ $loop->first ? 'true' : 'false' }}">{{ $category->name }}</a>
                             </li>
@@ -94,27 +94,23 @@
             </div>
 
             <div class="tab-content tab-content-carousel">
-                @forelse($homeCategories->take(2) as $category)
+                @forelse($featuredCategories as $category)
+                    @php $tabProducts = $categoryProducts->get($category->id, collect()); @endphp
                     <div class="tab-pane p-0 fade {{ $loop->first ? 'show active' : '' }}" id="featured-{{ $category->id }}-tab" role="tabpanel" aria-labelledby="featured-{{ $category->id }}-link">
-                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-                            data-owl-options='{"nav": false, "dots": true, "margin": 20, "loop": false, "responsive": {"0": {"items":2}, "480": {"items":2}, "768": {"items":3}, "992": {"items":4}, "1200": {"items":5, "nav": true}}}'>
-                            @forelse($categoryProducts->get($category->id, collect()) as $product)
-                                @include('content.partials.product-card', ['product' => $product])
-                            @empty
-                                @foreach($featuredProducts as $product)
-                                    @include('content.partials.product-card', ['product' => $product])
+                        @if($tabProducts->isEmpty())
+                            <p class="text-muted text-center py-4 mb-0">No featured deals selected for {{ $category->name }} yet.</p>
+                        @else
+                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                                data-owl-options='{"nav": false, "dots": true, "margin": 20, "loop": false, "responsive": {"0": {"items":2}, "480": {"items":2}, "768": {"items":3}, "992": {"items":4}, "1200": {"items":5, "nav": true}}}'>
+                                @foreach($tabProducts as $product)
+                                    @include('content.partials.product-card', ['product' => $product, 'linkToProduct' => true])
                                 @endforeach
-                            @endforelse
-                        </div>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div class="tab-pane p-0 fade show active">
-                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-                            data-owl-options='{"nav": false, "dots": true, "margin": 20, "loop": false, "responsive": {"0": {"items":2}, "480": {"items":2}, "768": {"items":3}, "992": {"items":4}, "1200": {"items":5, "nav": true}}}'>
-                            @foreach($featuredProducts as $product)
-                                @include('content.partials.product-card', ['product' => $product])
-                            @endforeach
-                        </div>
+                        <p class="text-muted text-center py-4">No featured categories available yet.</p>
                     </div>
                 @endforelse
             </div>

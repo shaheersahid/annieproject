@@ -26,13 +26,7 @@ Route::get('/', function () {
         ->take(8)
         ->get();
 
-    $featuredProducts = Product::query()
-        ->withListing()
-        ->published()
-        ->where('is_featured', true)
-        ->latest()
-        ->take(10)
-        ->get();
+    $featuredCategories = $homeCategories->take(2)->values();
 
     $newProducts = Product::query()
         ->withListing()
@@ -41,17 +35,16 @@ Route::get('/', function () {
         ->take(10)
         ->get();
 
-    $categoryProducts = $homeCategories
-        ->take(2)
+    $categoryProducts = $featuredCategories
         ->mapWithKeys(function (Category $category) {
             return [
                 $category->id => Product::query()
                     ->withListing()
                     ->published()
+                    ->featuredPicks()
                     ->whereHas('categories', function ($query) use ($category): void {
                         $query->whereKey($category->id);
                     })
-                    ->latest()
                     ->take(10)
                     ->get(),
             ];
@@ -59,7 +52,7 @@ Route::get('/', function () {
 
     return view('content.index', compact(
         'homeCategories',
-        'featuredProducts',
+        'featuredCategories',
         'newProducts',
         'categoryProducts',
     ));
@@ -196,6 +189,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('categories/toggle-status', [Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
     Route::post('categories/quick-store', [Admin\CategoryController::class, 'quickStore'])->name('categories.quick-store');
     Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+
+    Route::prefix('featured-deals')->name('featured-deals.')->group(function () {
+        Route::get('/', [Admin\FeaturedDealController::class, 'index'])->name('index');
+        Route::post('/', [Admin\FeaturedDealController::class, 'store'])->name('store');
+        Route::post('/reorder', [Admin\FeaturedDealController::class, 'reorder'])->name('reorder');
+        Route::delete('/{product}', [Admin\FeaturedDealController::class, 'destroy'])->name('destroy');
+    });
 
     Route::prefix('latest-deals')->name('latest-deals.')->group(function () {
         Route::get('/', [Admin\LatestDealController::class, 'index'])->name('index');

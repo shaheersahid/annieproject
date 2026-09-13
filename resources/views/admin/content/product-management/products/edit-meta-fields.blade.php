@@ -1,18 +1,24 @@
-@php
-    $meta = old('meta_fields', $product->seo?->meta_fields ?? []);
-    $og = old('og_fields', $product->seo?->og_fields ?? []);
-    $twitter = old('twitter_fields', $product->seo?->twitter_fields ?? []);
-    $schemaValue = old('schema_fields', $product->seo?->schema_fields
-        ? json_encode($product->seo->schema_fields, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
-        : '');
-    $robots = $meta['robots'] ?? 'index, follow';
-@endphp
-
 @extends('admin.layouts.master')
 
 @section('page-title', 'Product SEO')
 
 @section('admin-content')
+@php
+    $meta = is_array(old('meta_fields', $product->seo?->meta_fields)) ? old('meta_fields', $product->seo?->meta_fields) : [];
+    $og = is_array(old('og_fields', $product->seo?->og_fields)) ? old('og_fields', $product->seo?->og_fields) : [];
+    $twitter = is_array(old('twitter_fields', $product->seo?->twitter_fields)) ? old('twitter_fields', $product->seo?->twitter_fields) : [];
+    $schemaFields = $product->seo?->schema_fields;
+    $schemaValue = old('schema_fields', is_array($schemaFields)
+        ? json_encode($schemaFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+        : '');
+    $robots = $meta['robots'] ?? 'index, follow';
+
+    try {
+        $schemaPreview = json_encode($product->defaultProductSchema(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    } catch (Throwable $e) {
+        $schemaPreview = 'Automatic schema preview is unavailable for this product.';
+    }
+@endphp
 <div class="page-content">
     <div class="container-fluid">
         <x-admin.breadcrumb title="SEO: {{ $product->name }}" :items="[['label' => 'Products', 'url' => route('admin.products.index')], ['label' => 'SEO']]" />
@@ -118,7 +124,7 @@
                 <div class="col-lg-4">
                     <x-admin.card title="Auto schema preview">
                         <p class="text-muted small">This is what the product page outputs when the custom schema box is empty.</p>
-                        <pre class="bg-light p-3 rounded small mb-0" style="max-height: 420px; overflow: auto;">{{ json_encode($product->defaultProductSchema(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</pre>
+                        <pre class="bg-light p-3 rounded small mb-0" style="max-height: 420px; overflow: auto;">{{ $schemaPreview }}</pre>
                     </x-admin.card>
 
                     <div class="d-flex justify-content-end gap-2 mt-3">

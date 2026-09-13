@@ -267,6 +267,14 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
+        if (! empty($data['is_featured']) && empty($data['featured_sort_order'])) {
+            $data['featured_sort_order'] = ((int) Product::max('featured_sort_order')) + 1;
+        }
+
+        if (empty($data['is_featured'])) {
+            $data['featured_sort_order'] = 0;
+        }
+
         if (! empty($data['is_latest']) && empty($data['latest_sort_order'])) {
             $data['latest_sort_order'] = ((int) Product::max('latest_sort_order')) + 1;
         }

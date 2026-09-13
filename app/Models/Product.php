@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class Product extends Model
 {
@@ -54,6 +55,7 @@ class Product extends Model
         'is_draft',
         'is_active',
         'is_featured',
+        'featured_sort_order',
         'is_latest',
         'is_reel',
         'latest_sort_order',
@@ -74,6 +76,7 @@ class Product extends Model
         'pros' => 'array',
         'cons' => 'array',
         'is_featured' => 'boolean',
+        'featured_sort_order' => 'integer',
         'is_latest' => 'boolean',
         'is_reel' => 'boolean',
         'latest_sort_order' => 'integer',
@@ -213,6 +216,17 @@ class Product extends Model
         return $query->whereNotNull($urlColumn)->where($urlColumn, '!=', '');
     }
 
+    public function scopeFeaturedPicks($query)
+    {
+        $query->where('is_featured', true);
+
+        if (Schema::hasColumn($this->getTable(), 'featured_sort_order')) {
+            $query->orderBy('featured_sort_order');
+        }
+
+        return $query->orderByDesc('updated_at');
+    }
+
     public function scopeLatestPicks($query)
     {
         if (! Schema::hasColumn($this->getTable(), 'is_latest')) {
@@ -283,7 +297,15 @@ class Product extends Model
 
     public function getSeoUrl(): string
     {
-        return route('product-detail', $this);
+        if (filled($this->slug)) {
+            try {
+                return route('product-detail', $this);
+            } catch (Throwable) {
+                // Fall through to a safe public URL if route generation fails.
+            }
+        }
+
+        return url('/products/' . ($this->slug ?: $this->getKey()));
     }
 
     public function getSeoRobots(): string

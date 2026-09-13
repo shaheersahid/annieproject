@@ -42,13 +42,14 @@
                 @if($u->can('admin.products.index') || $u->can('admin.categories.index') || $u->can('admin.brands.index'))
                 <li class="menu-title">Product Management</li>
 
-                <li class="{{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') ? 'mm-active' : '' }}">
-                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') || request()->routeIs('admin.featured-deals.*') ? 'mm-active' : '' }}">
+                    <a href="javascript: void(0);" class="has-arrow {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') || request()->routeIs('admin.featured-deals.*') ? 'active' : '' }}">
                         <i class="fa fa-box-open"></i>
                         <span>Products</span>
                     </a>
-                    <ul class="sub-menu {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') ? 'mm-show' : '' }}">
+                    <ul class="sub-menu {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.latest-deals.*') || request()->routeIs('admin.featured-deals.*') ? 'mm-show' : '' }}">
                         <li><a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.index') ? 'active' : '' }}">All Products</a></li>
+                        <li><a href="{{ route('admin.featured-deals.index') }}" class="{{ request()->routeIs('admin.featured-deals.*') ? 'active' : '' }}">Featured Deals</a></li>
                         <li><a href="{{ route('admin.latest-deals.index') }}" class="{{ request()->routeIs('admin.latest-deals.*') ? 'active' : '' }}">Latest Deals</a></li>
                         <li><a href="{{ route('admin.products.drafts') }}" class="{{ request()->routeIs('admin.products.drafts') ? 'active' : '' }}">Drafts</a></li>
                         <li><a href="{{ route('admin.products.create') }}" class="{{ request()->routeIs('admin.products.create') ? 'active' : '' }}">Add Product</a></li>

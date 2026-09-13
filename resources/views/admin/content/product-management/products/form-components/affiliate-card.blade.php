@@ -44,10 +44,16 @@
             </div>
             <input type="hidden" id="price_note" name="price_note" value="{{ old('price_note', $product?->price_note ?? 'Check latest price') }}">
             <div class="col-md-3">
-                <label for="is_featured" class="form-label">Featured Deal</label>
+                <label for="is_featured" class="form-label">Featured Comfort Deals</label>
                 <div class="form-check form-switch mt-1">
                     <input type="hidden" name="is_featured" value="0">
                     <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product?->is_featured ?? false) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_featured">Show in homepage Featured Comfort Deals tabs</label>
+                    @if($isEdit && $product)
+                        <div class="mt-1">
+                            <a href="{{ route('admin.featured-deals.index') }}" class="small">Manage Featured Deals</a>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-3">

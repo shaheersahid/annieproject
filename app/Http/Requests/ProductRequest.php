@@ -56,6 +56,7 @@ class ProductRequest extends FormRequest
             'seo_description' => ['nullable', 'string', 'max:500'],
             'seo_keywords' => ['nullable', 'string', 'max:500'],
             'is_featured' => ['nullable', 'boolean'],
+            'featured_sort_order' => ['nullable', 'integer', 'min:0'],
             'is_latest' => ['nullable', 'boolean'],
             'is_reel' => ['nullable', 'boolean'],
             'latest_sort_order' => ['nullable', 'integer', 'min:0'],
