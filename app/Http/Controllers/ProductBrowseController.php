@@ -14,6 +14,15 @@ class ProductBrowseController extends Controller
     {
         $search = trim((string) ($request->input('q') ?: $request->input('mobile-search')));
 
+        $activeCategory = null;
+        if ($request->filled('category')) {
+            $activeCategory = Category::query()
+                ->with('seo')
+                ->active()
+                ->where('slug', $request->string('category'))
+                ->first();
+        }
+
         $products = Product::query()
             ->withListing()
             ->published()
@@ -38,7 +47,7 @@ class ProductBrowseController extends Controller
             ->ordered()
             ->get();
 
-        return view('content.product-list', compact('products', 'categories', 'search'));
+        return view('content.product-list', compact('products', 'categories', 'search', 'activeCategory'));
     }
 
     public function suggest(Request $request): JsonResponse

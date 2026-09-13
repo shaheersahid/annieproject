@@ -74,6 +74,30 @@
                                     <div class="col-12">
                                         <label for="description" class="form-label">Description</label>
                                         <textarea class="form-control" id="description" name="description" rows="4">{{ old('description') }}</textarea>
+                                        <small class="text-muted">Shown on the category page. Also used for meta description if SEO Meta Description is empty.</small>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <h5 class="mb-3">SEO (storefront meta tags)</h5>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="seo_title" class="form-label">SEO Title</label>
+                                        <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="255"
+                                            value="{{ old('seo_title') }}"
+                                            placeholder="Category Deals | Smart Comfort Deals">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="seo_description" class="form-label">SEO Meta Description</label>
+                                        <textarea class="form-control" id="seo_description" name="seo_description" rows="3" maxlength="500"
+                                            placeholder="Unique summary for Google (recommended ~150–160 characters)">{{ old('seo_description') }}</textarea>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="seo_keywords" class="form-label">SEO Keywords</label>
+                                        <input type="text" class="form-control" id="seo_keywords" name="seo_keywords" maxlength="500"
+                                            value="{{ old('seo_keywords') }}"
+                                            placeholder="category name, comfort deals, Amazon, Temu">
                                     </div>
                                 </div>
 

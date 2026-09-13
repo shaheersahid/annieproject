@@ -2,16 +2,27 @@
 
 @php
     $search = $search ?? request('q');
-    $activeCategoryName = null;
-    if (request('category')) {
-        $activeCategory = \App\Models\Category::where('slug', request('category'))->first();
-        if ($activeCategory) {
-            $activeCategoryName = $activeCategory->name;
-        }
+    $activeCategory = $activeCategory ?? null;
+    $activeCategoryName = $activeCategory?->name;
+
+    if (! empty($search)) {
+        $pageTitle = 'Search results for "' . $search . '" | Smart Comfort Deals';
+        $metaDescription = 'Search results for "' . $search . '" on Smart Comfort Deals. Compare curated Amazon, Temu and AliExpress comfort deals.';
+        $metaKeywords = 'Smart Comfort Deals, ' . $search . ', comfort deals, Amazon, Temu, AliExpress';
+    } elseif ($activeCategory) {
+        $pageTitle = $activeCategory->getSeoTitle();
+        $metaDescription = $activeCategory->getSeoDescription();
+        $metaKeywords = $activeCategory->getSeoKeywords();
+    } else {
+        $pageTitle = 'All Comfort Deals | Smart Comfort Deals';
+        $metaDescription = 'Browse all curated comfort and ergonomic deals on Smart Comfort Deals. Compare Amazon, Temu and AliExpress picks before you buy.';
+        $metaKeywords = 'Smart Comfort Deals, comfort deals, ergonomic, Amazon, Temu, AliExpress, home comfort, office comfort';
     }
 @endphp
 
-@section('title', $activeCategoryName ? $activeCategoryName . ' - Smart Comfort Deals' : 'Smart Comfort Deals')
+@section('title', $pageTitle)
+@section('meta-description', $metaDescription)
+@section('meta-keywords', $metaKeywords)
 
 @section('content')
 <main class="main">
@@ -23,6 +34,9 @@
                 <h1 class="page-title">{{ $activeCategoryName }}<span>Smart Comfort Deals</span></h1>
             @else
                 <h1 class="page-title">Smart Comfort Deals<span>Top ergonomic, home & office picks</span></h1>
+            @endif
+            @if($activeCategory && filled($activeCategory->description) && empty($search))
+                <p class="mt-2 mb-0 mx-auto" style="max-width: 46rem; color: #667780;">{{ strip_tags($activeCategory->description) }}</p>
             @endif
         </div>
     </div>

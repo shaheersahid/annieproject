@@ -33,10 +33,13 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request): RedirectResponse|JsonResponse
     {
         $data = $request->validated();
+        unset($data['seo_title'], $data['seo_description'], $data['seo_keywords'], $data['image']);
         $data['is_active'] = $request->boolean('is_active', true);
         $data['show_on_home'] = $request->boolean('show_on_home', false);
 
         $category = Category::create($data);
+
+        $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('categories', 'public');
@@ -57,6 +60,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category): View
     {
+        $category->load('seo');
+
         $parentCategories = Category::query()
             ->whereNull('parent_id')
             ->where('id', '!=', $category->id)
@@ -69,10 +74,13 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category): RedirectResponse|JsonResponse
     {
         $data = $request->validated();
+        unset($data['seo_title'], $data['seo_description'], $data['seo_keywords'], $data['image']);
         $data['is_active'] = $request->boolean('is_active', true);
         $data['show_on_home'] = $request->boolean('show_on_home', false);
 
         $category->update($data);
+
+        $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('categories', 'public');
@@ -127,5 +135,28 @@ class CategoryController extends Controller
         $request->validate(['name' => 'required|string|max:255']);
         $category = Category::create(['name' => $request->input('name'), 'is_active' => true]);
         return response()->json(['id' => $category->id, 'name' => $category->name]);
+    }
+
+    private function syncCategorySeo(Category $category, Request $request): void
+    {
+        if (! $request->exists('seo_title') && ! $request->exists('seo_description') && ! $request->exists('seo_keywords')) {
+            return;
+        }
+
+        $existing = $category->seo()->first();
+        $meta = $existing?->meta_fields ?? [];
+        $meta['title'] = trim((string) $request->input('seo_title', $meta['title'] ?? ''));
+        $meta['description'] = trim((string) $request->input('seo_description', $meta['description'] ?? ''));
+        $meta['keywords'] = trim((string) $request->input('seo_keywords', $meta['keywords'] ?? ''));
+
+        $category->seo()->updateOrCreate(
+            ['seoable_id' => $category->id, 'seoable_type' => Category::class],
+            [
+                'meta_fields' => collect($meta)
+                    ->map(fn ($value) => is_string($value) ? trim($value) : $value)
+                    ->filter(fn ($value) => $value !== null && $value !== '')
+                    ->all(),
+            ]
+        );
     }
 }

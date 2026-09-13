@@ -120,6 +120,63 @@ class Category extends Model
         return $query->orderBy('sort_order')->orderBy('name');
     }
 
+    public function getSeoTitle(): string
+    {
+        $custom = $this->seoField('meta_fields', 'title');
+
+        if ($custom) {
+            return (string) $custom;
+        }
+
+        return $this->name . ' Deals | Smart Comfort Deals';
+    }
+
+    public function getSeoDescription(): string
+    {
+        $custom = $this->seoField('meta_fields', 'description');
+
+        if ($custom) {
+            return \Illuminate\Support\Str::limit(
+                trim(preg_replace('/\s+/', ' ', strip_tags((string) $custom)) ?? ''),
+                180
+            );
+        }
+
+        if (filled($this->description)) {
+            return \Illuminate\Support\Str::limit(
+                trim(preg_replace('/\s+/', ' ', strip_tags((string) $this->description)) ?? ''),
+                180
+            );
+        }
+
+        return "Browse {$this->name} comfort deals on Smart Comfort Deals. Compare curated Amazon, Temu and AliExpress picks before you buy.";
+    }
+
+    public function getSeoKeywords(): string
+    {
+        $custom = $this->seoField('meta_fields', 'keywords');
+
+        if ($custom) {
+            return (string) $custom;
+        }
+
+        return implode(', ', array_filter([
+            $this->name,
+            $this->name . ' deals',
+            'Smart Comfort Deals',
+            'Amazon',
+            'Temu',
+            'AliExpress',
+            'home comfort',
+            'office comfort',
+        ]));
+    }
+
+    public function getSeoUrl(): string
+    {
+        return route('product-list', ['category' => $this->slug]);
+    }
+
     public function getUrlAttribute(): string
     {
         $path = [$this->slug];
