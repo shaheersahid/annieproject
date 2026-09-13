@@ -233,3 +233,25 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Keep desktop nav on one line even with many category links */
+.header-7 .qadir-menu-bar .menu {
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
+}
+
+.header-7 .qadir-menu-bar .menu > li > a {
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 992px) and (max-width: 1399px) {
+  .header-7 .qadir-menu-bar .menu > li + li {
+    margin-left: 1.2rem;
+  }
+
+  .header-7 .qadir-menu-bar .menu > li > a {
+    font-size: 1.25rem;
+    padding-left: .35rem;
+    padding-right: .35rem;
+  }
+}
