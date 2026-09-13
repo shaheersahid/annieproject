@@ -72,7 +72,7 @@
                 </header>
 
                 @if($post->featured_image)
-                    <img class="article-hero" src="{{ resolve_image_path($post->featured_image) }}" alt="{{ $post->title }}">
+                    <img class="article-hero" src="{{ resolve_image_path($post->featured_image) }}" alt="{{ seo_alt($post->title . ' - Smart Comfort Deals blog') }}">
                 @endif
 
                 <div class="article-layout {{ empty($post->toc) ? 'no-toc' : '' }}">
@@ -107,7 +107,7 @@
                                 <article class="related-item">
                                     @if($related->featured_image)
                                         <a href="{{ route('blog.show', $related->slug) }}">
-                                            <img src="{{ resolve_image_path($related->featured_image) }}" alt="{{ $related->title }}" loading="lazy">
+                                            <img src="{{ resolve_image_path($related->featured_image) }}" alt="{{ seo_alt($related->title . ' - related comfort guide') }}" loading="lazy">
                                         </a>
                                     @endif
                                     <p class="text-muted small mb-1">{{ $related->published_at?->format('M d, Y') }}</p>

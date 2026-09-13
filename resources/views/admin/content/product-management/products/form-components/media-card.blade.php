@@ -16,7 +16,7 @@
             @error('thumbnail') <div class="invalid-feedback">{{ $message }}</div> @enderror
             <div class="mt-2" id="thumbnail-preview-container" style="{{ $mainImage ? '' : 'display: none;' }}">
                 <div class="position-relative d-inline-block">
-                    <img id="thumbnail-preview" src="{{ $mainImage ? $mainImage->url : '' }}" alt="Thumbnail Preview" class="img-thumbnail" style="max-height: 200px;">
+                    <img id="thumbnail-preview" src="{{ $mainImage ? $mainImage->url : '' }}" alt="{{ $product ? product_image_alt($product, 'main thumbnail') : seo_alt('Product thumbnail preview') }}" class="img-thumbnail" style="max-height: 200px;">
                     <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" id="remove-thumbnail-btn" onclick="ProductForm.removeThumbnail()">
                         <i class="fa fa-times"></i>
                     </button>
@@ -44,7 +44,7 @@
                                 <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="ProductForm.removeExistingImage('{{ $image->path }}', this)" style="z-index: 5;">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <img src="{{ $image->url }}" class="card-img-top" alt="Product Image" style="height: 100px; object-fit: cover;">
+                                <img src="{{ $image->url }}" class="card-img-top" alt="{{ $product ? product_image_alt($product, 'gallery image') : seo_alt('Product gallery image') }}" style="height: 100px; object-fit: cover;">
                             </div>
                         </div>
                     @endforeach

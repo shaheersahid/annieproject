@@ -6,7 +6,7 @@
 <div class="{{ $columnClass ?? 'col-md-6 col-lg-4' }}">
     <div class="banner banner-overlay {{ $textClass ?? 'text-white' }}">
         <a href="{{ $url }}">
-            <img src="{{ $image }}" alt="{{ $category->name }}">
+            <img src="{{ $image }}" alt="{{ seo_alt($category->name . ' comfort deals from Smart Comfort Deals') }}">
         </a>
 
         <div class="banner-content {{ $contentClass ?? '' }}">

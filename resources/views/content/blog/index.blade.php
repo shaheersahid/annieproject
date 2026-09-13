@@ -59,7 +59,7 @@
                         <article class="blog-card">
                             @if($post->featured_image)
                                 <a class="blog-card-media" href="{{ route('blog.show', $post->slug) }}" aria-label="Read {{ $post->title }}">
-                                    <img src="{{ resolve_image_path($post->featured_image) }}" alt="{{ $post->title }}" loading="lazy">
+                                    <img src="{{ resolve_image_path($post->featured_image) }}" alt="{{ seo_alt($post->title . ' - Smart Comfort Deals blog') }}" loading="lazy">
                                 </a>
                             @endif
                             <div class="blog-card-body">

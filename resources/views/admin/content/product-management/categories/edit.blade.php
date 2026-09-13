@@ -23,7 +23,7 @@
                                         <!-- Show existing image if have -->
                                          @if($category->image_url)
                                            <div>
-                                               <img src="{{ $category->image_url }}" alt="Category Image" height="80px" width="120px" class="rounded-md mb-2">
+                                               <img src="{{ $category->image_url }}" alt="{{ seo_alt($category->name . ' category image') }}" height="80px" width="120px" class="rounded-md mb-2">
                                            </div>
                                          @endif
 

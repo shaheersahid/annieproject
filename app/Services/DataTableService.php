@@ -113,7 +113,7 @@ class DataTableService implements DataTableServiceInterface
         return DataTables::eloquent($query)
             ->addColumn('image', function ($product) {
                 $url = $product->primaryImage?->url ?? asset('admin/assets/images/placeholder.png');
-                return '<img src="' . $url . '" alt="' . $product->name . '" class="avatar-sm rounded">';
+                return '<img src="' . $url . '" alt="' . e(product_image_alt($product)) . '" class="avatar-sm rounded">';
             })
             ->addColumn('categories', function ($product) {
                 return $product->categories->pluck('name')->implode(', ');

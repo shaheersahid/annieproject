@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="col-5 align-self-end">
-                                <img src="{{ asset('admin/assets/images/profile-img.png') }}" alt="" class="img-fluid">
+                                <img src="{{ asset('admin/assets/images/profile-img.png') }}" alt="{{ seo_alt(($user->name ?? 'Admin user') . ' profile') }}" class="img-fluid">
                             </div>
                         </div>
                     </div>
