@@ -104,6 +104,14 @@
 
 .live-search-host {
   position: relative;
+  overflow: visible !important;
+}
+
+.header-search,
+.header-search .header-search-wrapper,
+.header-middle,
+.header-right {
+  overflow: visible !important;
 }
 
 .live-search-field {

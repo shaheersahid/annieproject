@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/skin.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/custom-storefront.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/custom-storefront.css') }}?v={{ @filemtime(public_path('assets/css/custom-storefront.css')) ?: time() }}">
 <link rel="stylesheet" href="{{ asset('assets/css/plugins/nouislider/nouislider.css') }}">
 
 @stack('page-styles')
