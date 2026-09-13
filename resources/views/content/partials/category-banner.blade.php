@@ -10,8 +10,8 @@
         </a>
 
         <div class="banner-content {{ $contentClass ?? '' }}">
-            <h4 class="banner-subtitle"><a href="{{ $url }}">{{ $category->products_count ?? $category->products_count ?? 0 }} Products</a></h4>
-            <h3 class="banner-title"><a href="{{ $url }}">{{ $category->name }}</a></h3>
+            <div class="banner-subtitle"><a href="{{ $url }}">{{ $category->products_count ?? 0 }} Products</a></div>
+            <div class="banner-title"><a href="{{ $url }}">{{ $category->name }}</a></div>
             <a href="{{ $url }}" class="btn underline {{ $buttonClass ?? 'btn-outline-white-3' }} banner-link">View Deals</a>
         </div>
     </div>

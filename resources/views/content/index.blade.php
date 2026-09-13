@@ -14,14 +14,17 @@
 
 @section('content')
 <main class="main">
-    <section class="homepage-hero-intro text-center pt-4 pb-2">
+    <div class="page-header homepage-page-header text-center">
         <div class="container">
-            <h1 class="homepage-hero-title mb-2">Smart Comfort Deals for Home, Office &amp; Everyday Comfort</h1>
-            <p class="homepage-hero-subtitle mb-0">
-                Discover ergonomic accessories, smart home finds and practical products from Amazon, Temu &amp; AliExpress.
+            <h1 class="page-title mb-1">
+                Smart Comfort Deals
+                <span>Home, office &amp; everyday comfort picks</span>
+            </h1>
+            <p class="homepage-hero-lead mb-0">
+                Ergonomic accessories and practical finds from Amazon, Temu &amp; AliExpress.
             </p>
         </div>
-    </section>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -58,7 +61,7 @@
                         <div class="icon-box icon-box-side">
                             <span class="icon-box-icon"><i class="icon-truck"></i></span>
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">Amazon & Temu Picks</h3>
+                                <div class="icon-box-title">Amazon & Temu Picks</div>
                                 <p>Compare comfort & ergonomic deals before you buy</p>
                             </div>
                         </div>
@@ -67,7 +70,7 @@
                         <div class="icon-box icon-box-side">
                             <span class="icon-box-icon"><i class="icon-rotate-left"></i></span>
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">Latest Price Check</h3>
+                                <div class="icon-box-title">Latest Price Check</div>
                                 <p>Retailer price and availability apply</p>
                             </div>
                         </div>
@@ -76,7 +79,7 @@
                         <div class="icon-box icon-box-side">
                             <span class="icon-box-icon"><i class="icon-headphones"></i></span>
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">Clear Disclosure</h3>
+                                <div class="icon-box-title">Clear Disclosure</div>
                                 <p>We may earn from affiliate links</p>
                             </div>
                         </div>
@@ -89,7 +92,7 @@
     <div class="bg-light-2 pt-6 pb-6 featured">
         <div class="container-fluid">
             <div class="heading heading-center mb-3">
-                <h2 class="title">FEATURED COMFORT DEALS</h2>
+                <h2 class="title">Featured Comfort Deals</h2>
 
                 @if($featuredCategories->isNotEmpty())
                     <ul class="nav nav-pills justify-content-center" role="tablist">
@@ -128,7 +131,7 @@
 
     <div class="container-fluid new-arrivals">
         <div class="heading heading-center mb-3">
-            <h2 class="title">LATEST PROMOTED PICKS</h2>
+            <h2 class="title">Latest Promoted Picks</h2>
         </div>
 
         <div class="products">
@@ -152,7 +155,7 @@
         <hr class="mt-0 mb-6">
 
         <div class="blog-posts mb-4">
-            <h2 class="title text-center mb-3">Shop By Category</h2>
+            <h2 class="title text-center mb-3">Shop by Category</h2>
 
             <div class="owl-carousel owl-simple mb-2" data-toggle="owl"
                 data-owl-options='{"nav": false, "dots": true, "items": 3, "margin": 20, "loop": false, "responsive": {"0": {"items":1}, "520": {"items":2}, "768": {"items":3}, "992": {"items":4}}}'>

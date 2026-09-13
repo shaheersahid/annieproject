@@ -5,7 +5,7 @@
     <main class="main">
         <div class="page-header">
             <div class="container">
-                <h1 class="page-title mb-0">About Us</h1>
+                <h1 class="page-title mb-0">About Smart Comfort Deals</h1>
             </div>
         </div>
 
@@ -21,7 +21,6 @@
         <div class="page-content pb-10">
             <div class="container">
                 <section class="content-title-section mb-6">
-                    <h2 class="title title-center mb-4">About Smart Comfort Deals</h2>
                     <div class="mx-auto" style="max-width: 780px;">
                         <p>
                             Smart Comfort Deals helps shoppers find practical comfort upgrades for home, office, and everyday routines.

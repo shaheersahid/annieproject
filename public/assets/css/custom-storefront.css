@@ -52,20 +52,52 @@
   margin-bottom: .8rem;
 }
 
-.homepage-hero-intro {
-  max-width: 860px;
-  margin: 0 auto 1.2rem;
+.homepage-page-header {
+  padding: 2.4rem 0 1.6rem;
+  margin-bottom: 0;
+  background: linear-gradient(180deg, #f4fafb 0%, #ffffff 100%);
+  border-bottom: .1rem solid #e8eef1;
 }
 
-.homepage-hero-title {
-  color: #1f2a30;
-  font-size: clamp(2.2rem, 3vw, 3.2rem);
-  font-weight: 700;
-  line-height: 1.25;
+.homepage-page-header .page-title {
+  margin-bottom: .6rem;
+  font-size: 3.2rem;
+  letter-spacing: -.02em;
 }
 
-.homepage-hero-subtitle {
-  color: #5b6b73;
+.homepage-page-header .page-title span {
+  display: block;
+  margin-top: .45rem;
   font-size: 1.5rem;
-  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #0097b2;
+}
+
+.homepage-hero-lead {
+  max-width: 54rem;
+  margin-left: auto;
+  margin-right: auto;
+  color: #667780;
+  font-size: 1.4rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 767.98px) {
+  .homepage-page-header {
+    padding: 1.8rem 0 1.2rem;
+  }
+
+  .homepage-page-header .page-title {
+    font-size: 2.4rem;
+  }
+
+  .homepage-page-header .page-title span {
+    font-size: 1.3rem;
+  }
+
+  .homepage-hero-lead {
+    font-size: 1.3rem;
+    padding: 0 1rem;
+  }
 }
