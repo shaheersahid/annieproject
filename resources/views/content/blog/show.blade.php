@@ -2,6 +2,28 @@
 @section('title', ($post->meta_title ?: $post->title) . ' | Smart Comfort Deals')
 @section('meta-description', $post->meta_description ?: $post->excerpt ?: 'Read the latest comfort guide from Smart Comfort Deals.')
 
+@php
+    $blogOgImage = $post->featured_image ? resolve_image_path($post->featured_image) : null;
+    $blogOgTitle = $post->meta_title ?: $post->title;
+    $blogOgDescription = $post->meta_description ?: $post->excerpt ?: 'Read the latest comfort guide from Smart Comfort Deals.';
+@endphp
+
+@push('seo-head')
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:site_name" content="Smart Comfort Deals">
+    <meta property="og:title" content="{{ $blogOgTitle }}">
+    <meta property="og:description" content="{{ $blogOgDescription }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if($blogOgImage)
+        <meta property="og:image" content="{{ $blogOgImage }}">
+        <meta name="twitter:image" content="{{ $blogOgImage }}">
+    @endif
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $blogOgTitle }}">
+    <meta name="twitter:description" content="{{ $blogOgDescription }}">
+@endpush
+
 @push('page-styles')
     <style>
         .article-page { padding-bottom: 7rem; }
@@ -72,7 +94,15 @@
                 </header>
 
                 @if($post->featured_image)
-                    <img class="article-hero" src="{{ resolve_image_path($post->featured_image) }}" alt="{{ seo_alt($post->title . ' - Smart Comfort Deals blog') }}">
+                    <img
+                        class="article-hero"
+                        src="{{ resolve_image_path($post->featured_image) }}"
+                        alt="{{ seo_alt($post->title . ' - Smart Comfort Deals blog') }}"
+                        width="1200"
+                        height="600"
+                        fetchpriority="high"
+                        decoding="async"
+                    >
                 @endif
 
                 <div class="article-layout {{ empty($post->toc) ? 'no-toc' : '' }}">

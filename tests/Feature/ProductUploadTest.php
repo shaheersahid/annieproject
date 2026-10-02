@@ -52,6 +52,11 @@ class ProductUploadTest extends TestCase
 
         foreach ($product->images as $image) {
             Storage::disk('public')->assertExists($image->path);
+            $this->assertStringEndsWith('.webp', $image->path);
+            $this->assertLessThanOrEqual(
+                \App\Services\ImageOptimizer::MAX_BYTES,
+                Storage::disk('public')->size($image->path)
+            );
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Contracts\DataTableServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogPostRequest;
 use App\Models\BlogPost;
+use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -17,7 +18,10 @@ use Throwable;
 
 class BlogController extends Controller
 {
-    public function __construct(protected DataTableServiceInterface $dataTable) {}
+    public function __construct(
+        protected DataTableServiceInterface $dataTable,
+        protected ImageOptimizer $imageOptimizer,
+    ) {}
 
     public function index(Request $request): mixed
     {
@@ -113,7 +117,14 @@ class BlogController extends Controller
     private function storeFeaturedImage(UploadedFile $image): string
     {
         try {
-            $path = $image->store('blog', 'public');
+            $path = $this->imageOptimizer->storeResized(
+                $image,
+                'blog',
+                1200,
+                82,
+                ImageOptimizer::MAX_BYTES,
+                $image->getClientOriginalName()
+            );
         } catch (Throwable $exception) {
             report($exception);
             $path = false;
