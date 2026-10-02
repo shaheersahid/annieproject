@@ -427,7 +427,14 @@ class ProductController extends Controller
             $mime = (string) $file->getMimeType();
             if (str_starts_with($mime, 'image/')) {
                 $maxWidth = str_contains($directory, 'categories') ? 800 : 1200;
-                $path = $this->imageOptimizer->storeResized($file, $directory, $maxWidth);
+            $path = $this->imageOptimizer->storeResized(
+                $file,
+                $directory,
+                $maxWidth,
+                82,
+                ImageOptimizer::MAX_BYTES,
+                $file->getClientOriginalName()
+            );
             } else {
                 $path = $file->store($directory, 'public');
             }

@@ -46,7 +46,14 @@ class CategoryController extends Controller
         $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
-            $path = $this->imageOptimizer->storeResized($request->file('image'), 'categories', 800);
+            $path = $this->imageOptimizer->storeResized(
+                $request->file('image'),
+                'categories',
+                800,
+                82,
+                ImageOptimizer::MAX_BYTES,
+                $request->file('image')->getClientOriginalName()
+            );
             $category->images()->create(['path' => $path, 'type' => 'primary', 'order' => 0]);
         }
 
@@ -87,7 +94,14 @@ class CategoryController extends Controller
         $this->syncCategorySeo($category, $request);
 
         if ($request->hasFile('image')) {
-            $path = $this->imageOptimizer->storeResized($request->file('image'), 'categories', 800);
+            $path = $this->imageOptimizer->storeResized(
+                $request->file('image'),
+                'categories',
+                800,
+                82,
+                ImageOptimizer::MAX_BYTES,
+                $request->file('image')->getClientOriginalName()
+            );
             $category->images()->updateOrCreate(['type' => 'primary'], ['path' => $path, 'order' => 0]);
         }
 

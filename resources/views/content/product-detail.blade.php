@@ -39,7 +39,7 @@
                     <div class="col-lg-6">
                         <div class="product-gallery product-gallery-vertical product-detail-gallery">
                             <figure class="product-main-image">
-                                <img id="product-zoom" src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'main product photo') }}">
+                                <img id="product-zoom" src="{{ $primaryImage }}" alt="{{ product_image_alt($product, 'main product photo') }}" width="800" height="800" fetchpriority="high" decoding="async">
                             </figure>
 
                             @if($gallery->isNotEmpty())

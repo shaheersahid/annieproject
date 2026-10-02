@@ -117,5 +117,10 @@ class BlogPostTest extends TestCase
         $post->refresh();
         Storage::disk('public')->assertExists($post->featured_image);
         Storage::disk('public')->assertMissing('blog/old.jpg');
+        $this->assertStringEndsWith('.webp', $post->featured_image);
+        $this->assertLessThanOrEqual(
+            \App\Services\ImageOptimizer::MAX_BYTES,
+            Storage::disk('public')->size($post->featured_image)
+        );
     }
 }
